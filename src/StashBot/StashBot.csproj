@@ -5,4 +5,20 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Telegram.Bot" Version="15.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="app\" />
+    <Folder Include="app\GetWorkData\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="workData.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="workData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
