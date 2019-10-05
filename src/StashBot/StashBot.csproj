@@ -12,6 +12,8 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\GetWorkData\" />
+    <Folder Include="app\ChatSession\" />
+    <Folder Include="app\Bot\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="workData.json" />
