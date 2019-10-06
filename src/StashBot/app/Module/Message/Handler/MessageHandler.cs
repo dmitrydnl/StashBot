@@ -84,11 +84,18 @@ namespace StashBot.Module.Message.Handler
                 ModulesManager.GetModulesManager().GetSessionsManager();
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager =
+                ModulesManager.GetModulesManager().GetUserManager();
 
             sessionsManager.UserSentMessage(chatId, messageId);
-            //TODO authorisation
-            const string answer = "Authorisation";
-            messageManager.SendTextMessage(chatId, answer);
+            if (userManager.AuthorisationUser(chatId, textMessage))
+            {
+                messageManager.SendAuthorisationSuccessMessage(chatId);
+            }
+            else
+            {
+                messageManager.SendAuthorisationFailMessage(chatId);
+            }
         }
 
         private void AddDataToStashHandle(long chatId, int messageId, string textMessage)

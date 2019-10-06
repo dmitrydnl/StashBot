@@ -2,5 +2,6 @@
 {
     internal interface IUser
     {
+        string HashAuthCode();
     }
 }

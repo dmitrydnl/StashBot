@@ -23,5 +23,15 @@ namespace StashBot.Module.Database.Account
                 usersDatabase.Add(chatId, newUser);
             }
         }
+
+        public IUser GetUser(long chatId)
+        {
+            if (!usersDatabase.ContainsKey(chatId))
+            {
+                return null;
+            }
+
+            return usersDatabase[chatId];
+        }
     }
 }

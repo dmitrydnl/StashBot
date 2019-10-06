@@ -3,5 +3,6 @@
     internal interface IUserManager
     {
         string CreateNewUser(long chatId);
+        bool AuthorisationUser(long chatId, string authCode);
     }
 }

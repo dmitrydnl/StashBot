@@ -15,5 +15,10 @@ namespace StashBot.Module.Database
         {
             databaseAccount.CreateNewUser(chatId, hashAuthCode);
         }
+
+        public IUser GetUser(long chatId)
+        {
+            return databaseAccount.GetUser(chatId);
+        }
     }
 }

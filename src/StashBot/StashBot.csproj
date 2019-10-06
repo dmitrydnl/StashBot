@@ -25,6 +25,7 @@
     <Folder Include="app\Module\Secure\RsaCrypto\" />
     <Folder Include="app\Module\Database\" />
     <Folder Include="app\Module\Database\Account\" />
+    <Folder Include="app\Module\User\Authorisation\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="workData.json" />

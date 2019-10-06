@@ -40,6 +40,18 @@ namespace StashBot.Module.Message
             SendTextMessage(chatId, message);
         }
 
+        public void SendAuthorisationSuccessMessage(long chatId)
+        {
+            const string message = "Authorisation success";
+            SendTextMessage(chatId, message);
+        }
+
+        public void SendAuthorisationFailMessage(long chatId)
+        {
+            const string message = "Authorisation fail";
+            SendTextMessage(chatId, message);
+        }
+
         public void DeleteBotMessage(long chatId, int messageId)
         {
             messageDelete.DeleteBotMessage(chatId, messageId);

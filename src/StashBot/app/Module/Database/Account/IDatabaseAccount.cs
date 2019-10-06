@@ -3,5 +3,6 @@
     internal interface IDatabaseAccount
     {
         void CreateNewUser(long chatId, string hashAuthCode);
+        IUser GetUser(long chatId);
     }
 }

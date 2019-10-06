@@ -7,6 +7,7 @@ namespace StashBot.Module.ChatSession
     {
         void UserSentMessage(int messageId);
         void BotSentMessage(int messageId);
+        void Authorize();
         long ChatId();
         bool IsAuthorized();
         DateTime LastUserMessage();

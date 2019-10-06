@@ -8,6 +8,8 @@ namespace StashBot.Module.Message
         void SendTextMessage(long chatId, string textMessage);
         void SendWelcomeMessage(long chatId);
         void SendRegistrationSuccessMessage(long chatId, string authCode);
+        void SendAuthorisationSuccessMessage(long chatId);
+        void SendAuthorisationFailMessage(long chatId);
         void DeleteBotMessage(long chatId, int messageId);
         void DeleteListBotMessages(long chatId, List<int> messagesId);
     }

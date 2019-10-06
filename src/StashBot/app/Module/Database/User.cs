@@ -10,5 +10,10 @@
             this.chatId = chatId;
             this.hashAuthCode = hashAuthCode;
         }
+
+        public string HashAuthCode()
+        {
+            return hashAuthCode;
+        }
     }
 }

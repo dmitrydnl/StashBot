@@ -39,6 +39,11 @@ namespace StashBot.Module.ChatSession
             return currentSessions[chatId];
         }
 
+        public void AuthorizeSession(long chatId)
+        {
+            currentSessions[chatId].Authorize();
+        }
+
         public void UserSentMessage(long chatId, int messageId)
         {
             ISession session = currentSessions[chatId];
