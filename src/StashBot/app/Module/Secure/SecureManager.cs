@@ -10,5 +10,15 @@ namespace StashBot.Module.Secure
         {
             secureHash = new SecureHash();
         }
+
+        public string CalculateHash(string input)
+        {
+            return secureHash.CalculateHash(input);
+        }
+
+        public bool CompareWithHash(string input, string hash)
+        {
+            return secureHash.CompareWithHash(input, hash);
+        }
     }
 }
