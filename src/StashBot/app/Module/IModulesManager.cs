@@ -1,5 +1,7 @@
 ﻿using StashBot.Module.Message;
 using StashBot.Module.ChatSession;
+using StashBot.Module.User;
+using StashBot.Module.Secure;
 using Telegram.Bot;
 
 namespace StashBot.Module
@@ -9,5 +11,7 @@ namespace StashBot.Module
         ITelegramBotClient GetTelegramBotClient();
         IMessageManager GetMessageManager();
         ISessionsManager GetSessionsManager();
+        IUserManager GetUserManager();
+        ISecureManager GetSecureManager();
     }
 }
