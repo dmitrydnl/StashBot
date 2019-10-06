@@ -1,9 +1,10 @@
 ﻿using System;
+using StashBot.Module;
 using StashBot.Module.Message;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
-namespace StashBot.Module
+namespace StashBot
 {
     class StashBot
     {

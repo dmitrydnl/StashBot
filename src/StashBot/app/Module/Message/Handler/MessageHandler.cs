@@ -25,8 +25,6 @@ namespace StashBot.Module.Message.Handler
         {
             ISessionsManager sessionsManager =
                 ModulesManager.GetModulesManager().GetSessionsManager();
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
 
             if (string.IsNullOrEmpty(textMessage))
             {
@@ -35,19 +33,74 @@ namespace StashBot.Module.Message.Handler
 
             if (!sessionsManager.ContainsSession(chatId))
             {
-                sessionsManager.CreateSession(chatId);
-                messageManager.SendWelcomeMessage(chatId);
+                FirstMessageHandle(chatId);
                 return;
             }
-
-            sessionsManager.UserSentMessage(chatId, messageId);
 
             if (IsCommand(textMessage))
             {
-                HandleCommand handleCommand = commandsHandlers[textMessage];
-                handleCommand(chatId);
+                CommandHandle(chatId, messageId, textMessage);
                 return;
             }
+
+            if (!sessionsManager.GetSession(chatId).IsAuthorized())
+            {
+                AuthorisationHandle(chatId, messageId, textMessage);
+                return;
+            }
+
+            if (sessionsManager.GetSession(chatId).IsAuthorized())
+            {
+                AddDataToStashHandle(chatId, messageId, textMessage);
+                return;
+            }
+        }
+
+        private void FirstMessageHandle(long chatId)
+        {
+            ISessionsManager sessionsManager =
+                ModulesManager.GetModulesManager().GetSessionsManager();
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+
+            sessionsManager.CreateSession(chatId);
+            messageManager.SendWelcomeMessage(chatId);
+        }
+
+        private void CommandHandle(long chatId, int messageId, string textMessage)
+        {
+            ISessionsManager sessionsManager =
+                ModulesManager.GetModulesManager().GetSessionsManager();
+
+            sessionsManager.UserSentMessage(chatId, messageId);
+            HandleCommand handleCommand = commandsHandlers[textMessage];
+            handleCommand(chatId);
+        }
+
+        private void AuthorisationHandle(long chatId, int messageId, string textMessage)
+        {
+            ISessionsManager sessionsManager =
+                ModulesManager.GetModulesManager().GetSessionsManager();
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+
+            sessionsManager.UserSentMessage(chatId, messageId);
+            //TODO authorisation
+            const string answer = "Authorisation";
+            messageManager.SendTextMessage(chatId, answer);
+        }
+
+        private void AddDataToStashHandle(long chatId, int messageId, string textMessage)
+        {
+            ISessionsManager sessionsManager =
+                ModulesManager.GetModulesManager().GetSessionsManager();
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+
+            sessionsManager.UserSentMessage(chatId, messageId);
+            //TODO add data to stash
+            const string answer = "Add Data To Stash";
+            messageManager.SendTextMessage(chatId, answer);
         }
 
         private bool IsCommand(string textMessage)
@@ -62,28 +115,45 @@ namespace StashBot.Module.Message.Handler
 
         private void HandleStartCommand(long chatId)
         {
+            ISessionsManager sessionsManager =
+                ModulesManager.GetModulesManager().GetSessionsManager();
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
-                
-            messageManager.SendWelcomeMessage(chatId);
+
+            if (!sessionsManager.GetSession(chatId).IsAuthorized())
+            {
+                messageManager.SendWelcomeMessage(chatId);
+            }
         }
 
         private void HandleRegistrationCommand(long chatId)
         {
+            ISessionsManager sessionsManager =
+                ModulesManager.GetModulesManager().GetSessionsManager();
             IMessageManager messageManager = 
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string answer = "REGISTRATION COMMAND";
-            messageManager.SendTextMessage(chatId, answer);
+            if (!sessionsManager.GetSession(chatId).IsAuthorized())
+            {
+                //TODO registration
+                const string answer = "REGISTRATION COMMAND";
+                messageManager.SendTextMessage(chatId, answer);
+            }
         }
 
         private void HandleGetStashCommand(long chatId)
         {
+            ISessionsManager sessionsManager =
+                ModulesManager.GetModulesManager().GetSessionsManager();
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string answer = "GET STASH COMMAND";
-            messageManager.SendTextMessage(chatId, answer);
+            if (sessionsManager.GetSession(chatId).IsAuthorized())
+            {
+                //TODO get stash
+                const string answer = "GET STASH COMMAND";
+                messageManager.SendTextMessage(chatId, answer);
+            }
         }
     }
 }

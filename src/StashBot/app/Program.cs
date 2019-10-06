@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace StashBot.Module
+namespace StashBot
 {
     class Program
     {

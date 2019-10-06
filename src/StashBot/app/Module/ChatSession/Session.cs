@@ -6,6 +6,7 @@ namespace StashBot.Module.ChatSession
     internal class Session : ISession
     {
         private readonly long chatId;
+        private bool isAuthorized;
         private DateTime lastUserMessage;
         private DateTime lastBotMessage;
         private readonly List<int> userMessagesId;
@@ -14,6 +15,7 @@ namespace StashBot.Module.ChatSession
         internal Session(long chatId)
         {
             this.chatId = chatId;
+            isAuthorized = false;
             lastUserMessage = DateTime.UtcNow;
             lastBotMessage = DateTime.UtcNow;
             userMessagesId = new List<int>();
@@ -35,6 +37,11 @@ namespace StashBot.Module.ChatSession
         public long ChatId()
         {
             return chatId;
+        }
+
+        public bool IsAuthorized()
+        {
+            return isAuthorized;
         }
 
         public DateTime LastUserMessage()
