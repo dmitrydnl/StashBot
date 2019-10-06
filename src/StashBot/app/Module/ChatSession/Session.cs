@@ -31,5 +31,20 @@ namespace StashBot.Module.ChatSession
             lastBotMessage = DateTime.UtcNow;
             botMessagesId.Add(messageId);
         }
+
+        public long ChatId()
+        {
+            return chatId;
+        }
+
+        public DateTime LastUserMessage()
+        {
+            return lastUserMessage;
+        }
+
+        public List<int> BotMessagesId()
+        {
+            return botMessagesId;
+        }
     }
 }

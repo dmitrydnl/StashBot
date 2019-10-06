@@ -15,6 +15,7 @@
     <Folder Include="app\Module\" />
     <Folder Include="app\Module\ChatSession\" />
     <Folder Include="app\Module\Message\" />
+    <Folder Include="app\Module\Message\Delete\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="workData.json" />

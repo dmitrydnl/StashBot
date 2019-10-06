@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StashBot.Module.ChatSession;
 
 namespace StashBot.Module.Message.Handler
 {
@@ -22,15 +23,30 @@ namespace StashBot.Module.Message.Handler
 
         public void HandleUserTextMessage(long chatId, int messageId, string textMessage)
         {
+            ISessionsManager sessionsManager =
+                ModulesManager.GetModulesManager().GetSessionsManager();
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+
             if (string.IsNullOrEmpty(textMessage))
             {
                 return;
             }
 
+            if (!sessionsManager.ContainsSession(chatId))
+            {
+                sessionsManager.CreateSession(chatId);
+                messageManager.SendWelcomeMessage(chatId);
+                return;
+            }
+
+            sessionsManager.UserSentMessage(chatId, messageId);
+
             if (IsCommand(textMessage))
             {
                 HandleCommand handleCommand = commandsHandlers[textMessage];
                 handleCommand(chatId);
+                return;
             }
         }
 
@@ -48,18 +64,8 @@ namespace StashBot.Module.Message.Handler
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
-
-            const string answer = 
-                "Input command /reg for registration" +
-                "\n" +
-                "If you already registered, just input your key" +
-                "\n" +
-                "(WARNING)" +
-                "\n" +
-                "If you already registration," +
-                "\n" +
-                "after new registration you'll lose all old data";
-            messageManager.SendTextMessage(chatId, answer);
+                
+            messageManager.SendWelcomeMessage(chatId);
         }
 
         private void HandleRegistrationCommand(long chatId)
