@@ -5,4 +5,30 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Telegram.Bot" Version="15.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="3.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="app\" />
+    <Folder Include="app\WorkData\" />
+    <Folder Include="app\Module\" />
+    <Folder Include="app\Module\ChatSession\" />
+    <Folder Include="app\Module\Message\" />
+    <Folder Include="app\Module\Message\Delete\" />
+    <Folder Include="app\Module\User\" />
+    <Folder Include="app\Module\User\Registration\" />
+    <Folder Include="app\Module\Secure\" />
+    <Folder Include="app\Module\Secure\Hash\" />
+    <Folder Include="app\Module\Secure\AesCrypto\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="workData.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="workData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

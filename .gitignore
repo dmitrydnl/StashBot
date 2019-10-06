@@ -331,3 +331,6 @@ ASALocalRun/
 
 # macOS files
 .DS_Store
+
+# Local files
+src/StashBot/workData.json
