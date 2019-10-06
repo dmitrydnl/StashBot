@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace StashBot.GetWorkData
+namespace StashBot.WorkData
 {
     internal static class TextFileIO
     {

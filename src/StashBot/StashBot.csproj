@@ -11,9 +11,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
-    <Folder Include="app\GetWorkData\" />
-    <Folder Include="app\ChatSession\" />
-    <Folder Include="app\Bot\" />
+    <Folder Include="app\WorkData\" />
+    <Folder Include="app\Module\" />
+    <Folder Include="app\Module\ChatSession\" />
+    <Folder Include="app\Module\Message\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="workData.json" />

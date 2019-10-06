@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace StashBot.GetWorkData
+namespace StashBot.WorkData
 {
     internal class BotToken
     {
