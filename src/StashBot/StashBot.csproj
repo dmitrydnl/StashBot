@@ -21,6 +21,7 @@
     <Folder Include="app\Module\User\Registration\" />
     <Folder Include="app\Module\Secure\" />
     <Folder Include="app\Module\Secure\Hash\" />
+    <Folder Include="app\Module\Secure\AesCrypto\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="workData.json" />
