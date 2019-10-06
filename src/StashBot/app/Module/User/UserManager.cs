@@ -10,5 +10,10 @@ namespace StashBot.Module.User
         {
             userRegistration = new UserRegistration();
         }
+
+        public string CreateNewUser(long chatId)
+        {
+            return userRegistration.CreateNewUser(chatId);
+        }
     }
 }

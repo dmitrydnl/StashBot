@@ -1,4 +1,6 @@
-﻿namespace StashBot.Module.Secure
+﻿using System.Security.Cryptography;
+
+namespace StashBot.Module.Secure
 {
     internal interface ISecureManager
     {
@@ -6,7 +8,10 @@
         bool CompareWithHash(string input, string hash);
         byte[] EncryptWithAes(string text);
         string DecryptWithAes(byte[] encrypted);
-        string ByteArrayToString(byte[] bytes);
-        byte[] StringToByteArray(string str);
+        string AesEncryptedDataToString(byte[] encrypted);
+        byte[] AesStringToEncryptedData(string cipherText);
+        RSACryptoServiceProvider CreateRsaCryptoService();
+        string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters);
+        RSACryptoServiceProvider RsaCryptoServiceFromXmlString(string xmlString);
     }
 }

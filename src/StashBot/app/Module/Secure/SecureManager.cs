@@ -2,6 +2,8 @@
 using System.Text;
 using StashBot.Module.Secure.Hash;
 using StashBot.Module.Secure.AesCrypto;
+using StashBot.Module.Secure.RsaCrypto;
+using System.Security.Cryptography;
 
 namespace StashBot.Module.Secure
 {
@@ -9,11 +11,13 @@ namespace StashBot.Module.Secure
     {
         private readonly ISecureHash secureHash;
         private readonly ISecureAesCrypto secureAesCrypto;
+        private readonly ISecureRsaCrypto secureRsaCrypto;
 
         internal SecureManager()
         {
             secureHash = new SecureHash();
             secureAesCrypto = new SecureAesCrypto();
+            secureRsaCrypto = new SecureRsaCrypto();
         }
 
         public string CalculateHash(string input)
@@ -36,35 +40,29 @@ namespace StashBot.Module.Secure
             return secureAesCrypto.Decrypt(encrypted);
         }
 
-        public string ByteArrayToString(byte[] bytes)
+        public string AesEncryptedDataToString(byte[] encrypted)
         {
-            const char divider = ':';
-
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                stringBuilder.Append(bytes[i]);
-                if (i < bytes.Length - 1)
-                {
-                    stringBuilder.Append(divider);
-                }
-            }
-
-            return stringBuilder.ToString();
+            return secureAesCrypto.EncryptedDataToString(encrypted);
         }
 
-        public byte[] StringToByteArray(string str)
+        public byte[] AesStringToEncryptedData(string cipherText)
         {
-            const char divider = ':';
+            return secureAesCrypto.StringToEncryptedData(cipherText);
+        }
 
-            string[] bytesStr = str.Split(divider, StringSplitOptions.RemoveEmptyEntries);
-            byte[] bytes = new byte[bytesStr.Length];
-            for (int i = 0; i < bytesStr.Length; i++)
-            {
-                bytes[i] = Convert.ToByte(bytesStr[i]);
-            }
+        public RSACryptoServiceProvider CreateRsaCryptoService()
+        {
+            return secureRsaCrypto.CreateCryptoService();
+        }
 
-            return bytes;
+        public string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)
+        {
+            return secureRsaCrypto.ToXmlString(csp, includePrivateParameters);
+        }
+
+        public RSACryptoServiceProvider RsaCryptoServiceFromXmlString(string xmlString)
+        {
+            return secureRsaCrypto.FromXmlString(xmlString);
         }
     }
 }

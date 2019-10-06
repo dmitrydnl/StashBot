@@ -34,6 +34,12 @@ namespace StashBot.Module.Message
             SendTextMessage(chatId, message);
         }
 
+        public void SendRegistrationSuccessMessage(long chatId, string authCode)
+        {
+            string message = $"Registration success\nUse your code for auth:\n{authCode}";
+            SendTextMessage(chatId, message);
+        }
+
         public void DeleteBotMessage(long chatId, int messageId)
         {
             messageDelete.DeleteBotMessage(chatId, messageId);

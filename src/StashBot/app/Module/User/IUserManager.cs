@@ -2,6 +2,6 @@
 {
     internal interface IUserManager
     {
-
+        string CreateNewUser(long chatId);
     }
 }
