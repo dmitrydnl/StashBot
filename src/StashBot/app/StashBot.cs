@@ -41,7 +41,7 @@ namespace StashBot.Module
             long chatId = e.Message.Chat.Id;
             int messageId = e.Message.MessageId;
             string textMessage = e.Message.Text;
-            messageManager.UserSentTextMessage(chatId, messageId, textMessage);
+            messageManager.HandleUserTextMessage(chatId, messageId, textMessage);
         }
     }
 }
