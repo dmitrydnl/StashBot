@@ -61,5 +61,30 @@ namespace StashBot.Module.Secure.AesCrypto
 
             return text;
         }
+
+        public string EncryptedDataToString(byte[] encrypted)
+        {
+            byte[] iv = aes.IV;
+            byte[] result = new byte[iv.Length + encrypted.Length];
+            Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
+            Buffer.BlockCopy(encrypted, 0, result, iv.Length, encrypted.Length);
+            return Convert.ToBase64String(result);
+        }
+
+        public byte[] StringToEncryptedData(string cipherText)
+        {
+            if (string.IsNullOrEmpty(cipherText))
+            {
+                return null;
+            }
+
+            cipherText = cipherText.Replace(" ", "+");
+            byte[] fullCipher = Convert.FromBase64String(cipherText);
+            byte[] iv = new byte[16];
+            byte[] cipher = new byte[fullCipher.Length - iv.Length];
+            Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
+            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, fullCipher.Length - iv.Length);
+            return cipher;
+        }
     }
 }

@@ -5,6 +5,7 @@
         void CreateSession(long chatId);
         bool ContainsSession(long chatId);
         ISession GetSession(long chatId);
+        void AuthorizeSession(long chatId);
         void UserSentMessage(long chatId, int messageId);
         void BotSentMessage(long chatId, int messageId);
     }

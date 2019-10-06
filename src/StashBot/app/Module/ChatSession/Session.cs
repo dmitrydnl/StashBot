@@ -34,6 +34,11 @@ namespace StashBot.Module.ChatSession
             botMessagesId.Add(messageId);
         }
 
+        public void Authorize()
+        {
+            isAuthorized = true;
+        }
+
         public long ChatId()
         {
             return chatId;
