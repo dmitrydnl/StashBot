@@ -32,37 +32,37 @@ namespace StashBot.Module.Secure
 
         public byte[] EncryptWithAes(string text)
         {
-            return secureAesCrypto.Encrypt(text);
+            return secureAesCrypto.EncryptWithAes(text);
         }
 
         public string DecryptWithAes(byte[] encrypted)
         {
-            return secureAesCrypto.Decrypt(encrypted);
+            return secureAesCrypto.DecryptWithAes(encrypted);
         }
 
         public string AesEncryptedDataToString(byte[] encrypted)
         {
-            return secureAesCrypto.EncryptedDataToString(encrypted);
+            return secureAesCrypto.AesEncryptedDataToString(encrypted);
         }
 
         public byte[] AesStringToEncryptedData(string cipherText)
         {
-            return secureAesCrypto.StringToEncryptedData(cipherText);
+            return secureAesCrypto.AesStringToEncryptedData(cipherText);
         }
 
         public RSACryptoServiceProvider CreateRsaCryptoService()
         {
-            return secureRsaCrypto.CreateCryptoService();
+            return secureRsaCrypto.CreateRsaCryptoService();
         }
 
         public string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)
         {
-            return secureRsaCrypto.ToXmlString(csp, includePrivateParameters);
+            return secureRsaCrypto.RsaCryptoServiceToXmlString(csp, includePrivateParameters);
         }
 
         public RSACryptoServiceProvider RsaCryptoServiceFromXmlString(string xmlString)
         {
-            return secureRsaCrypto.FromXmlString(xmlString);
+            return secureRsaCrypto.RsaCryptoServiceFromXmlString(xmlString);
         }
     }
 }

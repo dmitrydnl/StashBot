@@ -10,13 +10,13 @@ namespace StashBot.Module.Secure.RsaCrypto
         {
         }
 
-        public RSACryptoServiceProvider CreateCryptoService()
+        public RSACryptoServiceProvider CreateRsaCryptoService()
         {
             RSACryptoServiceProvider csp = new RSACryptoServiceProvider(2048);
             return csp;
         }
 
-        public string ToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)
+        public string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)
         {
             RSAParameters parameters = csp.ExportParameters(includePrivateParameters);
 
@@ -38,7 +38,7 @@ namespace StashBot.Module.Secure.RsaCrypto
                 Convert.ToBase64String(parameters.Exponent));
         }
 
-        public RSACryptoServiceProvider FromXmlString(string xmlString)
+        public RSACryptoServiceProvider RsaCryptoServiceFromXmlString(string xmlString)
         {
             RSAParameters parameters = new RSAParameters();
 

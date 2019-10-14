@@ -13,7 +13,7 @@ namespace StashBot.Module.Secure.AesCrypto
             aes = Aes.Create();
         }
 
-        public byte[] Encrypt(string text)
+        public byte[] EncryptWithAes(string text)
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentNullException(nameof(text));
@@ -38,7 +38,7 @@ namespace StashBot.Module.Secure.AesCrypto
             return encrypted;
         }
 
-        public string Decrypt(byte[] encrypted)
+        public string DecryptWithAes(byte[] encrypted)
         {
             if (encrypted == null || encrypted.Length <= 0)
                 throw new ArgumentNullException(nameof(encrypted));
@@ -62,7 +62,7 @@ namespace StashBot.Module.Secure.AesCrypto
             return text;
         }
 
-        public string EncryptedDataToString(byte[] encrypted)
+        public string AesEncryptedDataToString(byte[] encrypted)
         {
             byte[] iv = aes.IV;
             byte[] result = new byte[iv.Length + encrypted.Length];
@@ -71,7 +71,7 @@ namespace StashBot.Module.Secure.AesCrypto
             return Convert.ToBase64String(result);
         }
 
-        public byte[] StringToEncryptedData(string cipherText)
+        public byte[] AesStringToEncryptedData(string cipherText)
         {
             if (string.IsNullOrEmpty(cipherText))
             {

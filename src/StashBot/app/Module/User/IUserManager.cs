@@ -1,8 +1,10 @@
-﻿namespace StashBot.Module.User
+﻿using StashBot.Module.User.Registration;
+using StashBot.Module.User.Authorisation;
+
+namespace StashBot.Module.User
 {
-    internal interface IUserManager
+    internal interface IUserManager : IUserRegistration, IUserAuthorisation
     {
-        string CreateNewUser(long chatId);
-        bool AuthorisationUser(long chatId, string authCode);
+
     }
 }
