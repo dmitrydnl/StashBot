@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StashBot.Module.ChatSession
+namespace StashBot.Module.Session
 {
-    internal class Session : ISession
+    internal class ChatSession : IChatSession
     {
         private readonly long chatId;
         private bool isAuthorized;
@@ -12,7 +12,7 @@ namespace StashBot.Module.ChatSession
         private readonly List<int> userMessagesId;
         private readonly List<int> botMessagesId;
 
-        internal Session(long chatId)
+        internal ChatSession(long chatId)
         {
             this.chatId = chatId;
             isAuthorized = false;

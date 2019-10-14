@@ -1,6 +1,6 @@
 ﻿using StashBot.Module.Database;
 using StashBot.Module.Secure;
-using StashBot.Module.ChatSession;
+using StashBot.Module.Session;
 
 namespace StashBot.Module.User.Authorisation
 {
@@ -16,8 +16,8 @@ namespace StashBot.Module.User.Authorisation
                 ModulesManager.GetModulesManager().GetDatabaseManager();
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user == null)
@@ -31,7 +31,10 @@ namespace StashBot.Module.User.Authorisation
                 return false;
             }
 
-            sessionsManager.AuthorizeSession(chatId);
+            byte[] usersEncryptedRsa = secureManager.AesStringToEncryptedData(authCode);
+            string usersRsaXmlString = secureManager.DecryptWithAes(usersEncryptedRsa);
+            user.Authorize(usersRsaXmlString);
+            sessionManager.AuthorizeChatSession(chatId);
             return true;
         }
     }

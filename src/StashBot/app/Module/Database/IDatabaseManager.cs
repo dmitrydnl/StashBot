@@ -1,8 +1,10 @@
-﻿namespace StashBot.Module.Database
+﻿using StashBot.Module.Database.Account;
+using StashBot.Module.Database.Stash;
+
+namespace StashBot.Module.Database
 {
-    internal interface IDatabaseManager
+    internal interface IDatabaseManager : IDatabaseAccount, IDatabaseStash
     {
-        void CreateNewUser(long chatId, string hashAuthCode);
-        IUser GetUser(long chatId);
+
     }
 }

@@ -14,7 +14,7 @@
     <Folder Include="app\" />
     <Folder Include="app\WorkData\" />
     <Folder Include="app\Module\" />
-    <Folder Include="app\Module\ChatSession\" />
+    <Folder Include="app\Module\Session\" />
     <Folder Include="app\Module\Message\" />
     <Folder Include="app\Module\Message\Delete\" />
     <Folder Include="app\Module\User\" />
@@ -26,6 +26,7 @@
     <Folder Include="app\Module\Database\" />
     <Folder Include="app\Module\Database\Account\" />
     <Folder Include="app\Module\User\Authorisation\" />
+    <Folder Include="app\Module\Database\Stash\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="workData.json" />

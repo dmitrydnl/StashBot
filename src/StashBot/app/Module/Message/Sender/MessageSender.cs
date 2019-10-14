@@ -1,4 +1,4 @@
-﻿using StashBot.Module.ChatSession;
+﻿using StashBot.Module.Session;
 using Telegram.Bot;
 
 namespace StashBot.Module.Message.Sender
@@ -13,14 +13,14 @@ namespace StashBot.Module.Message.Sender
         {
             ITelegramBotClient telegramBotClient =
                 ModulesManager.GetModulesManager().GetTelegramBotClient();
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
 
             Telegram.Bot.Types.Message message = await telegramBotClient.SendTextMessageAsync(
               chatId: chatId,
               text: textMessage
             );
-            sessionsManager.BotSentMessage(chatId, message.MessageId);
+            sessionManager.BotSentMessage(chatId, message.MessageId);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using StashBot.Module.ChatSession;
+using StashBot.Module.Session;
 using StashBot.Module.User;
+using StashBot.Module.Database;
 
 namespace StashBot.Module.Message.Handler
 {
@@ -22,17 +23,17 @@ namespace StashBot.Module.Message.Handler
             commandsHandlers.Add("/stash", HandleGetStashCommand);
         }
 
-        public void HandleUserTextMessage(long chatId, int messageId, string textMessage)
+        public void HandleUserMessage(long chatId, int messageId, string textMessage)
         {
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
 
             if (string.IsNullOrEmpty(textMessage))
             {
                 return;
             }
 
-            if (!sessionsManager.ContainsSession(chatId))
+            if (!sessionManager.ContainsChatSession(chatId))
             {
                 FirstMessageHandle(chatId);
                 return;
@@ -44,13 +45,13 @@ namespace StashBot.Module.Message.Handler
                 return;
             }
 
-            if (!sessionsManager.GetSession(chatId).IsAuthorized())
+            if (!sessionManager.GetChatSession(chatId).IsAuthorized())
             {
                 AuthorisationHandle(chatId, messageId, textMessage);
                 return;
             }
 
-            if (sessionsManager.GetSession(chatId).IsAuthorized())
+            if (sessionManager.GetChatSession(chatId).IsAuthorized())
             {
                 AddDataToStashHandle(chatId, messageId, textMessage);
                 return;
@@ -59,35 +60,35 @@ namespace StashBot.Module.Message.Handler
 
         private void FirstMessageHandle(long chatId)
         {
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            sessionsManager.CreateSession(chatId);
+            sessionManager.CreateChatSession(chatId);
             messageManager.SendWelcomeMessage(chatId);
         }
 
         private void CommandHandle(long chatId, int messageId, string textMessage)
         {
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
 
-            sessionsManager.UserSentMessage(chatId, messageId);
+            sessionManager.UserSentMessage(chatId, messageId);
             HandleCommand handleCommand = commandsHandlers[textMessage];
             handleCommand(chatId);
         }
 
         private void AuthorisationHandle(long chatId, int messageId, string textMessage)
         {
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
             IUserManager userManager =
                 ModulesManager.GetModulesManager().GetUserManager();
 
-            sessionsManager.UserSentMessage(chatId, messageId);
+            sessionManager.UserSentMessage(chatId, messageId);
             if (userManager.AuthorisationUser(chatId, textMessage))
             {
                 messageManager.SendAuthorisationSuccessMessage(chatId);
@@ -100,15 +101,13 @@ namespace StashBot.Module.Message.Handler
 
         private void AddDataToStashHandle(long chatId, int messageId, string textMessage)
         {
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
+            IDatabaseManager databaseManager =
+                ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            sessionsManager.UserSentMessage(chatId, messageId);
-            //TODO add data to stash
-            const string answer = "Add Data To Stash";
-            messageManager.SendTextMessage(chatId, answer);
+            sessionManager.UserSentMessage(chatId, messageId);
+            databaseManager.SaveMessageToStash(chatId, textMessage);
         }
 
         private bool IsCommand(string textMessage)
@@ -123,12 +122,12 @@ namespace StashBot.Module.Message.Handler
 
         private void HandleStartCommand(long chatId)
         {
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            if (!sessionsManager.GetSession(chatId).IsAuthorized())
+            if (!sessionManager.GetChatSession(chatId).IsAuthorized())
             {
                 messageManager.SendWelcomeMessage(chatId);
             }
@@ -136,14 +135,14 @@ namespace StashBot.Module.Message.Handler
 
         private void HandleRegistrationCommand(long chatId)
         {
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
             IMessageManager messageManager = 
                 ModulesManager.GetModulesManager().GetMessageManager();
             IUserManager userManager =
                 ModulesManager.GetModulesManager().GetUserManager();
 
-            if (!sessionsManager.GetSession(chatId).IsAuthorized())
+            if (!sessionManager.GetChatSession(chatId).IsAuthorized())
             {
                 string authCode = userManager.CreateNewUser(chatId);
                 messageManager.SendRegistrationSuccessMessage(chatId, authCode);
@@ -152,16 +151,20 @@ namespace StashBot.Module.Message.Handler
 
         private void HandleGetStashCommand(long chatId)
         {
-            ISessionsManager sessionsManager =
-                ModulesManager.GetModulesManager().GetSessionsManager();
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
+            IDatabaseManager databaseManager =
+                ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            if (sessionsManager.GetSession(chatId).IsAuthorized())
+            if (sessionManager.GetChatSession(chatId).IsAuthorized())
             {
-                //TODO get stash
-                const string answer = "GET STASH COMMAND";
-                messageManager.SendTextMessage(chatId, answer);
+                List<string> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
+                foreach (string textMessage in messagesFromStash)
+                {
+                    messageManager.SendTextMessage(chatId, textMessage);
+                }
             }
         }
     }

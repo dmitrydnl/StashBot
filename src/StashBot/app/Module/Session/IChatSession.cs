@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StashBot.Module.ChatSession
+namespace StashBot.Module.Session
 {
-    internal interface ISession
+    internal interface IChatSession
     {
         void UserSentMessage(int messageId);
         void BotSentMessage(int messageId);

@@ -1,5 +1,5 @@
 ﻿using StashBot.Module.Message;
-using StashBot.Module.ChatSession;
+using StashBot.Module.Session;
 using StashBot.Module.User;
 using StashBot.Module.Secure;
 using StashBot.Module.Database;
@@ -11,7 +11,7 @@ namespace StashBot.Module
     {
         ITelegramBotClient GetTelegramBotClient();
         IMessageManager GetMessageManager();
-        ISessionsManager GetSessionsManager();
+        ISessionManager GetSessionManager();
         IUserManager GetUserManager();
         ISecureManager GetSecureManager();
         IDatabaseManager GetDatabaseManager();
