@@ -1,5 +1,5 @@
 ﻿using StashBot.Module.Message;
-using StashBot.Module.ChatSession;
+using StashBot.Module.Session;
 using StashBot.Module.User;
 using StashBot.Module.Secure;
 using StashBot.Module.Database;
@@ -14,7 +14,7 @@ namespace StashBot.Module
 
         private readonly ITelegramBotClient telegramBotClient;
         private readonly IMessageManager messageManager;
-        private readonly ISessionsManager sessionsManager;
+        private readonly ISessionManager sessionManager;
         private readonly IUserManager userManager;
         private readonly ISecureManager secureManager;
         private readonly IDatabaseManager databaseManager;
@@ -23,7 +23,7 @@ namespace StashBot.Module
         {
             telegramBotClient = new TelegramBotClient(new BotToken().Get());
             messageManager = new MessageManager();
-            sessionsManager = new SessionsManager();
+            sessionManager = new SessionManager();
             userManager = new UserManager();
             secureManager = new SecureManager();
             databaseManager = new DatabaseManager();
@@ -49,9 +49,9 @@ namespace StashBot.Module
             return messageManager;
         }
 
-        public ISessionsManager GetSessionsManager()
+        public ISessionManager GetSessionManager()
         {
-            return sessionsManager;
+            return sessionManager;
         }
 
         public IUserManager GetUserManager()
