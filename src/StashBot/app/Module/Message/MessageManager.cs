@@ -18,9 +18,9 @@ namespace StashBot.Module.Message
             messageDelete = new MessageDelete();
         }
 
-        public void HandleUserTextMessage(long chatId, int messageId, string textMessage)
+        public void HandleUserMessage(long chatId, int messageId, string textMessage)
         {
-            messageHandler.HandleUserTextMessage(chatId, messageId, textMessage);
+            messageHandler.HandleUserMessage(chatId, messageId, textMessage);
         }
 
         public void SendTextMessage(long chatId, string textMessage)

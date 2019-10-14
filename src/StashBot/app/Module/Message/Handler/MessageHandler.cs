@@ -22,7 +22,7 @@ namespace StashBot.Module.Message.Handler
             commandsHandlers.Add("/stash", HandleGetStashCommand);
         }
 
-        public void HandleUserTextMessage(long chatId, int messageId, string textMessage)
+        public void HandleUserMessage(long chatId, int messageId, string textMessage)
         {
             ISessionManager sessionManager =
                 ModulesManager.GetModulesManager().GetSessionManager();

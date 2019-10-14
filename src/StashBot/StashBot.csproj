@@ -26,6 +26,7 @@
     <Folder Include="app\Module\Database\" />
     <Folder Include="app\Module\Database\Account\" />
     <Folder Include="app\Module\User\Authorisation\" />
+    <Folder Include="app\Module\Database\Stash\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="workData.json" />
