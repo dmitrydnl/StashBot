@@ -31,6 +31,9 @@ namespace StashBot.Module.User.Authorisation
                 return false;
             }
 
+            byte[] usersEncryptedRsa = secureManager.AesStringToEncryptedData(authCode);
+            string usersRsaXmlString = secureManager.DecryptWithAes(usersEncryptedRsa);
+            user.Authorize(usersRsaXmlString);
             sessionManager.AuthorizeChatSession(chatId);
             return true;
         }

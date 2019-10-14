@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using StashBot.Module.Secure.Hash;
+﻿using StashBot.Module.Secure.Hash;
 using StashBot.Module.Secure.AesCrypto;
 using StashBot.Module.Secure.RsaCrypto;
 using System.Security.Cryptography;
@@ -53,6 +51,16 @@ namespace StashBot.Module.Secure
         public RSACryptoServiceProvider CreateRsaCryptoService()
         {
             return secureRsaCrypto.CreateRsaCryptoService();
+        }
+
+        public string EncryptWithRsa(RSACryptoServiceProvider csp, string text)
+        {
+            return secureRsaCrypto.EncryptWithRsa(csp, text);
+        }
+
+        public string DecryptWithRsa(RSACryptoServiceProvider csp, string encrypted)
+        {
+            return secureRsaCrypto.DecryptWithRsa(csp, encrypted);
         }
 
         public string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)

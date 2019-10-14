@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using StashBot.Module.Session;
 using StashBot.Module.User;
+using StashBot.Module.Database;
 
 namespace StashBot.Module.Message.Handler
 {
@@ -102,13 +103,11 @@ namespace StashBot.Module.Message.Handler
         {
             ISessionManager sessionManager =
                 ModulesManager.GetModulesManager().GetSessionManager();
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IDatabaseManager databaseManager =
+                ModulesManager.GetModulesManager().GetDatabaseManager();
 
             sessionManager.UserSentMessage(chatId, messageId);
-            //TODO add data to stash
-            const string answer = "Add Data To Stash";
-            messageManager.SendTextMessage(chatId, answer);
+            databaseManager.SaveMessageToStash(chatId, textMessage);
         }
 
         private bool IsCommand(string textMessage)
@@ -156,12 +155,16 @@ namespace StashBot.Module.Message.Handler
                 ModulesManager.GetModulesManager().GetSessionManager();
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
+            IDatabaseManager databaseManager =
+                ModulesManager.GetModulesManager().GetDatabaseManager();
 
             if (sessionManager.GetChatSession(chatId).IsAuthorized())
             {
-                //TODO get stash
-                const string answer = "GET STASH COMMAND";
-                messageManager.SendTextMessage(chatId, answer);
+                List<string> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
+                foreach (string textMessage in messagesFromStash)
+                {
+                    messageManager.SendTextMessage(chatId, textMessage);
+                }
             }
         }
     }

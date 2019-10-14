@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml;
+using System.Text;
 using System.Security.Cryptography;
 
 namespace StashBot.Module.Secure.RsaCrypto
@@ -14,6 +15,20 @@ namespace StashBot.Module.Secure.RsaCrypto
         {
             RSACryptoServiceProvider csp = new RSACryptoServiceProvider(2048);
             return csp;
+        }
+
+        public string EncryptWithRsa(RSACryptoServiceProvider csp, string text)
+        {
+            byte[] data = Encoding.Unicode.GetBytes(text);
+            byte[] encrypted = csp.Encrypt(data, false);
+            return Convert.ToBase64String(encrypted);
+        }
+
+        public string DecryptWithRsa(RSACryptoServiceProvider csp, string encrypted)
+        {
+            byte[] data = Convert.FromBase64String(encrypted);
+            byte[] decrypted = csp.Decrypt(data, false);
+            return Encoding.Unicode.GetString(decrypted);
         }
 
         public string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)
