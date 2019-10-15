@@ -19,7 +19,7 @@ namespace StashBot.Module.Database
             rsaCryptoServiceProvider = null;
         }
 
-        public void Authorize(string authCode)
+        public void Login(string authCode)
         {
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
@@ -27,6 +27,12 @@ namespace StashBot.Module.Database
             byte[] encryptedRsa = secureManager.AesStringToEncryptedData(authCode);
             string rsaXmlString = secureManager.DecryptWithAes(encryptedRsa);
             rsaCryptoServiceProvider = secureManager.RsaCryptoServiceFromXmlString(rsaXmlString);
+        }
+
+        public void Logout()
+        {
+            rsaCryptoServiceProvider.Clear();
+            rsaCryptoServiceProvider = null;
         }
 
         public bool ValidateAuthCode(string authCode)

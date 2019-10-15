@@ -6,5 +6,6 @@ namespace StashBot.Module.Database.Stash
     {
         void SaveMessageToStash(long chatId, string message);
         List<string> GetMessagesFromStash(long chatId);
+        void ClearStash(long chatId);
     }
 }

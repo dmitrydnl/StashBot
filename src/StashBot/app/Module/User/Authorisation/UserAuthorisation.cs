@@ -27,7 +27,7 @@ namespace StashBot.Module.User.Authorisation
                 return false;
             }
 
-            databaseManager.AuthorizeUser(chatId, authCode);
+            databaseManager.LoginUser(chatId, authCode);
             sessionManager.AuthorizeChatSession(chatId);
             return true;
         }

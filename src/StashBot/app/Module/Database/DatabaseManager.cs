@@ -35,9 +35,14 @@ namespace StashBot.Module.Database
             return databaseAccount.GetUser(chatId);
         }
 
-        public void AuthorizeUser(long chatId, string authCode)
+        public void LoginUser(long chatId, string authCode)
         {
-            databaseAccount.AuthorizeUser(chatId, authCode);
+            databaseAccount.LoginUser(chatId, authCode);
+        }
+
+        public void LogoutUser(long chatId)
+        {
+            databaseAccount.LogoutUser(chatId);
         }
 
         public void SaveMessageToStash(long chatId, string message)
@@ -48,6 +53,11 @@ namespace StashBot.Module.Database
         public List<string> GetMessagesFromStash(long chatId)
         {
             return databaseStash.GetMessagesFromStash(chatId);
+        }
+
+        public void ClearStash(long chatId)
+        {
+            databaseStash.ClearStash(chatId);
         }
     }
 }

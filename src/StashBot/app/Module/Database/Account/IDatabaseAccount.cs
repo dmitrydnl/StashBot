@@ -6,6 +6,7 @@
         bool IsUserExist(long chatId);
         bool ValidateUserAuthCode(long chatId, string authCode);
         IUser GetUser(long chatId);
-        void AuthorizeUser(long chatId, string authCode);
+        void LoginUser(long chatId, string authCode);
+        void LogoutUser(long chatId);
     }
 }

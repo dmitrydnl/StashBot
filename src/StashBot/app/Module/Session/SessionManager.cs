@@ -2,6 +2,7 @@
 using System.Timers;
 using System.Collections.Generic;
 using StashBot.Module.Message;
+using StashBot.Module.Database;
 
 namespace StashBot.Module.Session
 {
@@ -82,10 +83,13 @@ namespace StashBot.Module.Session
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
+            IDatabaseManager databaseManager =
+                ModulesManager.GetModulesManager().GetDatabaseManager();
 
             List<int> botMessagesId = GetChatSession(chatId).BotMessagesId();
             messageManager.DeleteListBotMessages(chatId, botMessagesId);
             currentChatSessions.Remove(chatId);
+            databaseManager.LogoutUser(chatId);
         }
     }
 }
