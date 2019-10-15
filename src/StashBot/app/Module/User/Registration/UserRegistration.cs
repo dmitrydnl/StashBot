@@ -8,6 +8,7 @@ namespace StashBot.Module.User.Registration
     {
         internal UserRegistration()
         {
+
         }
 
         public string CreateNewUser(long chatId)
@@ -21,8 +22,7 @@ namespace StashBot.Module.User.Registration
             string cspStr = secureManager.RsaCryptoServiceToXmlString(csp, true);
             byte[] cspEncrypted = secureManager.EncryptWithAes(cspStr);
             string authCode = secureManager.AesEncryptedDataToString(cspEncrypted);
-            string hashAuthCode = secureManager.CalculateHash(authCode);
-            databaseManager.CreateNewUser(chatId, hashAuthCode);
+            databaseManager.CreateNewUser(chatId, authCode);
             return authCode;
         }
     }

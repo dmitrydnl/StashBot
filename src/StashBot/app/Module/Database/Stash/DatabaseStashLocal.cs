@@ -53,5 +53,13 @@ namespace StashBot.Module.Database.Stash
             string encryptedMessage = secureManager.EncryptWithRsa(csp, message);
             usersStashes[chatId].Add(encryptedMessage);
         }
+
+        public void ClearStash(long chatId)
+        {
+            if (usersStashes.ContainsKey(chatId))
+            {
+                usersStashes[chatId].Clear();
+            }
+        }
     }
 }
