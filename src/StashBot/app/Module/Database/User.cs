@@ -9,24 +9,32 @@ namespace StashBot.Module.Database
         private readonly string hashAuthCode;
         private RSACryptoServiceProvider rsaCryptoServiceProvider;
 
-        internal User(long chatId, string hashAuthCode)
-        {
-            this.chatId = chatId;
-            this.hashAuthCode = hashAuthCode;
-            rsaCryptoServiceProvider = null;
-        }
-
-        public void Authorize(string rsaXmlString)
+        internal User(long chatId, string authCode)
         {
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
 
+            this.chatId = chatId;
+            hashAuthCode = secureManager.CalculateHash(authCode);
+            rsaCryptoServiceProvider = null;
+        }
+
+        public void Authorize(string authCode)
+        {
+            ISecureManager secureManager =
+                ModulesManager.GetModulesManager().GetSecureManager();
+
+            byte[] encryptedRsa = secureManager.AesStringToEncryptedData(authCode);
+            string rsaXmlString = secureManager.DecryptWithAes(encryptedRsa);
             rsaCryptoServiceProvider = secureManager.RsaCryptoServiceFromXmlString(rsaXmlString);
         }
 
-        public string HashAuthCode()
+        public bool ValidateAuthCode(string authCode)
         {
-            return hashAuthCode;
+            ISecureManager secureManager =
+                ModulesManager.GetModulesManager().GetSecureManager();
+
+            return secureManager.CompareWithHash(authCode, hashAuthCode);
         }
 
         public RSACryptoServiceProvider RsaCryptoServiceProvider()

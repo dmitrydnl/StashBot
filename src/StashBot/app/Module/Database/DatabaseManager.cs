@@ -15,14 +15,29 @@ namespace StashBot.Module.Database
             databaseStash = new DatabaseStashLocal();
         }
 
-        public void CreateNewUser(long chatId, string hashAuthCode)
+        public void CreateNewUser(long chatId, string authCode)
         {
-            databaseAccount.CreateNewUser(chatId, hashAuthCode);
+            databaseAccount.CreateNewUser(chatId, authCode);
+        }
+
+        public bool IsUserExist(long chatId)
+        {
+            return databaseAccount.IsUserExist(chatId);
+        }
+
+        public bool ValidateUserAuthCode(long chatId, string authCode)
+        {
+            return databaseAccount.ValidateUserAuthCode(chatId, authCode);
         }
 
         public IUser GetUser(long chatId)
         {
             return databaseAccount.GetUser(chatId);
+        }
+
+        public void AuthorizeUser(long chatId, string authCode)
+        {
+            databaseAccount.AuthorizeUser(chatId, authCode);
         }
 
         public void SaveMessageToStash(long chatId, string message)
