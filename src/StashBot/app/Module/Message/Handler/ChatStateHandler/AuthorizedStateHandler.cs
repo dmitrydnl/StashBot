@@ -5,13 +5,14 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class AuthorizedStateHandler : IChatStateHandler
     {
-        private delegate void Command(long chatId, int messageId, IChatStateHandlerContext context);
+        private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
-        internal AuthorizedStateHandler()
+        internal AuthorizedStateHandler(long chatId)
         {
             commands = new Dictionary<string, Command>();
             InitializeCommands();
+            StartState(chatId);
         }
 
         private void InitializeCommands()
@@ -19,11 +20,20 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             commands.Add("/stash", GetStash);
         }
 
+        private void StartState(long chatId)
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+
+            const string loginMessage = "Input message to save it in stash.\nTo get messages in stash - /stash";
+            messageManager.SendMessage(chatId, loginMessage);
+        }
+
         public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
         {
             if (commands.ContainsKey(message))
             {
-                commands[message](chatId, messageId, context);
+                commands[message](chatId, context);
             }
             else
             {
@@ -39,7 +49,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             databaseManager.SaveMessageToStash(chatId, message);
         }
 
-        private void GetStash(long chatId, int messageId, IChatStateHandlerContext context)
+        private void GetStash(long chatId, IChatStateHandlerContext context)
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();

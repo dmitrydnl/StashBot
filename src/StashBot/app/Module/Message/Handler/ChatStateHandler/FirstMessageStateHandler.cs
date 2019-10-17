@@ -12,19 +12,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 ModulesManager.GetModulesManager().GetMessageManager();
 
             sessionManager.CreateChatSession(chatId);
-            messageManager.SendMessage(chatId, WelcomeMessage());
-            context.ChangeChatState(new StartStateHandler());
-        }
-
-        private string WelcomeMessage()
-        {
-            return "Hi, good to see you!" +
-                "\n" +
-                "For registration: /reg" +
-                "\n" +
-                "For authorization: /auth" +
-                "\n" +
-                "For information about me: /info";
+            const string welcomeMessage = "Hi, good to see you!";
+            messageManager.SendMessage(chatId, welcomeMessage);
+            context.ChangeChatState(new StartStateHandler(chatId));
         }
     }
 }
