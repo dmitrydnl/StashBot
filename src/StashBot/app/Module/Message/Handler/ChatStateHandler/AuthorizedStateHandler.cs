@@ -26,7 +26,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string loginMessage = "Input message to save it in stash.\nGet messages in stash - /stash\nLogout - /logout";
+            const string loginMessage = "Input message to save it in stash.\nGet messages in stash: /stash\nLogout: /logout";
             messageManager.SendMessage(chatId, loginMessage);
         }
 

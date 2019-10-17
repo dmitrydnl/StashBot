@@ -25,7 +25,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string mainCommandsMessage = "Registration: /reg\nAuthorization: /auth\nInformation about me: /info";
+            const string mainCommandsMessage = "Registration: /reg\nAuthorization: /auth\nInformation about me: /info\nClose chat in any time: /e or /exit";
             messageManager.SendMessage(chatId, mainCommandsMessage);
         }
 

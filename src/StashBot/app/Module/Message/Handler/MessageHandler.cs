@@ -29,8 +29,15 @@ namespace StashBot.Module.Message.Handler
                 chatSession = sessionManager.GetChatSession(chatId);
             }
 
-            chatStateHandlerFactory.GetChatStateHandler(chatSession.State).HandleUserMessage(chatId, messageId, message, this);
             sessionManager.UserSentMessage(chatId, messageId);
+            if (string.Equals(message, "/e") || string.Equals(message, "/exit"))
+            {
+                sessionManager.KillChatSession(chatId);
+            }
+            else
+            {
+                chatStateHandlerFactory.GetChatStateHandler(chatSession.State).HandleUserMessage(chatId, messageId, message, this);
+            }
         }
 
         public void ChangeChatState(long chatId, ChatSessionState newChatSessionState)

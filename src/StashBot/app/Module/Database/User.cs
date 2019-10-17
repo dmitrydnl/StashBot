@@ -31,8 +31,11 @@ namespace StashBot.Module.Database
 
         public void Logout()
         {
-            rsaCryptoServiceProvider.Clear();
-            rsaCryptoServiceProvider = null;
+            if (rsaCryptoServiceProvider != null)
+            {
+                rsaCryptoServiceProvider.Clear();
+                rsaCryptoServiceProvider = null;
+            }
         }
 
         public bool ValidateAuthCode(string authCode)
