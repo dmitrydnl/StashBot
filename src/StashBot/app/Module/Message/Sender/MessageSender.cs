@@ -7,6 +7,7 @@ namespace StashBot.Module.Message.Sender
     {
         internal MessageSender()
         {
+
         }
 
         public async void SendTextMessage(long chatId, string textMessage)

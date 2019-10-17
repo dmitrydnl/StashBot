@@ -27,6 +27,7 @@
     <Folder Include="app\Module\Database\Account\" />
     <Folder Include="app\Module\User\Authorisation\" />
     <Folder Include="app\Module\Database\Stash\" />
+    <Folder Include="app\Module\Message\Handler\ChatStateHandler\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="workData.json" />

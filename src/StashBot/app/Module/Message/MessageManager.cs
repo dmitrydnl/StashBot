@@ -1,7 +1,7 @@
-﻿using StashBot.Module.Message.Handler;
+﻿using System.Collections.Generic;
+using StashBot.Module.Message.Handler;
 using StashBot.Module.Message.Sender;
 using StashBot.Module.Message.Delete;
-using System.Collections.Generic;
 
 namespace StashBot.Module.Message
 {
@@ -18,38 +18,14 @@ namespace StashBot.Module.Message
             messageDelete = new MessageDelete();
         }
 
-        public void HandleUserMessage(long chatId, int messageId, string textMessage)
+        public void HandleUserMessage(long chatId, int messageId, string message)
         {
-            messageHandler.HandleUserMessage(chatId, messageId, textMessage);
+            messageHandler.HandleUserMessage(chatId, messageId, message);
         }
 
         public void SendTextMessage(long chatId, string textMessage)
         {
             messageSender.SendTextMessage(chatId, textMessage);
-        }
-
-        public void SendWelcomeMessage(long chatId)
-        {
-            const string message = "Input command /reg for registration\nIf you already registered, just input your key\n(WARNING)\nIf you already registration,\nafter new registration you'll lose all old data";
-            SendTextMessage(chatId, message);
-        }
-
-        public void SendRegistrationSuccessMessage(long chatId, string authCode)
-        {
-            string message = $"Registration success\nUse your code for auth:\n{authCode}";
-            SendTextMessage(chatId, message);
-        }
-
-        public void SendAuthorisationSuccessMessage(long chatId)
-        {
-            const string message = "Authorisation success";
-            SendTextMessage(chatId, message);
-        }
-
-        public void SendAuthorisationFailMessage(long chatId)
-        {
-            const string message = "Authorisation fail";
-            SendTextMessage(chatId, message);
         }
 
         public void DeleteBotMessage(long chatId, int messageId)
