@@ -19,11 +19,11 @@ namespace StashBot.Module.Secure.RsaCrypto
             return Convert.ToBase64String(encrypted);
         }
 
-        public string DecryptWithRsa(RSACryptoServiceProvider csp, string encrypted)
+        public string DecryptWithRsa(RSACryptoServiceProvider csp, string encryptedText)
         {
-            byte[] data = Convert.FromBase64String(encrypted);
-            byte[] decrypted = csp.Decrypt(data, false);
-            return Encoding.Unicode.GetString(decrypted);
+            byte[] encryptedData = Convert.FromBase64String(encryptedText);
+            byte[] data = csp.Decrypt(encryptedData, false);
+            return Encoding.Unicode.GetString(data);
         }
 
         public string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)

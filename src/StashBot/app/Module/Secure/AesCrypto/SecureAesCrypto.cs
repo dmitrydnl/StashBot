@@ -20,7 +20,7 @@ namespace StashBot.Module.Secure.AesCrypto
             if (aes == null)
                 throw new ArgumentNullException(nameof(aes));
 
-            byte[] encrypted;
+            byte[] encryptedData;
 
             ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
             using (MemoryStream msEncrypt = new MemoryStream())
@@ -31,24 +31,24 @@ namespace StashBot.Module.Secure.AesCrypto
                     {
                         swEncrypt.Write(text);
                     }
-                    encrypted = msEncrypt.ToArray();
+                    encryptedData = msEncrypt.ToArray();
                 }
             }
 
-            return encrypted;
+            return encryptedData;
         }
 
-        public string DecryptWithAes(byte[] encrypted)
+        public string DecryptWithAes(byte[] encryptedData)
         {
-            if (encrypted == null || encrypted.Length <= 0)
-                throw new ArgumentNullException(nameof(encrypted));
+            if (encryptedData == null || encryptedData.Length <= 0)
+                throw new ArgumentNullException(nameof(encryptedData));
             if (aes == null)
                 throw new ArgumentNullException(nameof(aes));
 
             string text = null;
 
             ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            using (MemoryStream msDecrypt = new MemoryStream(encrypted))
+            using (MemoryStream msDecrypt = new MemoryStream(encryptedData))
             {
                 using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                 {
@@ -62,29 +62,29 @@ namespace StashBot.Module.Secure.AesCrypto
             return text;
         }
 
-        public string AesEncryptedDataToString(byte[] encrypted)
+        public string AesEncryptedDataToString(byte[] encryptedData)
         {
             byte[] iv = aes.IV;
-            byte[] result = new byte[iv.Length + encrypted.Length];
+            byte[] result = new byte[iv.Length + encryptedData.Length];
             Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
-            Buffer.BlockCopy(encrypted, 0, result, iv.Length, encrypted.Length);
+            Buffer.BlockCopy(encryptedData, 0, result, iv.Length, encryptedData.Length);
             return Convert.ToBase64String(result);
         }
 
-        public byte[] AesStringToEncryptedData(string cipherText)
+        public byte[] AesStringToEncryptedData(string encryptedText)
         {
-            if (string.IsNullOrEmpty(cipherText))
+            if (string.IsNullOrEmpty(encryptedText))
             {
                 return null;
             }
 
-            cipherText = cipherText.Replace(" ", "+");
-            byte[] fullCipher = Convert.FromBase64String(cipherText);
+            encryptedText = encryptedText.Replace(" ", "+");
+            byte[] fullCipher = Convert.FromBase64String(encryptedText);
             byte[] iv = new byte[16];
-            byte[] cipher = new byte[fullCipher.Length - iv.Length];
+            byte[] encryptedData = new byte[fullCipher.Length - iv.Length];
             Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
-            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, fullCipher.Length - iv.Length);
-            return cipher;
+            Buffer.BlockCopy(fullCipher, iv.Length, encryptedData, 0, fullCipher.Length - iv.Length);
+            return encryptedData;
         }
     }
 }

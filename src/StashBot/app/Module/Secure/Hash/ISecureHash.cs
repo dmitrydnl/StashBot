@@ -2,7 +2,7 @@
 {
     internal interface ISecureHash
     {
-        string CalculateHash(string input);
-        bool CompareWithHash(string input, string hash);
+        string CalculateHash(string text);
+        bool CompareWithHash(string text, string hash);
     }
 }
