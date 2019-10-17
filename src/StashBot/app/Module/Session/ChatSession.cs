@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using StashBot.Module.Message;
+using StashBot.Module.User;
 
 namespace StashBot.Module.Session
 {
     internal class ChatSession : IChatSession
     {
+        private const int CHAT_SESSION_LIVE_TIME_SEC = 60;
+
         private readonly long chatId;
         private bool isAuthorized;
         private DateTime lastUserMessage;
@@ -39,6 +43,26 @@ namespace StashBot.Module.Session
             isAuthorized = true;
         }
 
+        public void Kill()
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager =
+                ModulesManager.GetModulesManager().GetUserManager();
+
+            messageManager.DeleteListMessages(chatId, botMessagesId);
+            botMessagesId.Clear();
+            messageManager.DeleteListMessages(chatId, userMessagesId);
+            userMessagesId.Clear();
+            userManager.LogoutUser(chatId);
+        }
+
+        public bool NeedKill()
+        {
+            DateTime endLiveTime = lastUserMessage.AddSeconds(CHAT_SESSION_LIVE_TIME_SEC);
+            return endLiveTime <= DateTime.UtcNow;
+        }
+
         public long ChatId()
         {
             return chatId;
@@ -47,16 +71,6 @@ namespace StashBot.Module.Session
         public bool IsAuthorized()
         {
             return isAuthorized;
-        }
-
-        public DateTime LastUserMessage()
-        {
-            return lastUserMessage;
-        }
-
-        public List<int> BotMessagesId()
-        {
-            return botMessagesId;
         }
     }
 }

@@ -17,16 +17,13 @@ namespace StashBot.Module.Message.Handler
                 return;
             }
 
-            if (!sessionManager.ContainsChatSession(chatId))
+            if (!sessionManager.IsChatSessionExist(chatId))
             {
                 chatStateHandler = new FirstMessageStateHandler();
             }
-            else
-            {
-                sessionManager.UserSentMessage(chatId, messageId);
-            }
 
             chatStateHandler.HandleUserMessage(chatId, messageId, message, this);
+            sessionManager.UserSentMessage(chatId, messageId);
         }
 
         public void ChangeChatState(IChatStateHandler newChatStateHandler)

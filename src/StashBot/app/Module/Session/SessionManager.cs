@@ -1,15 +1,11 @@
-﻿using System;
-using System.Timers;
+﻿using System.Timers;
 using System.Collections.Generic;
-using StashBot.Module.Message;
-using StashBot.Module.Database;
 
 namespace StashBot.Module.Session
 {
     internal class SessionManager : ISessionManager
     {
         private const int TIMER_INTERVAL_CLEAR_CHAT_SESSIONS = 10;
-        private const int CHAT_SESSION_LIVE_TIME_SEC = 60;
 
         private readonly Dictionary<long, IChatSession> currentChatSessions;
 
@@ -22,27 +18,46 @@ namespace StashBot.Module.Session
         public void CreateChatSession(long chatId)
         {
             ChatSession newChatSession = new ChatSession(chatId);
-            currentChatSessions.Add(chatId, newChatSession);
+            if (IsChatSessionExist(chatId))
+            {
+                currentChatSessions[chatId] = newChatSession;
+            }
+            else
+            {
+                currentChatSessions.Add(chatId, newChatSession);
+            }
         }
 
-        public bool ContainsChatSession(long chatId)
+        public bool IsChatSessionExist(long chatId)
         {
             return currentChatSessions.ContainsKey(chatId);
         }
 
         public IChatSession GetChatSession(long chatId)
         {
-            if (!ContainsChatSession(chatId))
+            if (IsChatSessionExist(chatId))
             {
-                return null;
+                return currentChatSessions[chatId];
             }
 
-            return currentChatSessions[chatId];
+            return null;
         }
 
         public void AuthorizeChatSession(long chatId)
         {
-            currentChatSessions[chatId].Authorize();
+            if (IsChatSessionExist(chatId))
+            {
+                currentChatSessions[chatId].Authorize();
+            }
+        }
+
+        public void KillChatSession(long chatId)
+        {
+            if (IsChatSessionExist(chatId))
+            {
+                currentChatSessions[chatId].Kill();
+                currentChatSessions.Remove(chatId);
+            }
         }
 
         public void UserSentMessage(long chatId, int messageId)
@@ -70,26 +85,11 @@ namespace StashBot.Module.Session
             foreach (var s in currentChatSessions)
             {
                 IChatSession chatSession = s.Value;
-                DateTime endLiveTime = chatSession.LastUserMessage()
-                    .AddSeconds(CHAT_SESSION_LIVE_TIME_SEC);
-                if (endLiveTime <= DateTime.UtcNow)
+                if (chatSession.NeedKill())
                 {
                     KillChatSession(chatSession.ChatId());
                 }
             }
-        }
-
-        private void KillChatSession(long chatId)
-        {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
-
-            List<int> botMessagesId = GetChatSession(chatId).BotMessagesId();
-            messageManager.DeleteListBotMessages(chatId, botMessagesId);
-            currentChatSessions.Remove(chatId);
-            databaseManager.LogoutUser(chatId);
         }
     }
 }

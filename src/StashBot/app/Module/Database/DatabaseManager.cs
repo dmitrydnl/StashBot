@@ -25,24 +25,9 @@ namespace StashBot.Module.Database
             return databaseAccount.IsUserExist(chatId);
         }
 
-        public bool ValidateUserAuthCode(long chatId, string authCode)
-        {
-            return databaseAccount.ValidateUserAuthCode(chatId, authCode);
-        }
-
         public IUser GetUser(long chatId)
         {
             return databaseAccount.GetUser(chatId);
-        }
-
-        public void LoginUser(long chatId, string authCode)
-        {
-            databaseAccount.LoginUser(chatId, authCode);
-        }
-
-        public void LogoutUser(long chatId)
-        {
-            databaseAccount.LogoutUser(chatId);
         }
 
         public void SaveMessageToStash(long chatId, string message)

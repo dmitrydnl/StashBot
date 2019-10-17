@@ -11,7 +11,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IUserManager userManager =
                 ModulesManager.GetModulesManager().GetUserManager();
 
-            bool success = userManager.AuthorisationUser(chatId, message);
+            bool success = userManager.LoginUser(chatId, message);
             if (success)
             {
                 messageManager.SendTextMessage(chatId, SuccessMessage());

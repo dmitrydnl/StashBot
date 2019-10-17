@@ -4,7 +4,7 @@ namespace StashBot.Module.Message.Delete
 {
     internal interface IMessageDelete
     {
-        void DeleteBotMessage(long chatId, int messageId);
-        void DeleteListBotMessages(long chatId, List<int> messagesId);
+        void DeleteMessage(long chatId, int messageId);
+        void DeleteListMessages(long chatId, List<int> messagesId);
     }
 }
