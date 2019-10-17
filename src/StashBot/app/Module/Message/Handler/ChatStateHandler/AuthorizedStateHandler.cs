@@ -9,11 +9,10 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
-        internal AuthorizedStateHandler(long chatId)
+        internal AuthorizedStateHandler()
         {
             commands = new Dictionary<string, Command>();
             InitializeCommands();
-            StartState(chatId);
         }
 
         private void InitializeCommands()
@@ -22,7 +21,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             commands.Add("/logout", Logout);
         }
 
-        private void StartState(long chatId)
+        public void StartStateMessage(long chatId)
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
@@ -75,7 +74,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             userManager.LogoutUser(chatId);
             const string logoutMessage = "You're logged out";
             messageManager.SendMessage(chatId, logoutMessage);
-            context.ChangeChatState(new StartStateHandler(chatId));
+            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
         }
     }
 }

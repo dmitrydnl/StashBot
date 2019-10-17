@@ -25,7 +25,7 @@ namespace StashBot.Module.Session
 
         internal ChatSession(long chatId)
         {
-            this.ChatId = chatId;
+            ChatId = chatId;
             State = ChatSessionState.FirstMessage;
             lastUserMessage = DateTime.UtcNow;
             lastBotMessage = DateTime.UtcNow;

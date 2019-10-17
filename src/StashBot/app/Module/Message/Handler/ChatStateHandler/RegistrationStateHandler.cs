@@ -8,11 +8,10 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
-        internal RegistrationStateHandler(long chatId)
+        internal RegistrationStateHandler()
         {
             commands = new Dictionary<string, Command>();
             InitializeCommands();
-            StartState(chatId);
         }
 
         private void InitializeCommands()
@@ -21,7 +20,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             commands.Add("/no", Cancel);
         }
 
-        private void StartState(long chatId)
+        public void StartStateMessage(long chatId)
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
@@ -41,7 +40,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             }
             else
             {
-                StartState(chatId);
+                StartStateMessage(chatId);
             }
         }
 
@@ -55,12 +54,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             string authCode = userManager.CreateNewUser(chatId);
             string successMessage = $"Success!\nUse your code for auth:\n{authCode}";
             messageManager.SendMessage(chatId, successMessage);
-            context.ChangeChatState(new StartStateHandler(chatId));
+            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
         }
 
         private void Cancel(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(new StartStateHandler(chatId));
+            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
         }
     }
 }
