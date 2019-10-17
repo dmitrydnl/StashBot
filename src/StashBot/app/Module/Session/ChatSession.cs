@@ -15,9 +15,15 @@ namespace StashBot.Module.Session
         private readonly List<int> userMessagesId;
         private readonly List<int> botMessagesId;
 
+        public ChatSessionState State {
+            get;
+            set;
+        }
+
         internal ChatSession(long chatId)
         {
             this.chatId = chatId;
+            State = ChatSessionState.FirstMessage;
             lastUserMessage = DateTime.UtcNow;
             lastBotMessage = DateTime.UtcNow;
             userMessagesId = new List<int>();
@@ -54,11 +60,6 @@ namespace StashBot.Module.Session
         {
             DateTime endLiveTime = lastUserMessage.AddSeconds(CHAT_SESSION_LIVE_TIME_SEC);
             return endLiveTime <= DateTime.UtcNow;
-        }
-
-        public long ChatId()
-        {
-            return chatId;
         }
     }
 }
