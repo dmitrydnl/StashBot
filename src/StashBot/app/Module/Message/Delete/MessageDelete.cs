@@ -5,11 +5,7 @@ namespace StashBot.Module.Message.Delete
 {
     internal class MessageDelete : IMessageDelete
     {
-        internal MessageDelete()
-        {
-        }
-
-        public void DeleteBotMessage(long chatId, int messageId)
+        public void DeleteMessage(long chatId, int messageId)
         {
             ITelegramBotClient telegramBotClient =
                 ModulesManager.GetModulesManager().GetTelegramBotClient();
@@ -17,11 +13,11 @@ namespace StashBot.Module.Message.Delete
             telegramBotClient.DeleteMessageAsync(chatId, messageId);
         }
 
-        public void DeleteListBotMessages(long chatId, List<int> messagesId)
+        public void DeleteListMessages(long chatId, List<int> messagesId)
         {
             foreach (int id in messagesId)
             {
-                DeleteBotMessage(chatId, id);
+                DeleteMessage(chatId, id);
             }
         }
     }

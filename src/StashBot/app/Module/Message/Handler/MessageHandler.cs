@@ -17,7 +17,7 @@ namespace StashBot.Module.Message.Handler
                 return;
             }
 
-            if (!sessionManager.ContainsChatSession(chatId))
+            if (!sessionManager.IsChatSessionExist(chatId))
             {
                 chatStateHandler = new FirstMessageStateHandler();
             }

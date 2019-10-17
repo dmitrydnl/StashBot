@@ -28,14 +28,14 @@ namespace StashBot.Module.Message
             messageSender.SendTextMessage(chatId, textMessage);
         }
 
-        public void DeleteBotMessage(long chatId, int messageId)
+        public void DeleteMessage(long chatId, int messageId)
         {
-            messageDelete.DeleteBotMessage(chatId, messageId);
+            messageDelete.DeleteMessage(chatId, messageId);
         }
 
-        public void DeleteListBotMessages(long chatId, List<int> messagesId)
+        public void DeleteListMessages(long chatId, List<int> messagesId)
         {
-            messageDelete.DeleteListBotMessages(chatId, messagesId);
+            messageDelete.DeleteListMessages(chatId, messagesId);
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     internal interface IUserAuthorisation
     {
-        bool AuthorisationUser(long chatId, string authCode);
+        bool LoginUser(long chatId, string authCode);
+        void LogoutUser(long chatId);
     }
 }

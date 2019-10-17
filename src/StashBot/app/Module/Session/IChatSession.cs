@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StashBot.Module.Session
 {
     internal interface IChatSession
     {
