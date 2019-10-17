@@ -18,14 +18,14 @@ namespace StashBot.Module.Secure
             secureRsaCrypto = new SecureRsaCrypto();
         }
 
-        public string CalculateHash(string input)
+        public string CalculateHash(string text)
         {
-            return secureHash.CalculateHash(input);
+            return secureHash.CalculateHash(text);
         }
 
-        public bool CompareWithHash(string input, string hash)
+        public bool CompareWithHash(string text, string hash)
         {
-            return secureHash.CompareWithHash(input, hash);
+            return secureHash.CompareWithHash(text, hash);
         }
 
         public byte[] EncryptWithAes(string text)
@@ -33,19 +33,19 @@ namespace StashBot.Module.Secure
             return secureAesCrypto.EncryptWithAes(text);
         }
 
-        public string DecryptWithAes(byte[] encrypted)
+        public string DecryptWithAes(byte[] encryptedData)
         {
-            return secureAesCrypto.DecryptWithAes(encrypted);
+            return secureAesCrypto.DecryptWithAes(encryptedData);
         }
 
-        public string AesEncryptedDataToString(byte[] encrypted)
+        public string AesEncryptedDataToString(byte[] encryptedData)
         {
-            return secureAesCrypto.AesEncryptedDataToString(encrypted);
+            return secureAesCrypto.AesEncryptedDataToString(encryptedData);
         }
 
-        public byte[] AesStringToEncryptedData(string cipherText)
+        public byte[] AesStringToEncryptedData(string encryptedText)
         {
-            return secureAesCrypto.AesStringToEncryptedData(cipherText);
+            return secureAesCrypto.AesStringToEncryptedData(encryptedText);
         }
 
         public RSACryptoServiceProvider CreateRsaCryptoService()
@@ -58,9 +58,9 @@ namespace StashBot.Module.Secure
             return secureRsaCrypto.EncryptWithRsa(csp, text);
         }
 
-        public string DecryptWithRsa(RSACryptoServiceProvider csp, string encrypted)
+        public string DecryptWithRsa(RSACryptoServiceProvider csp, string encryptedText)
         {
-            return secureRsaCrypto.DecryptWithRsa(csp, encrypted);
+            return secureRsaCrypto.DecryptWithRsa(csp, encryptedText);
         }
 
         public string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)

@@ -24,7 +24,6 @@ namespace StashBot.Module.User.Authorisation
             }
 
             user.Login(authCode);
-            sessionManager.AuthorizeChatSession(chatId);
             return true;
         }
 

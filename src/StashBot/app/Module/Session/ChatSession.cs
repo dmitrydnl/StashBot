@@ -10,7 +10,6 @@ namespace StashBot.Module.Session
         private const int CHAT_SESSION_LIVE_TIME_SEC = 60;
 
         private readonly long chatId;
-        private bool isAuthorized;
         private DateTime lastUserMessage;
         private DateTime lastBotMessage;
         private readonly List<int> userMessagesId;
@@ -19,7 +18,6 @@ namespace StashBot.Module.Session
         internal ChatSession(long chatId)
         {
             this.chatId = chatId;
-            isAuthorized = false;
             lastUserMessage = DateTime.UtcNow;
             lastBotMessage = DateTime.UtcNow;
             userMessagesId = new List<int>();
@@ -36,11 +34,6 @@ namespace StashBot.Module.Session
         {
             lastBotMessage = DateTime.UtcNow;
             botMessagesId.Add(messageId);
-        }
-
-        public void Authorize()
-        {
-            isAuthorized = true;
         }
 
         public void Kill()
@@ -66,11 +59,6 @@ namespace StashBot.Module.Session
         public long ChatId()
         {
             return chatId;
-        }
-
-        public bool IsAuthorized()
-        {
-            return isAuthorized;
         }
     }
 }

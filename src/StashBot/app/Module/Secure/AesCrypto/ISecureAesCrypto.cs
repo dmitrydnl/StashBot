@@ -3,8 +3,8 @@
     internal interface ISecureAesCrypto
     {
         byte[] EncryptWithAes(string text);
-        string DecryptWithAes(byte[] encrypted);
-        string AesEncryptedDataToString(byte[] encrypted);
-        byte[] AesStringToEncryptedData(string cipherText);
+        string DecryptWithAes(byte[] encryptedData);
+        string AesEncryptedDataToString(byte[] encryptedData);
+        byte[] AesStringToEncryptedData(string encryptedText);
     }
 }

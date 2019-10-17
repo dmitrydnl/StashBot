@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using StashBot.Module.Secure;
 
 namespace StashBot.Module.Database.Stash
 {
@@ -17,8 +15,6 @@ namespace StashBot.Module.Database.Stash
         {
             IDatabaseManager databaseManager =
                 ModulesManager.GetModulesManager().GetDatabaseManager();
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
 
             if (!usersStashes.ContainsKey(chatId))
             {
@@ -26,13 +22,16 @@ namespace StashBot.Module.Database.Stash
             }
 
             IUser user = databaseManager.GetUser(chatId);
-            RSACryptoServiceProvider csp = user.RsaCryptoServiceProvider();
-            List<string> decryptedMessages = new List<string>();
-            foreach (string encrypted in usersStashes[chatId])
+            if (user == null)
             {
-                decryptedMessages.Add(secureManager.DecryptWithRsa(csp, encrypted));
+                return new List<string>();
             }
 
+            List<string> decryptedMessages = new List<string>();
+            foreach (string encryptedMessage in usersStashes[chatId])
+            {
+                decryptedMessages.Add(user.DecryptMessage(encryptedMessage));
+            }
             return decryptedMessages;
         }
 
@@ -40,8 +39,6 @@ namespace StashBot.Module.Database.Stash
         {
             IDatabaseManager databaseManager =
                 ModulesManager.GetModulesManager().GetDatabaseManager();
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
 
             if (!usersStashes.ContainsKey(chatId))
             {
@@ -49,9 +46,11 @@ namespace StashBot.Module.Database.Stash
             }
 
             IUser user = databaseManager.GetUser(chatId);
-            RSACryptoServiceProvider csp = user.RsaCryptoServiceProvider();
-            string encryptedMessage = secureManager.EncryptWithRsa(csp, message);
-            usersStashes[chatId].Add(encryptedMessage);
+            if (user != null)
+            {
+                string encryptedMessage = user.EncryptMessage(message);
+                usersStashes[chatId].Add(encryptedMessage);
+            }
         }
 
         public void ClearStash(long chatId)

@@ -6,11 +6,6 @@ namespace StashBot.Module.User.Registration
 {
     internal class UserRegistration : IUserRegistration
     {
-        internal UserRegistration()
-        {
-
-        }
-
         public string CreateNewUser(long chatId)
         {
             ISecureManager secureManager =
