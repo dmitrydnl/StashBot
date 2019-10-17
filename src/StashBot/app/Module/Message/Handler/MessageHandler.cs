@@ -21,12 +21,9 @@ namespace StashBot.Module.Message.Handler
             {
                 chatStateHandler = new FirstMessageStateHandler();
             }
-            else
-            {
-                sessionManager.UserSentMessage(chatId, messageId);
-            }
 
             chatStateHandler.HandleUserMessage(chatId, messageId, message, this);
+            sessionManager.UserSentMessage(chatId, messageId);
         }
 
         public void ChangeChatState(IChatStateHandler newChatStateHandler)

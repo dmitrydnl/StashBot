@@ -51,6 +51,9 @@ namespace StashBot.Module.Session
                 ModulesManager.GetModulesManager().GetUserManager();
 
             messageManager.DeleteListMessages(chatId, botMessagesId);
+            botMessagesId.Clear();
+            messageManager.DeleteListMessages(chatId, userMessagesId);
+            userMessagesId.Clear();
             userManager.LogoutUser(chatId);
         }
 
