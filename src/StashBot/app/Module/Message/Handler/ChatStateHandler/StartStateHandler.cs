@@ -4,7 +4,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class StartStateHandler : IChatStateHandler
     {
-        private delegate void Command(long chatId, int messageId, IChatStateHandlerContext context);
+        private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
         internal StartStateHandler()
@@ -20,53 +20,44 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             commands.Add("/info", Information);
         }
 
+        public void StartStateMessage(long chatId)
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+
+            const string mainCommandsMessage = "Registration: /reg\nAuthorization: /auth\nInformation about me: /info\nClose chat in any time: /e or /exit";
+            messageManager.SendMessage(chatId, mainCommandsMessage);
+        }
+
         public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
         {
             if (commands.ContainsKey(message))
             {
-                commands[message](chatId, messageId, context);
+                commands[message](chatId, context);
+            }
+            else
+            {
+                StartStateMessage(chatId);
             }
         }
 
-        private void Registration(long chatId, int messageId, IChatStateHandlerContext context)
+        private void Registration(long chatId, IChatStateHandlerContext context)
+        {
+            context.ChangeChatState(chatId, Session.ChatSessionState.Registration);
+        }
+
+        private void Authorization(long chatId, IChatStateHandlerContext context)
+        {
+            context.ChangeChatState(chatId, Session.ChatSessionState.Authorisation);
+        }
+
+        private void Information(long chatId, IChatStateHandlerContext context)
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, RegistrationMessage());
-            context.ChangeChatState(new RegistrationStateHandler());
-        }
-
-        private void Authorization(long chatId, int messageId, IChatStateHandlerContext context)
-        {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-
-            messageManager.SendTextMessage(chatId, AuthorizationMessage());
-            context.ChangeChatState(new AuthorisationStateHandler());
-        }
-
-        private void Information(long chatId, int messageId, IChatStateHandlerContext context)
-        {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-
-            messageManager.SendTextMessage(chatId, InformationMessage());
-        }
-
-        private string RegistrationMessage()
-        {
-            return "It is registration, send yes";
-        }
-
-        private string AuthorizationMessage()
-        {
-            return "It is authorization";
-        }
-
-        private string InformationMessage()
-        {
-            return "It is information";
+            const string informationMessage = "This is information";
+            messageManager.SendMessage(chatId, informationMessage);
         }
     }
 }

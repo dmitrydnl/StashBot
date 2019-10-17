@@ -79,7 +79,7 @@ namespace StashBot.Module.Session
                 IChatSession chatSession = s.Value;
                 if (chatSession.NeedKill())
                 {
-                    KillChatSession(chatSession.ChatId());
+                    KillChatSession(chatSession.ChatId);
                 }
             }
         }

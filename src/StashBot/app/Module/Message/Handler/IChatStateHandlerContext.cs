@@ -1,9 +1,9 @@
-﻿using StashBot.Module.Message.Handler.ChatStateHandler;
+﻿using StashBot.Module.Session;
 
 namespace StashBot.Module.Message.Handler
 {
     internal interface IChatStateHandlerContext
     {
-        void ChangeChatState(IChatStateHandler newChatStateHandler);
+        void ChangeChatState(long chatId, ChatSessionState newChatSessionState);
     }
 }
