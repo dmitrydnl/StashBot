@@ -2,6 +2,6 @@
 {
     internal interface IMessageHandler
     {
-        void HandleUserMessage(long chatId, int messageId, string textMessage);
+        void HandleUserMessage(long chatId, int messageId, string message);
     }
 }
