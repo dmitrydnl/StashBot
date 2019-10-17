@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using StashBot.Module.Database;
+using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -18,6 +19,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private void InitializeCommands()
         {
             commands.Add("/stash", GetStash);
+            commands.Add("/logout", Logout);
         }
 
         private void StartState(long chatId)
@@ -25,7 +27,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string loginMessage = "Input message to save it in stash.\nTo get messages in stash - /stash";
+            const string loginMessage = "Input message to save it in stash.\nGet messages in stash - /stash\nLogout - /logout";
             messageManager.SendMessage(chatId, loginMessage);
         }
 
@@ -61,6 +63,19 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             {
                 messageManager.SendMessage(chatId, textMessage);
             }
+        }
+
+        private void Logout(long chatId, IChatStateHandlerContext context)
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager =
+                ModulesManager.GetModulesManager().GetUserManager();
+
+            userManager.LogoutUser(chatId);
+            const string logoutMessage = "You're logged out";
+            messageManager.SendMessage(chatId, logoutMessage);
+            context.ChangeChatState(new StartStateHandler(chatId));
         }
     }
 }
