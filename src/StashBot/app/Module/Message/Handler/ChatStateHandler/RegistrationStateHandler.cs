@@ -14,11 +14,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             if (string.Equals(message, "yes"))
             {
                 string authCode = userManager.CreateNewUser(chatId);
-                messageManager.SendTextMessage(chatId, SuccessMessage(authCode));
+                messageManager.SendMessage(chatId, SuccessMessage(authCode));
             }
             else
             {
-                messageManager.SendTextMessage(chatId, CancelMessage());
+                messageManager.SendMessage(chatId, CancelMessage());
             }
 
             context.ChangeChatState(new StartStateHandler());

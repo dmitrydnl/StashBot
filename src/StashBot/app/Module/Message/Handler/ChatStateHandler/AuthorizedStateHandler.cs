@@ -49,7 +49,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             List<string> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
             foreach (string textMessage in messagesFromStash)
             {
-                messageManager.SendTextMessage(chatId, textMessage);
+                messageManager.SendMessage(chatId, textMessage);
             }
         }
     }

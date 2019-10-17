@@ -33,7 +33,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, RegistrationMessage());
+            messageManager.SendMessage(chatId, RegistrationMessage());
             context.ChangeChatState(new RegistrationStateHandler());
         }
 
@@ -42,7 +42,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, AuthorizationMessage());
+            messageManager.SendMessage(chatId, AuthorizationMessage());
             context.ChangeChatState(new AuthorisationStateHandler());
         }
 
@@ -51,7 +51,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, InformationMessage());
+            messageManager.SendMessage(chatId, InformationMessage());
         }
 
         private string RegistrationMessage()

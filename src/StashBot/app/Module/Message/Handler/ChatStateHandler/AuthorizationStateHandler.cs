@@ -14,12 +14,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             bool success = userManager.LoginUser(chatId, message);
             if (success)
             {
-                messageManager.SendTextMessage(chatId, SuccessMessage());
+                messageManager.SendMessage(chatId, SuccessMessage());
                 context.ChangeChatState(new AuthorizedStateHandler());
             }
             else
             {
-                messageManager.SendTextMessage(chatId, FailMessage());
+                messageManager.SendMessage(chatId, FailMessage());
                 context.ChangeChatState(new StartStateHandler());
             }
         }

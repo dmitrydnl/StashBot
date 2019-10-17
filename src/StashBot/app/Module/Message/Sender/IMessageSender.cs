@@ -2,6 +2,6 @@
 {
     internal interface IMessageSender
     {
-        void SendTextMessage(long chatId, string textMessage);
+        void SendMessage(long chatId, string message);
     }
 }
