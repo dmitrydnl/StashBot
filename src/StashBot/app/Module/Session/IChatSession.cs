@@ -2,6 +2,10 @@
 {
     internal interface IChatSession
     {
+        long ChatId
+        {
+            get;
+        }
         ChatSessionState State
         {
             get;

@@ -9,11 +9,14 @@ namespace StashBot.Module.Session
     {
         private const int CHAT_SESSION_LIVE_TIME_SEC = 60;
 
-        private readonly long chatId;
         private DateTime lastUserMessage;
         private DateTime lastBotMessage;
         private readonly List<int> userMessagesId;
         private readonly List<int> botMessagesId;
+
+        public long ChatId {
+            get;
+        }
 
         public ChatSessionState State {
             get;
@@ -22,7 +25,7 @@ namespace StashBot.Module.Session
 
         internal ChatSession(long chatId)
         {
-            this.chatId = chatId;
+            this.ChatId = chatId;
             State = ChatSessionState.FirstMessage;
             lastUserMessage = DateTime.UtcNow;
             lastBotMessage = DateTime.UtcNow;
@@ -49,11 +52,11 @@ namespace StashBot.Module.Session
             IUserManager userManager =
                 ModulesManager.GetModulesManager().GetUserManager();
 
-            messageManager.DeleteListMessages(chatId, botMessagesId);
+            messageManager.DeleteListMessages(ChatId, botMessagesId);
             botMessagesId.Clear();
-            messageManager.DeleteListMessages(chatId, userMessagesId);
+            messageManager.DeleteListMessages(ChatId, userMessagesId);
             userMessagesId.Clear();
-            userManager.LogoutUser(chatId);
+            userManager.LogoutUser(ChatId);
         }
 
         public bool NeedKill()
