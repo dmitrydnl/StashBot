@@ -1,12 +1,11 @@
-﻿using System.Security.Cryptography;
-
-namespace StashBot.Module.Database
+﻿namespace StashBot.Module.Database
 {
     internal interface IUser
     {
         void Login(string authCode);
         void Logout();
         bool ValidateAuthCode(string authCode);
-        RSACryptoServiceProvider RsaCryptoServiceProvider();
+        string EncryptMessage(string message);
+        string DecryptMessage(string encryptedMessage);
     }
 }

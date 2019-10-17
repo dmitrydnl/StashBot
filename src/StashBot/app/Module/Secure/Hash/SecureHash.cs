@@ -6,10 +6,6 @@ namespace StashBot.Module.Secure.Hash
 {
     internal class SecureHash : ISecureHash
     {
-        internal SecureHash()
-        {
-        }
-
         public string CalculateHash(string input)
         {
             byte[] salt = GenerateSalt(16);

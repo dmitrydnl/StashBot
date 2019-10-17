@@ -43,14 +43,6 @@ namespace StashBot.Module.Session
             return null;
         }
 
-        public void AuthorizeChatSession(long chatId)
-        {
-            if (IsChatSessionExist(chatId))
-            {
-                currentChatSessions[chatId].Authorize();
-            }
-        }
-
         public void KillChatSession(long chatId)
         {
             if (IsChatSessionExist(chatId))

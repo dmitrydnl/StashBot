@@ -43,9 +43,20 @@ namespace StashBot.Module.Database
             return secureManager.CompareWithHash(authCode, hashAuthCode);
         }
 
-        public RSACryptoServiceProvider RsaCryptoServiceProvider()
+        public string EncryptMessage(string message)
         {
-            return rsaCryptoServiceProvider;
+            ISecureManager secureManager =
+                ModulesManager.GetModulesManager().GetSecureManager();
+
+            return secureManager.EncryptWithRsa(rsaCryptoServiceProvider, message);
+        }
+
+        public string DecryptMessage(string encryptedMessage)
+        {
+            ISecureManager secureManager =
+                ModulesManager.GetModulesManager().GetSecureManager();
+
+            return secureManager.DecryptWithRsa(rsaCryptoServiceProvider, encryptedMessage);
         }
     }
 }

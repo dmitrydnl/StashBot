@@ -7,14 +7,9 @@ namespace StashBot.Module.Secure.RsaCrypto
 {
     internal class SecureRsaCrypto : ISecureRsaCrypto
     {
-        internal SecureRsaCrypto()
-        {
-        }
-
         public RSACryptoServiceProvider CreateRsaCryptoService()
         {
-            RSACryptoServiceProvider csp = new RSACryptoServiceProvider(2048);
-            return csp;
+            return new RSACryptoServiceProvider(2048);
         }
 
         public string EncryptWithRsa(RSACryptoServiceProvider csp, string text)
