@@ -29,12 +29,4 @@
     <Folder Include="app\Module\Database\Stash\" />
     <Folder Include="app\Module\Message\Handler\ChatStateHandler\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="workData.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AppSettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 </Project>
