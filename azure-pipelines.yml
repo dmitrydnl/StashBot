@@ -13,6 +13,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration) $(botToken)
+- script: dotnet build --configuration $(buildConfiguration)
   workingDirectory: src
   displayName: 'dotnet build $(buildConfiguration)'
