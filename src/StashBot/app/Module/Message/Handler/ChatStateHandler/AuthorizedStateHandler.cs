@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using StashBot.Module.Database;
+using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class AuthorizedStateHandler : IChatStateHandler
     {
-        private delegate void Command(long chatId, int messageId, IChatStateHandlerContext context);
+        private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
         internal AuthorizedStateHandler()
@@ -17,13 +18,23 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private void InitializeCommands()
         {
             commands.Add("/stash", GetStash);
+            commands.Add("/logout", Logout);
+        }
+
+        public void StartStateMessage(long chatId)
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+
+            const string loginMessage = "Input message to save it in stash.\nGet messages in stash: /stash\nLogout: /logout";
+            messageManager.SendMessage(chatId, loginMessage);
         }
 
         public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
         {
             if (commands.ContainsKey(message))
             {
-                commands[message](chatId, messageId, context);
+                commands[message](chatId, context);
             }
             else
             {
@@ -39,7 +50,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             databaseManager.SaveMessageToStash(chatId, message);
         }
 
-        private void GetStash(long chatId, int messageId, IChatStateHandlerContext context)
+        private void GetStash(long chatId, IChatStateHandlerContext context)
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
@@ -49,8 +60,21 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             List<string> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
             foreach (string textMessage in messagesFromStash)
             {
-                messageManager.SendTextMessage(chatId, textMessage);
+                messageManager.SendMessage(chatId, textMessage);
             }
+        }
+
+        private void Logout(long chatId, IChatStateHandlerContext context)
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager =
+                ModulesManager.GetModulesManager().GetUserManager();
+
+            userManager.LogoutUser(chatId);
+            const string logoutMessage = "You're logged out";
+            messageManager.SendMessage(chatId, logoutMessage);
+            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
         }
     }
 }

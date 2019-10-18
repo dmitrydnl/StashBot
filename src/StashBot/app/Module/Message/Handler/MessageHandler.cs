@@ -5,7 +5,12 @@ namespace StashBot.Module.Message.Handler
 {
     internal class MessageHandler : IMessageHandler, IChatStateHandlerContext
     {
-        private IChatStateHandler chatStateHandler;
+        private readonly IChatStateHandlerFactory chatStateHandlerFactory;
+
+        internal MessageHandler()
+        {
+            chatStateHandlerFactory = new ChatStateHandlerFactory();
+        }
 
         public void HandleUserMessage(long chatId, int messageId, string message)
         {
@@ -17,18 +22,35 @@ namespace StashBot.Module.Message.Handler
                 return;
             }
 
-            if (!sessionManager.IsChatSessionExist(chatId))
+            IChatSession chatSession = sessionManager.GetChatSession(chatId);
+            if (chatSession == null)
             {
-                chatStateHandler = new FirstMessageStateHandler();
+                sessionManager.CreateChatSession(chatId);
+                chatSession = sessionManager.GetChatSession(chatId);
             }
 
-            chatStateHandler.HandleUserMessage(chatId, messageId, message, this);
             sessionManager.UserSentMessage(chatId, messageId);
+            if (string.Equals(message, "/e") || string.Equals(message, "/exit"))
+            {
+                sessionManager.KillChatSession(chatId);
+            }
+            else
+            {
+                chatStateHandlerFactory.GetChatStateHandler(chatSession.State).HandleUserMessage(chatId, messageId, message, this);
+            }
         }
 
-        public void ChangeChatState(IChatStateHandler newChatStateHandler)
+        public void ChangeChatState(long chatId, ChatSessionState newChatSessionState)
         {
-            chatStateHandler = newChatStateHandler;
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
+
+            IChatSession chatSession = sessionManager.GetChatSession(chatId);
+            if (chatSession != null)
+            {
+                chatSession.State = newChatSessionState;
+                chatStateHandlerFactory.GetChatStateHandler(chatSession.State).StartStateMessage(chatId);
+            }
         }
     }
 }

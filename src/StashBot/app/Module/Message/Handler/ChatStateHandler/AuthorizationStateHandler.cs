@@ -1,9 +1,33 @@
-﻿using StashBot.Module.User;
+﻿using System.Collections.Generic;
+using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class AuthorisationStateHandler : IChatStateHandler
     {
+        private delegate void Command(long chatId, IChatStateHandlerContext context);
+        private readonly Dictionary<string, Command> commands;
+
+        internal AuthorisationStateHandler()
+        {
+            commands = new Dictionary<string, Command>();
+            InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
+            commands.Add("/back", Cancel);
+        }
+
+        public void StartStateMessage(long chatId)
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+
+            const string warningMessage = "Input your auth code or /back";
+            messageManager.SendMessage(chatId, warningMessage);
+        }
+
         public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
         {
             IMessageManager messageManager =
@@ -11,27 +35,30 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IUserManager userManager =
                 ModulesManager.GetModulesManager().GetUserManager();
 
-            bool success = userManager.LoginUser(chatId, message);
-            if (success)
+            if (commands.ContainsKey(message))
             {
-                messageManager.SendTextMessage(chatId, SuccessMessage());
-                context.ChangeChatState(new AuthorizedStateHandler());
+                commands[message](chatId, context);
             }
             else
             {
-                messageManager.SendTextMessage(chatId, FailMessage());
-                context.ChangeChatState(new StartStateHandler());
+                bool success = userManager.LoginUser(chatId, message);
+                if (success)
+                {
+                    const string successMessage = "Success!";
+                    messageManager.SendMessage(chatId, successMessage);
+                    context.ChangeChatState(chatId, Session.ChatSessionState.Authorized);
+                }
+                else
+                {
+                    const string wrongMessage = "WRONG";
+                    messageManager.SendMessage(chatId, wrongMessage);
+                }
             }
         }
 
-        private string SuccessMessage()
+        private void Cancel(long chatId, IChatStateHandlerContext context)
         {
-            return "Authorisation success";
-        }
-
-        private string FailMessage()
-        {
-            return "Authorisation fail";
+            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
         }
     }
 }
