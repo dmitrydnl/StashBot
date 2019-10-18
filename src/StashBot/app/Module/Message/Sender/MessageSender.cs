@@ -5,12 +5,7 @@ namespace StashBot.Module.Message.Sender
 {
     internal class MessageSender : IMessageSender
     {
-        internal MessageSender()
-        {
-
-        }
-
-        public async void SendTextMessage(long chatId, string textMessage)
+        public async void SendMessage(long chatId, string messageText)
         {
             ITelegramBotClient telegramBotClient =
                 ModulesManager.GetModulesManager().GetTelegramBotClient();
@@ -19,7 +14,7 @@ namespace StashBot.Module.Message.Sender
 
             Telegram.Bot.Types.Message message = await telegramBotClient.SendTextMessageAsync(
               chatId: chatId,
-              text: textMessage
+              text: messageText
             );
             sessionManager.BotSentMessage(chatId, message.MessageId);
         }
