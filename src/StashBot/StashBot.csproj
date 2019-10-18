@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
-    <Folder Include="app\WorkData\" />
+    <Folder Include="app\AppSettings\" />
     <Folder Include="app\Module\" />
     <Folder Include="app\Module\Session\" />
     <Folder Include="app\Module\Message\" />
@@ -33,7 +33,7 @@
     <None Remove="workData.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="workData.json">
+    <Content Include="AppSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
