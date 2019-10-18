@@ -3,7 +3,7 @@ using StashBot.Module.Session;
 using StashBot.Module.User;
 using StashBot.Module.Secure;
 using StashBot.Module.Database;
-using StashBot.WorkData;
+using StashBot.AppSetting;
 using Telegram.Bot;
 
 namespace StashBot.Module

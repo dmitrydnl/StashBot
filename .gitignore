@@ -333,4 +333,4 @@ ASALocalRun/
 .DS_Store
 
 # Local files
-src/StashBot/workData.json
+src/StashBot/AppSettings.json
