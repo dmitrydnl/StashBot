@@ -20,10 +20,10 @@ namespace StashBot
                 return;
             }
 
-            if (args.Length >= 1 && !string.IsNullOrEmpty(args[1]))
+            if (args.Length >= 1 && !string.IsNullOrEmpty(args[0]))
             {
                 BotToken botToken = new BotToken();
-                botToken.Set(args[1]);
+                botToken.Set(args[0]);
             }
             else
             {
