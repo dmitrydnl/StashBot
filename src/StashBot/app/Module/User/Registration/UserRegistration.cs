@@ -1,24 +1,15 @@
-﻿using System.Security.Cryptography;
-using StashBot.Module.Secure;
-using StashBot.Module.Database;
+﻿using StashBot.Module.Database;
 
 namespace StashBot.Module.User.Registration
 {
     internal class UserRegistration : IUserRegistration
     {
-        public string CreateNewUser(long chatId)
+        public void CreateNewUser(long chatId, string password)
         {
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
             IDatabaseManager databaseManager =
                 ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            RSACryptoServiceProvider csp = secureManager.CreateRsaCryptoService();
-            string cspStr = secureManager.RsaCryptoServiceToXmlString(csp, true);
-            byte[] cspEncrypted = secureManager.EncryptWithAes(cspStr);
-            string authCode = secureManager.AesEncryptedDataToString(cspEncrypted);
-            databaseManager.CreateNewUser(chatId, authCode);
-            return authCode;
+            databaseManager.CreateNewUser(chatId, password);
         }
     }
 }

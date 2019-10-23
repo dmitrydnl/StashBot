@@ -22,11 +22,11 @@
     <Folder Include="app\Module\Secure\" />
     <Folder Include="app\Module\Secure\Hash\" />
     <Folder Include="app\Module\Secure\AesCrypto\" />
-    <Folder Include="app\Module\Secure\RsaCrypto\" />
     <Folder Include="app\Module\Database\" />
     <Folder Include="app\Module\Database\Account\" />
     <Folder Include="app\Module\User\Authorisation\" />
     <Folder Include="app\Module\Database\Stash\" />
     <Folder Include="app\Module\Message\Handler\ChatStateHandler\" />
+    <Folder Include="app\Module\Secure\AesHmacCrypto\" />
   </ItemGroup>
 </Project>

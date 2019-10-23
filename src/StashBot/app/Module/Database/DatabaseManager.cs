@@ -15,9 +15,9 @@ namespace StashBot.Module.Database
             databaseStash = new DatabaseStashLocal();
         }
 
-        public void CreateNewUser(long chatId, string authCode)
+        public void CreateNewUser(long chatId, string password)
         {
-            databaseAccount.CreateNewUser(chatId, authCode);
+            databaseAccount.CreateNewUser(chatId, password);
         }
 
         public bool IsUserExist(long chatId)

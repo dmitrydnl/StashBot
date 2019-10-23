@@ -1,7 +1,6 @@
 ﻿using StashBot.Module.Secure.Hash;
 using StashBot.Module.Secure.AesCrypto;
-using StashBot.Module.Secure.RsaCrypto;
-using System.Security.Cryptography;
+using StashBot.Module.Secure.AesHmacCrypto;
 
 namespace StashBot.Module.Secure
 {
@@ -9,13 +8,13 @@ namespace StashBot.Module.Secure
     {
         private readonly ISecureHash secureHash;
         private readonly ISecureAesCrypto secureAesCrypto;
-        private readonly ISecureRsaCrypto secureRsaCrypto;
+        private readonly ISecureAesHmacCrypto secureAesHmacCrypto;
 
         internal SecureManager()
         {
             secureHash = new SecureHash();
             secureAesCrypto = new SecureAesCrypto();
-            secureRsaCrypto = new SecureRsaCrypto();
+            secureAesHmacCrypto = new SecureAesHmacCrypto();
         }
 
         public string CalculateHash(string text)
@@ -28,49 +27,24 @@ namespace StashBot.Module.Secure
             return secureHash.CompareWithHash(text, hash);
         }
 
-        public byte[] EncryptWithAes(string text)
+        public string EncryptWithAes(string secretMessage)
         {
-            return secureAesCrypto.EncryptWithAes(text);
+            return secureAesCrypto.EncryptWithAes(secretMessage);
         }
 
-        public string DecryptWithAes(byte[] encryptedData)
+        public string DecryptWithAes(string encryptedMessage)
         {
-            return secureAesCrypto.DecryptWithAes(encryptedData);
+            return secureAesCrypto.DecryptWithAes(encryptedMessage);
         }
 
-        public string AesEncryptedDataToString(byte[] encryptedData)
+        public string EncryptWithAesHmac(string secretMessage, string password, byte[] nonSecretPayload = null)
         {
-            return secureAesCrypto.AesEncryptedDataToString(encryptedData);
+            return secureAesHmacCrypto.EncryptWithAesHmac(secretMessage, password, nonSecretPayload);
         }
 
-        public byte[] AesStringToEncryptedData(string encryptedText)
+        public string DecryptWithAesHmac(string encryptedMessage, string password, int nonSecretPayloadLength = 0)
         {
-            return secureAesCrypto.AesStringToEncryptedData(encryptedText);
-        }
-
-        public RSACryptoServiceProvider CreateRsaCryptoService()
-        {
-            return secureRsaCrypto.CreateRsaCryptoService();
-        }
-
-        public string EncryptWithRsa(RSACryptoServiceProvider csp, string text)
-        {
-            return secureRsaCrypto.EncryptWithRsa(csp, text);
-        }
-
-        public string DecryptWithRsa(RSACryptoServiceProvider csp, string encryptedText)
-        {
-            return secureRsaCrypto.DecryptWithRsa(csp, encryptedText);
-        }
-
-        public string RsaCryptoServiceToXmlString(RSACryptoServiceProvider csp, bool includePrivateParameters)
-        {
-            return secureRsaCrypto.RsaCryptoServiceToXmlString(csp, includePrivateParameters);
-        }
-
-        public RSACryptoServiceProvider RsaCryptoServiceFromXmlString(string xmlString)
-        {
-            return secureRsaCrypto.RsaCryptoServiceFromXmlString(xmlString);
+            return secureAesHmacCrypto.DecryptWithAesHmac(encryptedMessage, password, nonSecretPayloadLength);
         }
     }
 }
