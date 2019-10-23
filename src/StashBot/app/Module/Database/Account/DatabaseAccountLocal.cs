@@ -11,12 +11,12 @@ namespace StashBot.Module.Database.Account
             usersDatabase = new Dictionary<long, IUser>();
         }
 
-        public void CreateNewUser(long chatId, string authCode)
+        public void CreateNewUser(long chatId, string password)
         {
             IDatabaseManager databaseManager =
                 ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            User newUser = new User(chatId, authCode);
+            User newUser = new User(chatId, password);
             if (IsUserExist(chatId))
             {
                 databaseManager.ClearStash(chatId);

@@ -2,6 +2,6 @@
 {
     internal interface IUserRegistration
     {
-        string CreateNewUser(long chatId);
+        void CreateNewUser(long chatId, string password);
     }
 }

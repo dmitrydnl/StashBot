@@ -24,7 +24,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string warningMessage = "Input your auth code or /back";
+            const string warningMessage = "Input your password or /back";
             messageManager.SendMessage(chatId, warningMessage);
         }
 

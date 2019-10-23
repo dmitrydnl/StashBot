@@ -14,14 +14,14 @@ namespace StashBot.Module.User
             userAuthorisation = new UserAuthorisation();
         }
 
-        public string CreateNewUser(long chatId)
+        public void CreateNewUser(long chatId, string password)
         {
-            return userRegistration.CreateNewUser(chatId);
+            userRegistration.CreateNewUser(chatId, password);
         }
 
-        public bool LoginUser(long chatId, string authCode)
+        public bool LoginUser(long chatId, string password)
         {
-            return userAuthorisation.LoginUser(chatId, authCode);
+            return userAuthorisation.LoginUser(chatId, password);
         }
 
         public void LogoutUser(long chatId)

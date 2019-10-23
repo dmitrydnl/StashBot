@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -46,15 +45,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void Registration(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
-
-            string authCode = userManager.CreateNewUser(chatId);
-            string successMessage = $"Success!\nUse your code for auth:\n{authCode}";
-            messageManager.SendMessage(chatId, successMessage);
-            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
+            context.ChangeChatState(chatId, Session.ChatSessionState.CreateUserPassword);
         }
 
         private void Cancel(long chatId, IChatStateHandlerContext context)

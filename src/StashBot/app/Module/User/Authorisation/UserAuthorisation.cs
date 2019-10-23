@@ -5,12 +5,10 @@ namespace StashBot.Module.User.Authorisation
 {
     internal class UserAuthorisation : IUserAuthorisation
     {
-        public bool LoginUser(long chatId, string authCode)
+        public bool LoginUser(long chatId, string password)
         {
             IDatabaseManager databaseManager =
                 ModulesManager.GetModulesManager().GetDatabaseManager();
-            ISessionManager sessionManager =
-                ModulesManager.GetModulesManager().GetSessionManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user == null)
@@ -18,12 +16,12 @@ namespace StashBot.Module.User.Authorisation
                 return false;
             }
 
-            if (!user.ValidateAuthCode(authCode))
+            if (!user.ValidatePassword(password))
             {
                 return false;
             }
 
-            user.Login(authCode);
+            user.Login(password);
             return true;
         }
 

@@ -1,57 +1,51 @@
-﻿using System.Security.Cryptography;
-using StashBot.Module.Secure;
+﻿using StashBot.Module.Secure;
 
 namespace StashBot.Module.Database
 {
     internal class User : IUser
     {
         private readonly long chatId;
-        private readonly string hashAuthCode;
-        private RSACryptoServiceProvider rsaCryptoServiceProvider;
+        private readonly string hashPassword;
+        private string encryptedPassword;
 
-        internal User(long chatId, string authCode)
+        internal User(long chatId, string password)
         {
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
 
             this.chatId = chatId;
-            hashAuthCode = secureManager.CalculateHash(authCode);
-            rsaCryptoServiceProvider = null;
+            hashPassword = secureManager.CalculateHash(password);
+            encryptedPassword = null;
         }
 
-        public void Login(string authCode)
+        public void Login(string password)
         {
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
 
-            byte[] encryptedRsa = secureManager.AesStringToEncryptedData(authCode);
-            string rsaXmlString = secureManager.DecryptWithAes(encryptedRsa);
-            rsaCryptoServiceProvider = secureManager.RsaCryptoServiceFromXmlString(rsaXmlString);
+            encryptedPassword = secureManager.EncryptWithAes(password);
         }
 
         public void Logout()
         {
-            if (rsaCryptoServiceProvider != null)
-            {
-                rsaCryptoServiceProvider.Clear();
-                rsaCryptoServiceProvider = null;
-            }
+            encryptedPassword = null;
         }
 
-        public bool ValidateAuthCode(string authCode)
+        public bool ValidatePassword(string password)
         {
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
 
-            return secureManager.CompareWithHash(authCode, hashAuthCode);
+            return secureManager.CompareWithHash(password, hashPassword);
         }
 
-        public string EncryptMessage(string message)
+        public string EncryptMessage(string secretMessage)
         {
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
 
-            return secureManager.EncryptWithRsa(rsaCryptoServiceProvider, message);
+            string password = secureManager.DecryptWithAes(encryptedPassword);
+            return secureManager.EncryptWithAesHmac(secretMessage, password);
         }
 
         public string DecryptMessage(string encryptedMessage)
@@ -59,7 +53,8 @@ namespace StashBot.Module.Database
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
 
-            return secureManager.DecryptWithRsa(rsaCryptoServiceProvider, encryptedMessage);
+            string password = secureManager.DecryptWithAes(encryptedPassword);
+            return secureManager.DecryptWithAesHmac(encryptedMessage, password);
         }
     }
 }

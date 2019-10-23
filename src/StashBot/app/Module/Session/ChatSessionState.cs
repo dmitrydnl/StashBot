@@ -5,6 +5,7 @@
         FirstMessage,
         Start,
         Registration,
+        CreateUserPassword,
         Authorisation,
         Authorized
     }
