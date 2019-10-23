@@ -14,6 +14,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 { ChatSessionState.FirstMessage, new FirstMessageStateHandler() },
                 { ChatSessionState.Start, new StartStateHandler() },
                 { ChatSessionState.Registration, new RegistrationStateHandler() },
+                { ChatSessionState.CreateUserPassword, new CreateUserPasswordStateHandler() },
                 { ChatSessionState.Authorisation, new AuthorisationStateHandler() },
                 { ChatSessionState.Authorized, new AuthorizedStateHandler() }
             };

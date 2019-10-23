@@ -13,12 +13,12 @@ namespace StashBot.Module.Secure.AesCrypto
             aes = Aes.Create();
         }
 
-        public byte[] EncryptWithAes(string text)
+        public string EncryptWithAes(string secretMessage)
         {
-            if (string.IsNullOrEmpty(text))
-                throw new ArgumentNullException(nameof(text));
-            if (aes == null)
-                throw new ArgumentNullException(nameof(aes));
+            if (string.IsNullOrEmpty(secretMessage))
+            {
+                throw new ArgumentException("Secret Message Required!", nameof(secretMessage));
+            }
 
             byte[] encryptedData;
 
@@ -29,23 +29,24 @@ namespace StashBot.Module.Secure.AesCrypto
                 {
                     using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                     {
-                        swEncrypt.Write(text);
+                        swEncrypt.Write(secretMessage);
                     }
                     encryptedData = msEncrypt.ToArray();
                 }
             }
 
-            return encryptedData;
+            return AesEncryptedDataToString(encryptedData);
         }
 
-        public string DecryptWithAes(byte[] encryptedData)
+        public string DecryptWithAes(string encryptedMessage)
         {
-            if (encryptedData == null || encryptedData.Length <= 0)
-                throw new ArgumentNullException(nameof(encryptedData));
-            if (aes == null)
-                throw new ArgumentNullException(nameof(aes));
+            if (string.IsNullOrEmpty(encryptedMessage))
+            {
+                throw new ArgumentException("Encrypted Message Required!", nameof(encryptedMessage));
+            }
 
-            string text = null;
+            byte[] encryptedData = AesStringToEncryptedData(encryptedMessage);
+            string secretMessage = null;
 
             ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
             using (MemoryStream msDecrypt = new MemoryStream(encryptedData))
@@ -54,15 +55,15 @@ namespace StashBot.Module.Secure.AesCrypto
                 {
                     using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                     {
-                        text = srDecrypt.ReadToEnd();
+                        secretMessage = srDecrypt.ReadToEnd();
                     }
                 }
             }
 
-            return text;
+            return secretMessage;
         }
 
-        public string AesEncryptedDataToString(byte[] encryptedData)
+        private string AesEncryptedDataToString(byte[] encryptedData)
         {
             byte[] iv = aes.IV;
             byte[] result = new byte[iv.Length + encryptedData.Length];
@@ -71,13 +72,8 @@ namespace StashBot.Module.Secure.AesCrypto
             return Convert.ToBase64String(result);
         }
 
-        public byte[] AesStringToEncryptedData(string encryptedText)
+        private byte[] AesStringToEncryptedData(string encryptedText)
         {
-            if (string.IsNullOrEmpty(encryptedText))
-            {
-                return null;
-            }
-
             encryptedText = encryptedText.Replace(" ", "+");
             byte[] fullCipher = Convert.FromBase64String(encryptedText);
             byte[] iv = new byte[16];
