@@ -14,11 +14,13 @@ namespace StashBot.Module.Session
         private readonly List<int> userMessagesId;
         private readonly List<int> botMessagesId;
 
-        public long ChatId {
+        public long ChatId
+        {
             get;
         }
 
-        public ChatSessionState State {
+        public ChatSessionState State
+        {
             get;
             set;
         }

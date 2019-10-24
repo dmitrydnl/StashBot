@@ -28,15 +28,15 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             messageManager.SendMessage(chatId, warningMessage);
         }
 
-        public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            if (commands.ContainsKey(message))
+            if (commands.ContainsKey(message.Message))
             {
-                commands[message](chatId, context);
+                commands[message.Message](message.ChatId, context);
             }
             else
             {
-                StartStateMessage(chatId);
+                StartStateMessage(message.ChatId);
             }
         }
 
