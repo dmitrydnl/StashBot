@@ -56,7 +56,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string informationMessage = "This is information";
+            const string informationMessage = "This is open source bot for stashing in Telegram Messenger.\nThe code you can find here: https://github.com/dmitrydnl/StashBot";
             messageManager.SendMessage(chatId, informationMessage);
         }
     }
