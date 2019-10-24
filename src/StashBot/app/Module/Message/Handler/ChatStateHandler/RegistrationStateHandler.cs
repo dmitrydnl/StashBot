@@ -24,11 +24,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string warningMessage = "If you have already registered you will lose all your old data!";
+            const string warningMessage = "If you have already registered you will lose all your old data!\nAre you sure? /yes or /no";
             messageManager.SendMessage(chatId, warningMessage);
-
-            const string questionMessage = "Are you sure? /yes or /no";
-            messageManager.SendMessage(chatId, questionMessage);
         }
 
         public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
