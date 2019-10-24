@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
@@ -62,14 +63,21 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
             if (password.Length < 12)
             {
-                const string warningMessage = "Min length 12";
+                const string warningMessage = "Password min length 12!";
                 messageManager.SendMessage(chatId, warningMessage);
                 return false;
             }
 
             if (password.Length > 25)
             {
-                const string warningMessage = "Max length 25";
+                const string warningMessage = "Password max length 25!";
+                messageManager.SendMessage(chatId, warningMessage);
+                return false;
+            }
+
+            if (!Regex.IsMatch(password, @"^[a-zA-Z0-9!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$"))
+            {
+                const string warningMessage = "Password can contain only letters, numbers and special characters!";
                 messageManager.SendMessage(chatId, warningMessage);
                 return false;
             }
