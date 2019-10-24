@@ -3,6 +3,6 @@
     internal interface IChatStateHandler
     {
         void StartStateMessage(long chatId);
-        void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context);
+        void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context);
     }
 }

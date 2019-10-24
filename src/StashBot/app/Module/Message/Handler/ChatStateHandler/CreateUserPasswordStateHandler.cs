@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
@@ -28,17 +29,17 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             messageManager.SendMessage(chatId, warningMessage);
         }
 
-        public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            if (commands.ContainsKey(message))
+            if (commands.ContainsKey(message.Message))
             {
-                commands[message](chatId, context);
+                commands[message.Message](message.ChatId, context);
             }
             else
             {
-                if (CheckPassword(chatId, message))
+                if (CheckPassword(message.ChatId, message.Message))
                 {
-                    RegistrationUser(chatId, message, context);
+                    RegistrationUser(message.ChatId, message.Message, context);
                 }
             }
         }
@@ -62,14 +63,21 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
             if (password.Length < 12)
             {
-                const string warningMessage = "Min length 12";
+                const string warningMessage = "Password min length 12!";
                 messageManager.SendMessage(chatId, warningMessage);
                 return false;
             }
 
             if (password.Length > 25)
             {
-                const string warningMessage = "Max length 25";
+                const string warningMessage = "Password max length 25!";
+                messageManager.SendMessage(chatId, warningMessage);
+                return false;
+            }
+
+            if (!Regex.IsMatch(password, @"^[a-zA-Z0-9!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$"))
+            {
+                const string warningMessage = "Password can contain only letters, numbers and special characters!";
                 messageManager.SendMessage(chatId, warningMessage);
                 return false;
             }
