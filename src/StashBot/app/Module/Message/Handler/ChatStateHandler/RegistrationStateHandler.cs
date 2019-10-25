@@ -24,23 +24,25 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string warningMessage = "If you have already registered you will lose all your old data!";
+            const string warningMessage = "If you have already registered you will lose all your old data!\nAre you sure? /yes or /no";
             messageManager.SendMessage(chatId, warningMessage);
-
-            const string questionMessage = "Are you sure? /yes or /no";
-            messageManager.SendMessage(chatId, questionMessage);
         }
 
-        public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            if (commands.ContainsKey(message))
+            if (IsCommand(message.Message))
             {
-                commands[message](chatId, context);
+                commands[message.Message](message.ChatId, context);
             }
             else
             {
-                StartStateMessage(chatId);
+                StartStateMessage(message.ChatId);
             }
+        }
+
+        private bool IsCommand(string message)
+        {
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
         private void Registration(long chatId, IChatStateHandlerContext context)

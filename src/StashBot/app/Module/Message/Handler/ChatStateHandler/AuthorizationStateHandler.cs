@@ -28,31 +28,49 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             messageManager.SendMessage(chatId, warningMessage);
         }
 
-        public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
             IUserManager userManager =
                 ModulesManager.GetModulesManager().GetUserManager();
 
-            if (commands.ContainsKey(message))
+            if (IsCommand(message.Message))
             {
-                commands[message](chatId, context);
+                commands[message.Message](message.ChatId, context);
             }
             else
             {
-                bool success = userManager.LoginUser(chatId, message);
-                if (success)
+                if (!string.IsNullOrEmpty(message.Message))
                 {
-                    const string successMessage = "Success!";
-                    messageManager.SendMessage(chatId, successMessage);
-                    context.ChangeChatState(chatId, Session.ChatSessionState.Authorized);
+                    LoginUser(message, context);
                 }
-                else
-                {
-                    const string wrongMessage = "WRONG";
-                    messageManager.SendMessage(chatId, wrongMessage);
-                }
+            }
+        }
+
+        private bool IsCommand(string message)
+        {
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
+        }
+
+        private void LoginUser(ITelegramUserMessage message, IChatStateHandlerContext context)
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager =
+                ModulesManager.GetModulesManager().GetUserManager();
+
+            bool success = userManager.LoginUser(message.ChatId, message.Message);
+            if (success)
+            {
+                const string successMessage = "Success!";
+                messageManager.SendMessage(message.ChatId, successMessage);
+                context.ChangeChatState(message.ChatId, Session.ChatSessionState.Authorized);
+            }
+            else
+            {
+                const string wrongMessage = "WRONG";
+                messageManager.SendMessage(message.ChatId, wrongMessage);
             }
         }
 

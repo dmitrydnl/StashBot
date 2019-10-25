@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
@@ -28,24 +29,40 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             messageManager.SendMessage(chatId, warningMessage);
         }
 
-        public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            if (commands.ContainsKey(message))
+            if (IsCommand(message.Message))
             {
-                commands[message](chatId, context);
+                commands[message.Message](message.ChatId, context);
             }
             else
             {
-                if (CheckPassword(chatId, message))
+                if (!string.IsNullOrEmpty(message.Message))
                 {
-                    RegistrationUser(chatId, message, context);
+                    RegistrationUser(message, context);
                 }
             }
         }
 
-        private void Cancel(long chatId, IChatStateHandlerContext context)
+        private bool IsCommand(string message)
         {
-            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
+        }
+
+        private void RegistrationUser(ITelegramUserMessage message, IChatStateHandlerContext context)
+        {
+            IMessageManager messageManager =
+                ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager =
+                ModulesManager.GetModulesManager().GetUserManager();
+
+            if (CheckPassword(message.ChatId, message.Message))
+            {
+                userManager.CreateNewUser(message.ChatId, message.Message);
+                string successMessage = "Success!\nNow you can auth with password";
+                messageManager.SendMessage(message.ChatId, successMessage);
+                context.ChangeChatState(message.ChatId, Session.ChatSessionState.Start);
+            }
         }
 
         private bool CheckPassword(long chatId, string password)
@@ -62,14 +79,21 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
             if (password.Length < 12)
             {
-                const string warningMessage = "Min length 12";
+                const string warningMessage = "Password min length 12!";
                 messageManager.SendMessage(chatId, warningMessage);
                 return false;
             }
 
             if (password.Length > 25)
             {
-                const string warningMessage = "Max length 25";
+                const string warningMessage = "Password max length 25!";
+                messageManager.SendMessage(chatId, warningMessage);
+                return false;
+            }
+
+            if (!Regex.IsMatch(password, @"^[a-zA-Z0-9!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$"))
+            {
+                const string warningMessage = "Password can contain only letters, numbers and special characters!";
                 messageManager.SendMessage(chatId, warningMessage);
                 return false;
             }
@@ -77,16 +101,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             return true;
         }
 
-        private void RegistrationUser(long chatId, string password, IChatStateHandlerContext context)
+        private void Cancel(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
-
-            userManager.CreateNewUser(chatId, password);
-            string successMessage = "Success!\nNow you can auth with password";
-            messageManager.SendMessage(chatId, successMessage);
             context.ChangeChatState(chatId, Session.ChatSessionState.Start);
         }
     }

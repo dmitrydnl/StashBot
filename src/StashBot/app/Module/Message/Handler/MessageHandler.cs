@@ -12,31 +12,31 @@ namespace StashBot.Module.Message.Handler
             chatStateHandlerFactory = new ChatStateHandlerFactory();
         }
 
-        public void HandleUserMessage(long chatId, int messageId, string message)
+        public void HandleUserMessage(ITelegramUserMessage message)
         {
             ISessionManager sessionManager =
                 ModulesManager.GetModulesManager().GetSessionManager();
 
-            if (string.IsNullOrEmpty(message))
+            if (message.IsEmpty())
             {
                 return;
             }
 
-            IChatSession chatSession = sessionManager.GetChatSession(chatId);
+            IChatSession chatSession = sessionManager.GetChatSession(message.ChatId);
             if (chatSession == null)
             {
-                sessionManager.CreateChatSession(chatId);
-                chatSession = sessionManager.GetChatSession(chatId);
+                sessionManager.CreateChatSession(message.ChatId);
+                chatSession = sessionManager.GetChatSession(message.ChatId);
             }
 
-            sessionManager.UserSentMessage(chatId, messageId);
-            if (string.Equals(message, "/e") || string.Equals(message, "/exit"))
+            sessionManager.UserSentMessage(message.ChatId, message.MessageId);
+            if (string.Equals(message.Message, "/e") || string.Equals(message.Message, "/exit"))
             {
-                sessionManager.KillChatSession(chatId);
+                sessionManager.KillChatSession(message.ChatId);
             }
             else
             {
-                chatStateHandlerFactory.GetChatStateHandler(chatSession.State).HandleUserMessage(chatId, messageId, message, this);
+                chatStateHandlerFactory.GetChatStateHandler(chatSession.State).HandleUserMessage(message, this);
             }
         }
 

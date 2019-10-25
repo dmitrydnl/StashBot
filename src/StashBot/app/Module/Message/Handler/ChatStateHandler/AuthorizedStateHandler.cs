@@ -30,24 +30,32 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             messageManager.SendMessage(chatId, loginMessage);
         }
 
-        public void HandleUserMessage(long chatId, int messageId, string message, IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            if (commands.ContainsKey(message))
+            if (IsCommand(message.Message))
             {
-                commands[message](chatId, context);
+                commands[message.Message](message.ChatId, context);
             }
             else
             {
-                AddDataToStashHandle(chatId, message);
+                if (!string.IsNullOrEmpty(message.Message))
+                {
+                    SaveTextMessageToStash(message);
+                }
             }
         }
 
-        private void AddDataToStashHandle(long chatId, string message)
+        private bool IsCommand(string message)
+        {
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
+        }
+
+        private void SaveTextMessageToStash(ITelegramUserMessage message)
         {
             IDatabaseManager databaseManager =
                     ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            databaseManager.SaveMessageToStash(chatId, message);
+            databaseManager.SaveMessageToStash(message.ChatId, message.Message);
         }
 
         private void GetStash(long chatId, IChatStateHandlerContext context)

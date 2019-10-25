@@ -39,10 +39,7 @@ namespace StashBot
             IMessageManager messageManager =
                    ModulesManager.GetModulesManager().GetMessageManager();
 
-            long chatId = e.Message.Chat.Id;
-            int messageId = e.Message.MessageId;
-            string message = e.Message.Text;
-            messageManager.HandleUserMessage(chatId, messageId, message);
+            messageManager.HandleUserMessage(new TelegramUserMessage(e.Message));
         }
     }
 }
