@@ -31,7 +31,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            if (commands.ContainsKey(message.Message))
+            if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);
             }
@@ -39,6 +39,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             {
                 StartStateMessage(message.ChatId);
             }
+        }
+
+        private bool IsCommand(string message)
+        {
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
         private void Registration(long chatId, IChatStateHandlerContext context)

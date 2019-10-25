@@ -17,7 +17,7 @@ namespace StashBot.Module.Message.Handler
             ISessionManager sessionManager =
                 ModulesManager.GetModulesManager().GetSessionManager();
 
-            if (string.IsNullOrEmpty(message.Message))
+            if (message.IsEmpty())
             {
                 return;
             }

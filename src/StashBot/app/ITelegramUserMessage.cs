@@ -23,5 +23,12 @@ namespace StashBot
         {
             get;
         }
+
+        string PhotoId
+        {
+            get;
+        }
+
+        bool IsEmpty();
     }
 }
