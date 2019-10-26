@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 
 namespace StashBot.AppSetting
 {
-    internal class BotToken
+    internal static class BotToken
     {
         private const string BOT_TOKEN_FILE_NAME = "AppSettings.json";
         private static string botToken;
 
-        internal string Get()
+        internal static string Get()
         {
             if (string.IsNullOrEmpty(botToken))
             {
@@ -20,7 +20,7 @@ namespace StashBot.AppSetting
             return botToken;
         }
 
-        internal void Set(string newBotToken)
+        internal static void Set(string newBotToken)
         {
             if (string.IsNullOrEmpty(botToken) && !string.IsNullOrEmpty(newBotToken))
             {
