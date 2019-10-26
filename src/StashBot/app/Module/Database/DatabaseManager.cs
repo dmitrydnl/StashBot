@@ -6,8 +6,8 @@ namespace StashBot.Module.Database
 {
     internal class DatabaseManager : IDatabaseManager
     {
-        private IDatabaseAccount databaseAccount;
-        private IDatabaseStash databaseStash;
+        private readonly IDatabaseAccount databaseAccount;
+        private readonly IDatabaseStash databaseStash;
 
         internal DatabaseManager()
         {
