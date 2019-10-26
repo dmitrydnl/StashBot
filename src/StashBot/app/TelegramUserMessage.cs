@@ -30,15 +30,15 @@ namespace StashBot
             get;
         }
 
-        internal TelegramUserMessage(Message message)
+        internal TelegramUserMessage(Message telegramMessage)
         {
-            ChatId = message.Chat.Id;
-            MessageId = message.MessageId;
-            DateSent = message.Date;
-            Message = message.Text;
-            if (message.Photo != null && message.Photo.Length > 0)
+            ChatId = telegramMessage.Chat.Id;
+            MessageId = telegramMessage.MessageId;
+            DateSent = telegramMessage.Date;
+            Message = telegramMessage.Text;
+            if (telegramMessage.Photo != null && telegramMessage.Photo.Length > 0)
             {
-                PhotoId = message.Photo[message.Photo.Length - 1].FileId;
+                PhotoId = telegramMessage.Photo[telegramMessage.Photo.Length - 1].FileId;
             }
             else
             {
