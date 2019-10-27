@@ -2,10 +2,13 @@
 {
     internal interface IUser
     {
+        string EncryptedPassword
+        {
+            get;
+        }
+
         void Login(string password);
         void Logout();
         bool ValidatePassword(string password);
-        string EncryptMessage(string secretMessage);
-        string DecryptMessage(string encryptedMessage);
     }
 }

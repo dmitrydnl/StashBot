@@ -21,7 +21,7 @@ namespace StashBot.Module
 
         private ModulesManager()
         {
-            telegramBotClient = new TelegramBotClient(new BotToken().Get());
+            telegramBotClient = new TelegramBotClient(BotToken.Get());
             messageManager = new MessageManager();
             sessionManager = new SessionManager();
             userManager = new UserManager();

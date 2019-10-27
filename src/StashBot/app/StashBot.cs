@@ -6,10 +6,13 @@ using Telegram.Bot.Args;
 
 namespace StashBot
 {
-    class StashBot
+    internal class StashBot
     {
+        private ITelegramUserMessageFactory telegramUserMessageFactory;
+
         internal StashBot()
         {
+            telegramUserMessageFactory = new TelegramUserMessageFactory();
             WriteBotStatus();
         }
 
@@ -39,7 +42,7 @@ namespace StashBot
             IMessageManager messageManager =
                    ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.HandleUserMessage(new TelegramUserMessage(e.Message));
+            messageManager.HandleUserMessage(telegramUserMessageFactory.Create(e.Message));
         }
     }
 }
