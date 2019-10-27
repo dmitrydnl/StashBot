@@ -30,12 +30,12 @@ namespace StashBot.Module.Database
             return databaseAccount.GetUser(chatId);
         }
 
-        public void SaveMessageToStash(long chatId, string message)
+        public void SaveMessageToStash(IStashMessage stashMessage)
         {
-            databaseStash.SaveMessageToStash(chatId, message);
+            databaseStash.SaveMessageToStash(stashMessage);
         }
 
-        public List<string> GetMessagesFromStash(long chatId)
+        public List<IStashMessage> GetMessagesFromStash(long chatId)
         {
             return databaseStash.GetMessagesFromStash(chatId);
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using StashBot.Module.Database;
+using StashBot.Module.Database.Stash;
 using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
@@ -8,9 +9,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
     {
         private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
+        private readonly IStashMessageFactory stashMessageFactory;
 
         internal AuthorizedStateHandler()
         {
+            stashMessageFactory = new StashMessageFactory();
             commands = new Dictionary<string, Command>();
             InitializeCommands();
         }
@@ -55,20 +58,19 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IDatabaseManager databaseManager =
                     ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            databaseManager.SaveMessageToStash(message.ChatId, message.Message);
+            IStashMessage stashMessage = stashMessageFactory.Create(message);
+            databaseManager.SaveMessageToStash(stashMessage);
         }
 
         private void GetStash(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
             IDatabaseManager databaseManager =
                 ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            List<string> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
-            foreach (string textMessage in messagesFromStash)
+            List<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
+            foreach (IStashMessage stashMessage in messagesFromStash)
             {
-                messageManager.SendMessage(chatId, textMessage);
+                stashMessage.Send();
             }
         }
 
