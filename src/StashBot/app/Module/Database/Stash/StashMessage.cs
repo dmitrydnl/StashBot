@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using StashBot.Module.Message;
 using StashBot.Module.Secure;
+using Telegram.Bot;
 
 namespace StashBot.Module.Database.Stash
 {
@@ -9,9 +12,16 @@ namespace StashBot.Module.Database.Stash
         public long ChatId
         {
             get;
+            private set;
         }
 
         public bool IsEncrypt
+        {
+            get;
+            private set;
+        }
+
+        public bool IsDownloaded
         {
             get;
             private set;
@@ -23,11 +33,23 @@ namespace StashBot.Module.Database.Stash
             private set;
         }
 
+        public string PhotoId
+        {
+            get;
+            private set;
+        }
+
         internal StashMessage(ITelegramUserMessage telegramMessage)
         {
             ChatId = telegramMessage.ChatId;
             IsEncrypt = false;
             Message = telegramMessage.Message;
+            PhotoId = telegramMessage.PhotoId;
+            IsDownloaded = string.IsNullOrEmpty(PhotoId);
+        }
+
+        public async Task Download()
+        {
         }
 
         public void Encrypt(IUser user)
