@@ -1,4 +1,5 @@
-﻿using StashBot.Module.Message;
+﻿using System;
+using StashBot.Module.Message;
 using StashBot.Module.Secure;
 
 namespace StashBot.Module.Database.Stash
@@ -31,13 +32,13 @@ namespace StashBot.Module.Database.Stash
 
         public void Encrypt(IUser user)
         {
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
-
             if (IsEncrypt)
             {
                 return;
             }
+
+            ISecureManager secureManager =
+                ModulesManager.GetModulesManager().GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             Message = secureManager.EncryptWithAesHmac(Message, password);
@@ -46,13 +47,13 @@ namespace StashBot.Module.Database.Stash
 
         public void Decrypt(IUser user)
         {
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
-
             if (!IsEncrypt)
             {
                 return;
             }
+
+            ISecureManager secureManager =
+                ModulesManager.GetModulesManager().GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             Message = secureManager.DecryptWithAesHmac(Message, password);
@@ -61,6 +62,11 @@ namespace StashBot.Module.Database.Stash
 
         public void Send()
         {
+            if (IsEncrypt)
+            {
+                throw new ArgumentException("An encrypted message cannot send");
+            }
+
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 

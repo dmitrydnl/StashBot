@@ -58,8 +58,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IDatabaseManager databaseManager =
                     ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            IStashMessage stashMessage = stashMessageFactory.Create(message);
-            databaseManager.SaveMessageToStash(stashMessage);
+            IUser user = databaseManager.GetUser(message.ChatId);
+            if (user != null && user.IsAuthorized)
+            {
+                IStashMessage stashMessage = stashMessageFactory.Create(message);
+                stashMessage.Encrypt(user);
+                databaseManager.SaveMessageToStash(stashMessage);
+            }
         }
 
         private void GetStash(long chatId, IChatStateHandlerContext context)
@@ -67,10 +72,16 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IDatabaseManager databaseManager =
                 ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            List<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
-            foreach (IStashMessage stashMessage in messagesFromStash)
+
+            IUser user = databaseManager.GetUser(chatId);
+            if (user != null && user.IsAuthorized)
             {
-                stashMessage.Send();
+                List<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
+                foreach(IStashMessage stashMessage in messagesFromStash)
+                {
+                    stashMessage.Decrypt(user);
+                    stashMessage.Send();
+                }
             }
         }
 
