@@ -26,7 +26,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 ModulesManager.GetModulesManager().GetMessageManager();
 
             const string mainCommandsMessage = "Registration: /reg\nAuthorization: /auth\nInformation about me: /info\nClose chat in any time: /e or /exit";
-            messageManager.SendMessage(chatId, mainCommandsMessage);
+            messageManager.SendTextMessage(chatId, mainCommandsMessage);
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -62,7 +62,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 ModulesManager.GetModulesManager().GetMessageManager();
 
             const string informationMessage = "This is open source bot for stashing in Telegram Messenger.\nThe code you can find here: https://github.com/dmitrydnl/StashBot";
-            messageManager.SendMessage(chatId, informationMessage);
+            messageManager.SendTextMessage(chatId, informationMessage);
         }
     }
 }

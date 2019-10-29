@@ -24,7 +24,7 @@ namespace StashBot.Module.Database.Stash
             get;
         }
 
-        string PhotoId
+        string Photo
         {
             get;
         }

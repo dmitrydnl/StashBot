@@ -25,7 +25,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 ModulesManager.GetModulesManager().GetMessageManager();
 
             const string warningMessage = "If you have already registered you will lose all your old data!\nAre you sure? /yes or /no";
-            messageManager.SendMessage(chatId, warningMessage);
+            messageManager.SendTextMessage(chatId, warningMessage);
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)

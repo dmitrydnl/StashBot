@@ -14,6 +14,13 @@ namespace StashBot.Module.Database.Stash
 
         public void SaveMessageToStash(IStashMessage stashMessage)
         {
+            if (!stashMessage.IsDownloaded)
+            {
+                throw new ArgumentException(
+                    "An undownloaded message cannot be stored in a stash",
+                    nameof(stashMessage));
+            }
+
             if (!stashMessage.IsEncrypt)
             {
                 throw new ArgumentException(

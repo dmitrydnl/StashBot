@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using StashBot.Module.Message.Handler;
 using StashBot.Module.Message.Sender;
 using StashBot.Module.Message.Delete;
@@ -23,9 +24,14 @@ namespace StashBot.Module.Message
             messageHandler.HandleUserMessage(message);
         }
 
-        public void SendMessage(long chatId, string message)
+        public Task SendTextMessage(long chatId, string textMessage)
         {
-            messageSender.SendMessage(chatId, message);
+            return messageSender.SendTextMessage(chatId, textMessage);
+        }
+
+        public Task SendPhotoMessage(long chatId, byte[] imageBytes)
+        {
+            return messageSender.SendPhotoMessage(chatId, imageBytes);
         }
 
         public void DeleteMessage(long chatId, int messageId)

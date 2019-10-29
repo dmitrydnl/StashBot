@@ -31,7 +31,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 ModulesManager.GetModulesManager().GetMessageManager();
 
             const string loginMessage = "Input message to save it in stash.\nGet messages in stash: /stash\nLogout: /logout";
-            messageManager.SendMessage(chatId, loginMessage);
+            messageManager.SendTextMessage(chatId, loginMessage);
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -44,7 +44,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             {
                 if (!message.IsEmpty())
                 {
-                    SaveMessageToStash(message);
+                    _ = SaveMessageToStash(message);
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
             userManager.LogoutUser(chatId);
             const string logoutMessage = "You're logged out";
-            messageManager.SendMessage(chatId, logoutMessage);
+            messageManager.SendTextMessage(chatId, logoutMessage);
             context.ChangeChatState(chatId, Session.ChatSessionState.Start);
         }
     }
