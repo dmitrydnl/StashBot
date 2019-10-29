@@ -10,12 +10,12 @@ namespace StashBot
             get;
         }
 
-        public int MessageId
+        public DateTime DateSent
         {
             get;
         }
 
-        public DateTime DateSent
+        public int MessageId
         {
             get;
         }
@@ -33,8 +33,8 @@ namespace StashBot
         internal TelegramUserMessage(Message telegramMessage)
         {
             ChatId = telegramMessage.Chat.Id;
-            MessageId = telegramMessage.MessageId;
             DateSent = telegramMessage.Date;
+            MessageId = telegramMessage.MessageId;
             Message = telegramMessage.Text;
             if (telegramMessage.Photo != null && telegramMessage.Photo.Length > 0)
             {

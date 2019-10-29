@@ -1,5 +1,9 @@
-﻿using StashBot.Module.Message;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using StashBot.Module.Message;
 using StashBot.Module.Secure;
+using Telegram.Bot;
 
 namespace StashBot.Module.Database.Stash
 {
@@ -8,9 +12,16 @@ namespace StashBot.Module.Database.Stash
         public long ChatId
         {
             get;
+            private set;
         }
 
         public bool IsEncrypt
+        {
+            get;
+            private set;
+        }
+
+        public bool IsDownloaded
         {
             get;
             private set;
@@ -22,22 +33,34 @@ namespace StashBot.Module.Database.Stash
             private set;
         }
 
+        public string PhotoId
+        {
+            get;
+            private set;
+        }
+
         internal StashMessage(ITelegramUserMessage telegramMessage)
         {
             ChatId = telegramMessage.ChatId;
             IsEncrypt = false;
             Message = telegramMessage.Message;
+            PhotoId = telegramMessage.PhotoId;
+            IsDownloaded = string.IsNullOrEmpty(PhotoId);
+        }
+
+        public async Task Download()
+        {
         }
 
         public void Encrypt(IUser user)
         {
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
-
             if (IsEncrypt)
             {
                 return;
             }
+
+            ISecureManager secureManager =
+                ModulesManager.GetModulesManager().GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             Message = secureManager.EncryptWithAesHmac(Message, password);
@@ -46,13 +69,13 @@ namespace StashBot.Module.Database.Stash
 
         public void Decrypt(IUser user)
         {
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
-
             if (!IsEncrypt)
             {
                 return;
             }
+
+            ISecureManager secureManager =
+                ModulesManager.GetModulesManager().GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             Message = secureManager.DecryptWithAesHmac(Message, password);
@@ -61,6 +84,11 @@ namespace StashBot.Module.Database.Stash
 
         public void Send()
         {
+            if (IsEncrypt)
+            {
+                throw new ArgumentException("An encrypted message cannot send");
+            }
+
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 

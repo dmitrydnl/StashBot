@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace StashBot.Module.Database.Stash
 {
@@ -13,45 +14,29 @@ namespace StashBot.Module.Database.Stash
 
         public void SaveMessageToStash(IStashMessage stashMessage)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
+            if (!stashMessage.IsEncrypt)
+            {
+                throw new ArgumentException(
+                    "An unencrypted message cannot be stored in a stash",
+                    nameof(stashMessage));
+            }
 
             if (!usersStashes.ContainsKey(stashMessage.ChatId))
             {
                 usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
             }
 
-            IUser user = databaseManager.GetUser(stashMessage.ChatId);
-            if (user != null)
-            {
-                stashMessage.Encrypt(user);
-                usersStashes[stashMessage.ChatId].Add(stashMessage);
-            }
+            usersStashes[stashMessage.ChatId].Add(stashMessage);
         }
 
         public List<IStashMessage> GetMessagesFromStash(long chatId)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
-
             if (!usersStashes.ContainsKey(chatId))
             {
                 return new List<IStashMessage>();
             }
 
-            IUser user = databaseManager.GetUser(chatId);
-            if (user == null)
-            {
-                return new List<IStashMessage>();
-            }
-
-            List<IStashMessage> decryptedMessages = new List<IStashMessage>();
-            foreach (IStashMessage encryptedMessage in usersStashes[chatId])
-            {
-                encryptedMessage.Decrypt(user);
-                decryptedMessages.Add(encryptedMessage);
-            }
-            return decryptedMessages;
+            return usersStashes[chatId];
         }
 
         public void ClearStash(long chatId)

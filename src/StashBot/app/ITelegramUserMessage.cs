@@ -9,12 +9,12 @@ namespace StashBot
             get;
         }
 
-        int MessageId
+        DateTime DateSent
         {
             get;
         }
 
-        DateTime DateSent
+        int MessageId
         {
             get;
         }

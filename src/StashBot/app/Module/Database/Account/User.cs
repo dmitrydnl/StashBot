@@ -13,6 +13,12 @@ namespace StashBot.Module.Database
             private set;
         }
 
+        public bool IsAuthorized
+        {
+            get;
+            private set;
+        }
+
         internal User(long chatId, string password)
         {
             ISecureManager secureManager =
@@ -21,6 +27,7 @@ namespace StashBot.Module.Database
             this.chatId = chatId;
             hashPassword = secureManager.CalculateHash(password);
             EncryptedPassword = null;
+            IsAuthorized = false;
         }
 
         public void Login(string password)
@@ -29,11 +36,13 @@ namespace StashBot.Module.Database
                 ModulesManager.GetModulesManager().GetSecureManager();
 
             EncryptedPassword = secureManager.EncryptWithAes(password);
+            IsAuthorized = true;
         }
 
         public void Logout()
         {
             EncryptedPassword = null;
+            IsAuthorized = false;
         }
 
         public bool ValidatePassword(string password)
