@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using StashBot.Module.Database;
 using StashBot.Module.Database.Stash;
 using StashBot.Module.User;
@@ -41,9 +42,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             }
             else
             {
-                if (!string.IsNullOrEmpty(message.Message))
+                if (!message.IsEmpty())
                 {
-                    SaveTextMessageToStash(message);
+                    SaveMessageToStash(message);
                 }
             }
         }
@@ -53,7 +54,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
-        private void SaveTextMessageToStash(ITelegramUserMessage message)
+        private async Task SaveMessageToStash(ITelegramUserMessage message)
         {
             IDatabaseManager databaseManager =
                     ModulesManager.GetModulesManager().GetDatabaseManager();
@@ -62,6 +63,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             if (user != null && user.IsAuthorized)
             {
                 IStashMessage stashMessage = stashMessageFactory.Create(message);
+                if (!stashMessage.IsDownloaded)
+                {
+                    await stashMessage.Download();
+                }
+
                 stashMessage.Encrypt(user);
                 databaseManager.SaveMessageToStash(stashMessage);
             }
