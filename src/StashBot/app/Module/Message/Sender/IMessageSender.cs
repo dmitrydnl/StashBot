@@ -1,7 +1,10 @@
-﻿namespace StashBot.Module.Message.Sender
+﻿using System.Threading.Tasks;
+
+namespace StashBot.Module.Message.Sender
 {
     internal interface IMessageSender
     {
-        void SendMessage(long chatId, string message);
+        Task SendTextMessage(long chatId, string message);
+        Task SendPhotoMessage(long chatId, byte[] imageBytes);
     }
 }

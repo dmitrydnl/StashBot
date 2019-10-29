@@ -25,7 +25,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 ModulesManager.GetModulesManager().GetMessageManager();
 
             const string warningMessage = "Input your password or /back";
-            messageManager.SendMessage(chatId, warningMessage);
+            messageManager.SendTextMessage(chatId, warningMessage);
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -64,13 +64,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             if (success)
             {
                 const string successMessage = "Success!";
-                messageManager.SendMessage(message.ChatId, successMessage);
+                messageManager.SendTextMessage(message.ChatId, successMessage);
                 context.ChangeChatState(message.ChatId, Session.ChatSessionState.Authorized);
             }
             else
             {
                 const string wrongMessage = "WRONG";
-                messageManager.SendMessage(message.ChatId, wrongMessage);
+                messageManager.SendTextMessage(message.ChatId, wrongMessage);
             }
         }
 

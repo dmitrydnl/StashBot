@@ -33,23 +33,36 @@ namespace StashBot.Module.Database.Stash
             private set;
         }
 
-        public string PhotoId
+        public string Photo
         {
             get;
             private set;
         }
+
+        private readonly string photoId;
 
         internal StashMessage(ITelegramUserMessage telegramMessage)
         {
             ChatId = telegramMessage.ChatId;
             IsEncrypt = false;
             Message = telegramMessage.Message;
-            PhotoId = telegramMessage.PhotoId;
-            IsDownloaded = string.IsNullOrEmpty(PhotoId);
+            photoId = telegramMessage.PhotoId;
+            IsDownloaded = string.IsNullOrEmpty(photoId);
         }
 
         public async Task Download()
         {
+            ITelegramBotClient telegramBotClient =
+                ModulesManager.GetModulesManager().GetTelegramBotClient();
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                await telegramBotClient.GetInfoAndDownloadFileAsync(photoId, stream);
+                byte[] imageBytes = stream.ToArray();
+                Photo = Convert.ToBase64String(imageBytes);
+            }
+
+            IsDownloaded = true;
         }
 
         public void Encrypt(IUser user)
@@ -63,7 +76,15 @@ namespace StashBot.Module.Database.Stash
                 ModulesManager.GetModulesManager().GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
-            Message = secureManager.EncryptWithAesHmac(Message, password);
+            if (!string.IsNullOrEmpty(Message))
+            {
+                Message = secureManager.EncryptWithAesHmac(Message, password);
+            }
+            if (!string.IsNullOrEmpty(Photo))
+            {
+                Photo = secureManager.EncryptWithAesHmac(Photo, password);
+            }
+
             IsEncrypt = true;
         }
 
@@ -78,12 +99,26 @@ namespace StashBot.Module.Database.Stash
                 ModulesManager.GetModulesManager().GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
-            Message = secureManager.DecryptWithAesHmac(Message, password);
+            if (!string.IsNullOrEmpty(Message))
+            {
+                Message = secureManager.DecryptWithAesHmac(Message, password);
+            }
+            if (!string.IsNullOrEmpty(Photo))
+            {
+                Photo = secureManager.DecryptWithAesHmac(Photo, password);
+
+            }
+
             IsEncrypt = false;
         }
 
         public void Send()
         {
+            if (!IsDownloaded)
+            {
+                throw new ArgumentException("An undownloaded message cannot send");
+            }
+
             if (IsEncrypt)
             {
                 throw new ArgumentException("An encrypted message cannot send");
@@ -92,7 +127,15 @@ namespace StashBot.Module.Database.Stash
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.SendMessage(ChatId, Message);
+            if (!string.IsNullOrEmpty(Message))
+            {
+                _ = messageManager.SendTextMessage(ChatId, Message);
+            }
+            if (!string.IsNullOrEmpty(Photo))
+            {
+                byte[] imageBytes = Convert.FromBase64String(Photo);
+                _ = messageManager.SendPhotoMessage(ChatId, imageBytes);
+            }
         }
     }
 }
