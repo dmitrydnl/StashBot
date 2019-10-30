@@ -7,5 +7,6 @@ namespace StashBot.Module.Database.Stash
         void SaveMessageToStash(IStashMessage stashMessage);
         List<IStashMessage> GetMessagesFromStash(long chatId);
         void ClearStash(long chatId);
+        bool IsStashExist(long chatId);
     }
 }

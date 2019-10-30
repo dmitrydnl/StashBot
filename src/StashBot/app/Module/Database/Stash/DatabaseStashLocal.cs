@@ -14,23 +14,22 @@ namespace StashBot.Module.Database.Stash
 
         public void SaveMessageToStash(IStashMessage stashMessage)
         {
-            if (!stashMessage.IsDownloaded)
-            {
-                throw new ArgumentException(
-                    "An undownloaded message cannot be stored in a stash",
-                    nameof(stashMessage));
-            }
-
             if (!stashMessage.IsEncrypt)
             {
                 throw new ArgumentException(
-                    "An unencrypted message cannot be stored in a stash",
-                    nameof(stashMessage));
+                    "An unencrypted message cannot be stored in a stash");
             }
 
-            if (!usersStashes.ContainsKey(stashMessage.ChatId))
+            if (!stashMessage.IsDownloaded)
             {
-                usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
+                throw new ArgumentException(
+                    "An undownloaded message cannot be stored in a stash");
+            }
+
+            if (!IsStashExist(stashMessage.ChatId))
+            {
+                usersStashes
+                    .Add(stashMessage.ChatId, new List<IStashMessage>());
             }
 
             usersStashes[stashMessage.ChatId].Add(stashMessage);
@@ -38,9 +37,9 @@ namespace StashBot.Module.Database.Stash
 
         public List<IStashMessage> GetMessagesFromStash(long chatId)
         {
-            if (!usersStashes.ContainsKey(chatId))
+            if (!IsStashExist(chatId))
             {
-                return new List<IStashMessage>();
+                usersStashes.Add(chatId, new List<IStashMessage>());
             }
 
             return usersStashes[chatId];
@@ -48,10 +47,15 @@ namespace StashBot.Module.Database.Stash
 
         public void ClearStash(long chatId)
         {
-            if (usersStashes.ContainsKey(chatId))
+            if (IsStashExist(chatId))
             {
                 usersStashes[chatId].Clear();
             }
+        }
+
+        public bool IsStashExist(long chatId)
+        {
+            return usersStashes.ContainsKey(chatId);
         }
     }
 }

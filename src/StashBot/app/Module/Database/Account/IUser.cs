@@ -2,12 +2,17 @@
 {
     internal interface IUser
     {
-        string EncryptedPassword
+        long ChatId
         {
             get;
         }
 
         bool IsAuthorized
+        {
+            get;
+        }
+
+        string EncryptedPassword
         {
             get;
         }

@@ -3,7 +3,7 @@
     internal interface IDatabaseAccount
     {
         void CreateNewUser(long chatId, string password);
-        bool IsUserExist(long chatId);
         IUser GetUser(long chatId);
+        bool IsUserExist(long chatId);
     }
 }
