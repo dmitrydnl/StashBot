@@ -4,7 +4,10 @@ using StashBot.Module.Secure.AesHmacCrypto;
 
 namespace StashBot.Module.Secure
 {
-    internal interface ISecureManager : ISecureHash, ISecureAesCrypto, ISecureAesHmacCrypto
+    internal interface ISecureManager :
+        ISecureHash,
+        ISecureAesCrypto,
+        ISecureAesHmacCrypto
     {
 
     }

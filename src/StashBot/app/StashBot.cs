@@ -42,7 +42,8 @@ namespace StashBot
             IMessageManager messageManager =
                    ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.HandleUserMessage(telegramUserMessageFactory.Create(e.Message));
+            messageManager.HandleUserMessage(
+                telegramUserMessageFactory.Create(e.Message));
         }
     }
 }

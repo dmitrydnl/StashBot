@@ -54,14 +54,20 @@ namespace StashBot.Module.Session
 
         public void UserSentMessage(long chatId, int messageId)
         {
-            IChatSession chatSession = currentChatSessions[chatId];
-            chatSession.UserSentMessage(messageId);
+            if (IsChatSessionExist(chatId))
+            {
+                IChatSession chatSession = currentChatSessions[chatId];
+                chatSession.UserSentMessage(messageId);
+            }
         }
 
         public void BotSentMessage(long chatId, int messageId)
         {
-            IChatSession chatSession = currentChatSessions[chatId];
-            chatSession.BotSentMessage(messageId);
+            if (IsChatSessionExist(chatId))
+            {
+                IChatSession chatSession = currentChatSessions[chatId];
+                chatSession.BotSentMessage(messageId);
+            }
         }
 
         private void StartClearChatSessionsTimer()

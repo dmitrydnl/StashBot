@@ -9,11 +9,6 @@ namespace StashBot.Module.Session
     {
         private const int CHAT_SESSION_LIVE_TIME_SEC = 60;
 
-        private DateTime lastUserMessage;
-        private DateTime lastBotMessage;
-        private readonly List<int> userMessagesId;
-        private readonly List<int> botMessagesId;
-
         public long ChatId
         {
             get;
@@ -24,6 +19,11 @@ namespace StashBot.Module.Session
             get;
             set;
         }
+
+        private DateTime lastUserMessage;
+        private DateTime lastBotMessage;
+        private readonly List<int> userMessagesId;
+        private readonly List<int> botMessagesId;
 
         internal ChatSession(long chatId)
         {
@@ -63,7 +63,8 @@ namespace StashBot.Module.Session
 
         public bool NeedKill()
         {
-            DateTime endLiveTime = lastUserMessage.AddSeconds(CHAT_SESSION_LIVE_TIME_SEC);
+            DateTime endLiveTime =
+                lastUserMessage.AddSeconds(CHAT_SESSION_LIVE_TIME_SEC);
             return endLiveTime <= DateTime.UtcNow;
         }
     }

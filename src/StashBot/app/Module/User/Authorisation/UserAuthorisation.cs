@@ -1,5 +1,4 @@
 ﻿using StashBot.Module.Database;
-using StashBot.Module.Session;
 
 namespace StashBot.Module.User.Authorisation
 {

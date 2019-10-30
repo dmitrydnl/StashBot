@@ -17,7 +17,7 @@ namespace StashBot.Module.Secure.AesCrypto
         {
             if (string.IsNullOrEmpty(secretMessage))
             {
-                throw new ArgumentException("Secret Message Required!", nameof(secretMessage));
+                throw new ArgumentException("Secret message required");
             }
 
             byte[] encryptedData;
@@ -25,7 +25,8 @@ namespace StashBot.Module.Secure.AesCrypto
             ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
             using (MemoryStream msEncrypt = new MemoryStream())
             {
-                using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                using (CryptoStream csEncrypt = new CryptoStream(msEncrypt,
+                    encryptor, CryptoStreamMode.Write))
                 {
                     using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                     {
@@ -42,7 +43,7 @@ namespace StashBot.Module.Secure.AesCrypto
         {
             if (string.IsNullOrEmpty(encryptedMessage))
             {
-                throw new ArgumentException("Encrypted Message Required!", nameof(encryptedMessage));
+                throw new ArgumentException("Encrypted message required");
             }
 
             byte[] encryptedData = AesStringToEncryptedData(encryptedMessage);
@@ -51,7 +52,8 @@ namespace StashBot.Module.Secure.AesCrypto
             ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
             using (MemoryStream msDecrypt = new MemoryStream(encryptedData))
             {
-                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt,
+                    decryptor, CryptoStreamMode.Read))
                 {
                     using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                     {
