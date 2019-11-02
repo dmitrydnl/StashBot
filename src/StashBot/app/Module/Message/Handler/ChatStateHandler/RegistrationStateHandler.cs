@@ -4,9 +4,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class RegistrationStateHandler : IChatStateHandler
     {
-        private delegate void Command(
-            long chatId,
-            IChatStateHandlerContext context);
+        private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
         internal RegistrationStateHandler()
@@ -26,15 +24,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string warningMessage =
-                "If you have already registered " +
-                "you will lose all your old data!\nAre you sure? /yes or /no";
+            const string warningMessage = "If you have already registered you will lose all your old data!\nAre you sure? /yes or /no";
             messageManager.SendTextMessage(chatId, warningMessage);
         }
 
-        public void HandleUserMessage(
-            ITelegramUserMessage message,
-            IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
             if (message == null || context == null)
             {
@@ -53,17 +47,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private bool IsCommand(string message)
         {
-            return !string.IsNullOrEmpty(message)
-                && commands.ContainsKey(message);
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
-        private void Registration(
-            long chatId,
-            IChatStateHandlerContext context)
+        private void Registration(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(
-                chatId,
-                Session.ChatSessionState.CreateUserPassword);
+            context.ChangeChatState(chatId, Session.ChatSessionState.CreateUserPassword);
         }
 
         private void Cancel(long chatId, IChatStateHandlerContext context)

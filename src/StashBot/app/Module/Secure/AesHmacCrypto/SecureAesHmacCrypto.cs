@@ -13,78 +13,52 @@ namespace StashBot.Module.Secure.AesHmacCrypto
         private const int ITERATIONS = 10000;
         private const int MIN_PASSWORD_LENGTH = 12;
 
-        public string EncryptWithAesHmac(
-            string secretMessage,
-            string password,
-            byte[] nonSecretPayload = null)
+        public string EncryptWithAesHmac(string secretMessage, string password, byte[] nonSecretPayload = null)
         {
             if (string.IsNullOrEmpty(secretMessage))
             {
                 throw new ArgumentException("Secret message required");
             }
 
-            if (string.IsNullOrWhiteSpace(password)
-                || password.Length < MIN_PASSWORD_LENGTH)
+            if (string.IsNullOrWhiteSpace(password) || password.Length < MIN_PASSWORD_LENGTH)
             {
-                throw new ArgumentException(string.Format(
-                    "Must have a password of at least {0} characters!",
-                    MIN_PASSWORD_LENGTH));
+                throw new ArgumentException(string.Format("Must have a password of at least {0} characters!", MIN_PASSWORD_LENGTH));
             }
 
             byte[] plainText = Encoding.UTF8.GetBytes(secretMessage);
-            byte[] cipherText = EncryptWithPassword(
-                plainText,
-                password,
-                nonSecretPayload);
+            byte[] cipherText = EncryptWithPassword(plainText, password, nonSecretPayload);
             return Convert.ToBase64String(cipherText);
         }
 
-        public string DecryptWithAesHmac(
-            string encryptedMessage,
-            string password,
-            int nonSecretPayloadLength = 0)
+        public string DecryptWithAesHmac(string encryptedMessage, string password, int nonSecretPayloadLength = 0)
         {
             if (string.IsNullOrWhiteSpace(encryptedMessage))
             {
                 throw new ArgumentException("Encrypted message required");
             }
 
-            if (string.IsNullOrWhiteSpace(password)
-                || password.Length < MIN_PASSWORD_LENGTH)
+            if (string.IsNullOrWhiteSpace(password) || password.Length < MIN_PASSWORD_LENGTH)
             {
-                throw new ArgumentException(string.Format(
-                    "Must have a password of at least {0} characters!",
-                    MIN_PASSWORD_LENGTH));
+                throw new ArgumentException(string.Format("Must have a password of at least {0} characters!", MIN_PASSWORD_LENGTH));
             }
 
             byte[] cipherText = Convert.FromBase64String(encryptedMessage);
-            byte[] plainText = DecryptWithPassword(
-                cipherText,
-                password,
-                nonSecretPayloadLength);
-            return plainText == null
-                ? null : Encoding.UTF8.GetString(plainText);
+            byte[] plainText = DecryptWithPassword(cipherText, password, nonSecretPayloadLength);
+            return plainText == null ? null : Encoding.UTF8.GetString(plainText);
         }
 
-        private byte[] EncryptWithPassword(
-            byte[] secretMessage,
-            string password,
-            byte[] nonSecretPayload = null)
+        private byte[] EncryptWithPassword(byte[] secretMessage, string password, byte[] nonSecretPayload = null)
         {
             nonSecretPayload = nonSecretPayload ?? new byte[] { };
 
-            byte[] payload =
-                new byte[(SALT_BIT_SIZE / 8 * 2) + nonSecretPayload.Length];
+            byte[] payload = new byte[(SALT_BIT_SIZE / 8 * 2) + nonSecretPayload.Length];
 
             Array.Copy(nonSecretPayload, payload, nonSecretPayload.Length);
             int payloadIndex = nonSecretPayload.Length;
 
             byte[] cryptKey;
             byte[] authKey;
-            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(
-                password,
-                SALT_BIT_SIZE / 8,
-                ITERATIONS))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, SALT_BIT_SIZE / 8, ITERATIONS))
             {
                 byte[] salt = generator.Salt;
                 cryptKey = generator.GetBytes(KEY_BIT_SIZE / 8);
@@ -92,10 +66,7 @@ namespace StashBot.Module.Secure.AesHmacCrypto
                 payloadIndex += salt.Length;
             }
 
-            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(
-                password,
-                SALT_BIT_SIZE / 8,
-                ITERATIONS))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, SALT_BIT_SIZE / 8, ITERATIONS))
             {
                 byte[] salt = generator.Salt;
                 authKey = generator.GetBytes(KEY_BIT_SIZE / 8);
@@ -105,41 +76,28 @@ namespace StashBot.Module.Secure.AesHmacCrypto
             return Encrypt(secretMessage, cryptKey, authKey, payload);
         }
 
-        private byte[] DecryptWithPassword(
-            byte[] encryptedMessage,
-            string password,
-            int nonSecretPayloadLength = 0)
+        private byte[] DecryptWithPassword(byte[] encryptedMessage, string password, int nonSecretPayloadLength = 0)
         {
             byte[] cryptSalt = new byte[SALT_BIT_SIZE / 8];
             byte[] authSalt = new byte[SALT_BIT_SIZE / 8];
 
-            Array.Copy(encryptedMessage, nonSecretPayloadLength,
-                cryptSalt, 0, cryptSalt.Length);
-            Array.Copy(encryptedMessage,
-                nonSecretPayloadLength + cryptSalt.Length,
-                authSalt, 0, authSalt.Length);
+            Array.Copy(encryptedMessage, nonSecretPayloadLength, cryptSalt, 0, cryptSalt.Length);
+            Array.Copy(encryptedMessage, nonSecretPayloadLength + cryptSalt.Length, authSalt, 0, authSalt.Length);
 
             byte[] cryptKey;
             byte[] authKey;
 
-            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(
-                password,
-                cryptSalt,
-                ITERATIONS))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, cryptSalt, ITERATIONS))
             {
                 cryptKey = generator.GetBytes(KEY_BIT_SIZE / 8);
             }
 
-            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(
-                password,
-                authSalt,
-                ITERATIONS))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, authSalt, ITERATIONS))
             {
                 authKey = generator.GetBytes(KEY_BIT_SIZE / 8);
             }
 
-            return Decrypt(encryptedMessage, cryptKey, authKey,
-                cryptSalt.Length + authSalt.Length + nonSecretPayloadLength);
+            return Decrypt(encryptedMessage, cryptKey, authKey, cryptSalt.Length + authSalt.Length + nonSecretPayloadLength);
         }
 
         private byte[] Encrypt(byte[] secretMessage, byte[] cryptKey, byte[] authKey, byte[] nonSecretPayload = null)
@@ -201,16 +159,22 @@ namespace StashBot.Module.Secure.AesHmacCrypto
                 int ivLength = (BLOCK_BIT_SIZE / 8);
 
                 if (encryptedMessage.Length < sentTag.Length + nonSecretPayloadLength + ivLength)
+                {
                     return null;
+                }
 
                 Array.Copy(encryptedMessage, encryptedMessage.Length - sentTag.Length, sentTag, 0, sentTag.Length);
 
                 int compare = 0;
                 for (int i = 0; i < sentTag.Length; i++)
+                {
                     compare |= sentTag[i] ^ calcTag[i];
+                }
 
                 if (compare != 0)
+                {
                     return null;
+                }
 
                 using (AesManaged aes = new AesManaged
                 {

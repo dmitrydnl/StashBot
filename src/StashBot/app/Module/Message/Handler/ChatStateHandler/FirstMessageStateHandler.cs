@@ -16,8 +16,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             const string welcomeMessage = "Hi, good to see you!";
             messageManager.SendTextMessage(message.ChatId, welcomeMessage);

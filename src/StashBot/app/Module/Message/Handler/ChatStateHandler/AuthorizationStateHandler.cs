@@ -5,8 +5,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class AuthorisationStateHandler : IChatStateHandler
     {
-        private delegate void Command(long chatId,
-            IChatStateHandlerContext context);
+        private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
         internal AuthorisationStateHandler()
@@ -22,8 +21,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             const string warningMessage = "Input your password or /back";
             messageManager.SendTextMessage(chatId, warningMessage);
@@ -36,10 +34,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
 
             if (IsCommand(message.Message))
             {
@@ -62,19 +58,15 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private void LoginUser(ITelegramUserMessage message,
             IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
 
-            bool success =
-                userManager.LoginUser(message.ChatId, message.Message);
+            bool success = userManager.LoginUser(message.ChatId, message.Message);
             if (success)
             {
                 const string successMessage = "Success!";
                 messageManager.SendTextMessage(message.ChatId, successMessage);
-                context.ChangeChatState(message.ChatId,
-                    Session.ChatSessionState.Authorized);
+                context.ChangeChatState(message.ChatId, Session.ChatSessionState.Authorized);
             }
             else
             {

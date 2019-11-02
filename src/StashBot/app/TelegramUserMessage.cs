@@ -36,11 +36,9 @@ namespace StashBot
             DateSent = telegramMessage.Date;
             MessageId = telegramMessage.MessageId;
             Message = telegramMessage.Text;
-            if (telegramMessage.Photo != null
-                && telegramMessage.Photo.Length > 0)
+            if (telegramMessage.Photo != null && telegramMessage.Photo.Length > 0)
             {
-                PhotoId = telegramMessage
-                    .Photo[telegramMessage.Photo.Length - 1].FileId;
+                PhotoId = telegramMessage.Photo[telegramMessage.Photo.Length - 1].FileId;
             }
             else
             {
@@ -50,8 +48,7 @@ namespace StashBot
 
         public bool IsEmpty()
         {
-            return string.IsNullOrEmpty(Message)
-                && string.IsNullOrEmpty(PhotoId);
+            return string.IsNullOrEmpty(Message) && string.IsNullOrEmpty(PhotoId);
         }
     }
 }

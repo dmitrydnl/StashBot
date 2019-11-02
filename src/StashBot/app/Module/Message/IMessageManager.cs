@@ -4,10 +4,7 @@ using StashBot.Module.Message.Delete;
 
 namespace StashBot.Module.Message
 {
-    internal interface IMessageManager :
-        IMessageDelete,
-        IMessageHandler,
-        IMessageSender
+    internal interface IMessageManager : IMessageDelete, IMessageHandler, IMessageSender
     {
 
     }

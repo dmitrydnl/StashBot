@@ -65,24 +65,21 @@ namespace StashBot.Module.Database.Stash
 
         public async Task Download()
         {
-            if (IsEncrypt)
-            {
-                throw new ArgumentException(
-                    "An encrypted message cannot download");
-            }
-
             if (IsDownloaded)
             {
                 return;
             }
 
-            ITelegramBotClient telegramBotClient =
-                ModulesManager.GetModulesManager().GetTelegramBotClient();
+            if (IsEncrypt)
+            {
+                throw new ArgumentException("An encrypted message cannot download");
+            }
+
+            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
 
             using (MemoryStream stream = new MemoryStream())
             {
-                await telegramBotClient
-                    .GetInfoAndDownloadFileAsync(photoId, stream);
+                await telegramBotClient.GetInfoAndDownloadFileAsync(photoId, stream);
                 byte[] imageBytes = stream.ToArray();
                 content = Convert.ToBase64String(imageBytes);
             }
@@ -100,21 +97,17 @@ namespace StashBot.Module.Database.Stash
 
             if (!IsDownloaded)
             {
-                throw new ArgumentException(
-                    "An undownloaded message cannot encrypt");
+                throw new ArgumentException("An undownloaded message cannot encrypt");
             }
 
             if (!user.IsAuthorized)
             {
-                throw new ArgumentException(
-                    "User is unauthorized, message cannot encrypt");
+                throw new ArgumentException("User is unauthorized, message cannot encrypt");
             }
 
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
 
-            string password =
-                secureManager.DecryptWithAes(user.EncryptedPassword);
+            string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             if (type != StashMessageType.Empty)
             {
                 content = secureManager.EncryptWithAesHmac(content, password);
@@ -132,21 +125,17 @@ namespace StashBot.Module.Database.Stash
 
             if (!IsDownloaded)
             {
-                throw new ArgumentException(
-                    "An undownloaded message cannot decrypt");
+                throw new ArgumentException("An undownloaded message cannot decrypt");
             }
 
             if (!user.IsAuthorized)
             {
-                throw new ArgumentException(
-                    "User is unauthorized, message cannot decrypt");
+                throw new ArgumentException("User is unauthorized, message cannot decrypt");
             }
 
-            ISecureManager secureManager =
-                ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
 
-            string password =
-                secureManager.DecryptWithAes(user.EncryptedPassword);
+            string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             if (type != StashMessageType.Empty)
             {
                 content = secureManager.DecryptWithAesHmac(content, password);
@@ -159,18 +148,15 @@ namespace StashBot.Module.Database.Stash
         {
             if (IsEncrypt)
             {
-                throw new ArgumentException(
-                    "An encrypted message cannot send");
+                throw new ArgumentException("An encrypted message cannot send");
             }
 
             if (!IsDownloaded)
             {
-                throw new ArgumentException(
-                    "An undownloaded message cannot send");
+                throw new ArgumentException("An undownloaded message cannot send");
             }
 
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             switch (type)
             {

@@ -16,20 +16,17 @@ namespace StashBot.Module.Database.Stash
         {
             if (!stashMessage.IsEncrypt)
             {
-                throw new ArgumentException(
-                    "An unencrypted message cannot be stored in a stash");
+                throw new ArgumentException("An unencrypted message cannot be stored in a stash");
             }
 
             if (!stashMessage.IsDownloaded)
             {
-                throw new ArgumentException(
-                    "An undownloaded message cannot be stored in a stash");
+                throw new ArgumentException("An undownloaded message cannot be stored in a stash");
             }
 
             if (!IsStashExist(stashMessage.ChatId))
             {
-                usersStashes
-                    .Add(stashMessage.ChatId, new List<IStashMessage>());
+                usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
             }
 
             usersStashes[stashMessage.ChatId].Add(stashMessage);

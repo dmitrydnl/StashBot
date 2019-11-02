@@ -6,6 +6,7 @@ namespace StashBot.AppSetting
     internal static class BotToken
     {
         private const string BOT_TOKEN_FILE_NAME = "AppSettings.json";
+
         private static string botToken;
 
         internal static string Get()

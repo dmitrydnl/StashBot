@@ -4,9 +4,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class StartStateHandler : IChatStateHandler
     {
-        private delegate void Command(
-            long chatId,
-            IChatStateHandlerContext context);
+        private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
         internal StartStateHandler()
@@ -24,20 +22,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string mainCommandsMessage =
-                "Registration: /reg\n" +
-                "Authorization: /auth\n" +
-                "Information about me: /info\n" +
-                "Close chat in any time: /e or /exit";
+            const string mainCommandsMessage = "Registration: /reg\nAuthorization: /auth\nInformation about me: /info\nClose chat in any time: /e or /exit";
             messageManager.SendTextMessage(chatId, mainCommandsMessage);
         }
 
-        public void HandleUserMessage(
-            ITelegramUserMessage message,
-            IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
             if (message == null || context == null)
             {
@@ -56,39 +47,24 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private bool IsCommand(string message)
         {
-            return !string.IsNullOrEmpty(message)
-                && commands.ContainsKey(message);
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
-        private void Registration(
-            long chatId,
-            IChatStateHandlerContext context)
+        private void Registration(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(
-                chatId,
-                Session.ChatSessionState.Registration);
+            context.ChangeChatState(chatId, Session.ChatSessionState.Registration);
         }
 
-        private void Authorization(
-            long chatId,
-            IChatStateHandlerContext context)
+        private void Authorization(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(
-                chatId,
-                Session.ChatSessionState.Authorisation);
+            context.ChangeChatState(chatId, Session.ChatSessionState.Authorisation);
         }
 
-        private void Information(
-            long chatId,
-            IChatStateHandlerContext context)
+        private void Information(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string informationMessage =
-                "This is open source bot for stashing in Telegram Messenger." +
-                "\nThe code you can find here: " +
-                "https://github.com/dmitrydnl/StashBot";
+            const string informationMessage = "This is open source bot for stashing in Telegram Messenger.\nThe code you can find here: https://github.com/dmitrydnl/StashBot";
             messageManager.SendTextMessage(chatId, informationMessage);
         }
     }

@@ -8,9 +8,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class AuthorizedStateHandler : IChatStateHandler
     {
-        private delegate void Command(
-            long chatId,
-            IChatStateHandlerContext context);
+        private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
         private readonly IStashMessageFactory stashMessageFactory;
 
@@ -29,18 +27,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string loginMessage =
-                "Input message to save it in stash.\n" +
-                "Get messages in stash: /stash\nLogout: /logout";
+            const string loginMessage = "Input message to save it in stash.\nGet messages in stash: /stash\nLogout: /logout";
             messageManager.SendTextMessage(chatId, loginMessage);
         }
 
-        public void HandleUserMessage(
-            ITelegramUserMessage message,
-            IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
             if (message == null || context == null)
             {
@@ -62,8 +55,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private bool IsCommand(string message)
         {
-            return !string.IsNullOrEmpty(message)
-                && commands.ContainsKey(message);
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
         private async Task SaveMessageToStash(ITelegramUserMessage message)
@@ -98,10 +90,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void Logout(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
 
             userManager.LogoutUser(chatId);
             const string logoutMessage = "You're logged out";

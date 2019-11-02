@@ -3,9 +3,7 @@ using StashBot.Module.User.Authorisation;
 
 namespace StashBot.Module.User
 {
-    internal interface IUserManager :
-        IUserRegistration,
-        IUserAuthorisation
+    internal interface IUserManager : IUserRegistration, IUserAuthorisation
     {
 
     }

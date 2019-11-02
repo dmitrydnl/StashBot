@@ -49,10 +49,8 @@ namespace StashBot.Module.Session
 
         public void Kill()
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
 
             messageManager.DeleteListMessages(ChatId, botMessagesId);
             botMessagesId.Clear();
@@ -63,8 +61,7 @@ namespace StashBot.Module.Session
 
         public bool NeedKill()
         {
-            DateTime endLiveTime =
-                lastUserMessage.AddSeconds(CHAT_SESSION_LIVE_TIME_SEC);
+            DateTime endLiveTime = lastUserMessage.AddSeconds(CHAT_SESSION_LIVE_TIME_SEC);
             return endLiveTime <= DateTime.UtcNow;
         }
     }
