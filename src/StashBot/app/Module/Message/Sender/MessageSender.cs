@@ -10,6 +10,11 @@ namespace StashBot.Module.Message.Sender
     {
         public async Task SendTextMessage(long chatId, string messageText)
         {
+            if (string.IsNullOrEmpty(messageText))
+            {
+                return;
+            }
+
             ITelegramBotClient telegramBotClient =
                 ModulesManager.GetModulesManager().GetTelegramBotClient();
             ISessionManager sessionManager =
@@ -24,6 +29,11 @@ namespace StashBot.Module.Message.Sender
 
         public async Task SendPhotoMessage(long chatId, byte[] imageBytes)
         {
+            if (imageBytes == null || imageBytes.Length == 0)
+            {
+                return;
+            }
+
             ITelegramBotClient telegramBotClient =
                 ModulesManager.GetModulesManager().GetTelegramBotClient();
             ISessionManager sessionManager =

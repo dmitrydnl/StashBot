@@ -5,7 +5,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class AuthorisationStateHandler : IChatStateHandler
     {
-        private delegate void Command(long chatId, IChatStateHandlerContext context);
+        private delegate void Command(long chatId,
+            IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
 
         internal AuthorisationStateHandler()
@@ -28,8 +29,15 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             messageManager.SendTextMessage(chatId, warningMessage);
         }
 
-        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
+        public void HandleUserMessage(
+            ITelegramUserMessage message,
+            IChatStateHandlerContext context)
         {
+            if (message == null || context == null)
+            {
+                return;
+            }
+
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
             IUserManager userManager =
@@ -50,22 +58,26 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private bool IsCommand(string message)
         {
-            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
+            return !string.IsNullOrEmpty(message)
+                && commands.ContainsKey(message);
         }
 
-        private void LoginUser(ITelegramUserMessage message, IChatStateHandlerContext context)
+        private void LoginUser(ITelegramUserMessage message,
+            IChatStateHandlerContext context)
         {
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
             IUserManager userManager =
                 ModulesManager.GetModulesManager().GetUserManager();
 
-            bool success = userManager.LoginUser(message.ChatId, message.Message);
+            bool success =
+                userManager.LoginUser(message.ChatId, message.Message);
             if (success)
             {
                 const string successMessage = "Success!";
                 messageManager.SendTextMessage(message.ChatId, successMessage);
-                context.ChangeChatState(message.ChatId, Session.ChatSessionState.Authorized);
+                context.ChangeChatState(message.ChatId,
+                    Session.ChatSessionState.Authorized);
             }
             else
             {

@@ -31,6 +31,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
+            if (message == null || context == null)
+            {
+                return;
+            }
+
             if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);

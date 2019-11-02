@@ -8,7 +8,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class AuthorizedStateHandler : IChatStateHandler
     {
-        private delegate void Command(long chatId, IChatStateHandlerContext context);
+        private delegate void Command(
+            long chatId,
+            IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
         private readonly IStashMessageFactory stashMessageFactory;
 
@@ -30,12 +32,21 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager =
                 ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string loginMessage = "Input message to save it in stash.\nGet messages in stash: /stash\nLogout: /logout";
+            const string loginMessage =
+                "Input message to save it in stash.\n" +
+                "Get messages in stash: /stash\nLogout: /logout";
             messageManager.SendTextMessage(chatId, loginMessage);
         }
 
-        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
+        public void HandleUserMessage(
+            ITelegramUserMessage message,
+            IChatStateHandlerContext context)
         {
+            if (message == null || context == null)
+            {
+                return;
+            }
+
             if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);
@@ -51,7 +62,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private bool IsCommand(string message)
         {
-            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
+            return !string.IsNullOrEmpty(message)
+                && commands.ContainsKey(message);
         }
 
         private async Task SaveMessageToStash(ITelegramUserMessage message)
@@ -62,12 +74,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IUser user = databaseManager.GetUser(message.ChatId);
             if (user != null && user.IsAuthorized)
             {
-                IStashMessage stashMessage = stashMessageFactory.Create(message);
-                if (!stashMessage.IsDownloaded)
-                {
-                    await stashMessage.Download();
-                }
-
+                IStashMessage stashMessage =
+                    stashMessageFactory.Create(message);
+                await stashMessage.Download();
                 stashMessage.Encrypt(user);
                 databaseManager.SaveMessageToStash(stashMessage);
             }
@@ -78,11 +87,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IDatabaseManager databaseManager =
                 ModulesManager.GetModulesManager().GetDatabaseManager();
 
-
             IUser user = databaseManager.GetUser(chatId);
             if (user != null && user.IsAuthorized)
             {
-                List<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
+                List<IStashMessage> messagesFromStash =
+                    databaseManager.GetMessagesFromStash(chatId);
                 foreach(IStashMessage stashMessage in messagesFromStash)
                 {
                     stashMessage.Decrypt(user);

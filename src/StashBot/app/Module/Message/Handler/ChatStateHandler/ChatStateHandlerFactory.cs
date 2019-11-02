@@ -9,14 +9,33 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         internal ChatStateHandlerFactory()
         {
-            chatStateHandlers = new Dictionary<ChatSessionState, IChatStateHandler>
+            chatStateHandlers =
+                new Dictionary<ChatSessionState, IChatStateHandler>
             {
-                { ChatSessionState.FirstMessage, new FirstMessageStateHandler() },
-                { ChatSessionState.Start, new StartStateHandler() },
-                { ChatSessionState.Registration, new RegistrationStateHandler() },
-                { ChatSessionState.CreateUserPassword, new CreateUserPasswordStateHandler() },
-                { ChatSessionState.Authorisation, new AuthorisationStateHandler() },
-                { ChatSessionState.Authorized, new AuthorizedStateHandler() }
+                {
+                    ChatSessionState.FirstMessage,
+                    new FirstMessageStateHandler()
+                },
+                {
+                    ChatSessionState.Start,
+                    new StartStateHandler()
+                },
+                {
+                    ChatSessionState.Registration,
+                    new RegistrationStateHandler()
+                },
+                {
+                    ChatSessionState.CreateUserPassword,
+                    new CreateUserPasswordStateHandler()
+                },
+                {
+                    ChatSessionState.Authorisation,
+                    new AuthorisationStateHandler()
+                },
+                {
+                    ChatSessionState.Authorized,
+                    new AuthorizedStateHandler()
+                }
             };
         }
 
