@@ -37,10 +37,7 @@ namespace StashBot.Module.Secure
             return secureAesCrypto.DecryptWithAes(encryptedMessage);
         }
 
-        public string EncryptWithAesHmac(
-            string secretMessage,
-            string password,
-            byte[] nonSecretPayload = null)
+        public string EncryptWithAesHmac(string secretMessage, string password, byte[] nonSecretPayload = null)
         {
             return secureAesHmacCrypto.EncryptWithAesHmac(
                 secretMessage,

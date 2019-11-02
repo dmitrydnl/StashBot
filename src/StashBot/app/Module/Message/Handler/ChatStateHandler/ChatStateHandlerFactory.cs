@@ -9,8 +9,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         internal ChatStateHandlerFactory()
         {
-            chatStateHandlers =
-                new Dictionary<ChatSessionState, IChatStateHandler>
+            chatStateHandlers = new Dictionary<ChatSessionState, IChatStateHandler>
             {
                 {
                     ChatSessionState.FirstMessage,

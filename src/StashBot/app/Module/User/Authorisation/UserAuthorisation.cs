@@ -6,8 +6,7 @@ namespace StashBot.Module.User.Authorisation
     {
         public bool LoginUser(long chatId, string password)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user == null)
@@ -26,8 +25,7 @@ namespace StashBot.Module.User.Authorisation
 
         public void LogoutUser(long chatId)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user != null)

@@ -29,9 +29,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             messageManager.SendTextMessage(chatId, warningMessage);
         }
 
-        public void HandleUserMessage(
-            ITelegramUserMessage message,
-            IChatStateHandlerContext context)
+        public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
             if (message == null || context == null)
             {
@@ -58,8 +56,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private bool IsCommand(string message)
         {
-            return !string.IsNullOrEmpty(message)
-                && commands.ContainsKey(message);
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
         private void LoginUser(ITelegramUserMessage message,

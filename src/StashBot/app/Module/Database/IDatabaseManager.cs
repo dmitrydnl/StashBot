@@ -3,7 +3,9 @@ using StashBot.Module.Database.Stash;
 
 namespace StashBot.Module.Database
 {
-    internal interface IDatabaseManager : IDatabaseAccount, IDatabaseStash
+    internal interface IDatabaseManager :
+        IDatabaseAccount,
+        IDatabaseStash
     {
 
     }

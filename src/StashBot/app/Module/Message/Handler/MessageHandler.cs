@@ -14,13 +14,13 @@ namespace StashBot.Module.Message.Handler
 
         public void HandleUserMessage(ITelegramUserMessage message)
         {
-            ISessionManager sessionManager =
-                ModulesManager.GetModulesManager().GetSessionManager();
-
             if (message.IsEmpty())
             {
                 return;
             }
+
+            ISessionManager sessionManager =
+                ModulesManager.GetModulesManager().GetSessionManager();
 
             IChatSession chatSession =
                 sessionManager.GetChatSession(message.ChatId);

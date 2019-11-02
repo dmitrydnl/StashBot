@@ -43,6 +43,11 @@ namespace StashBot.Module.Database
 
         public void Login(string password)
         {
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentException("Password cannot be null");
+            }
+
             ISecureManager secureManager =
                 ModulesManager.GetModulesManager().GetSecureManager();
 

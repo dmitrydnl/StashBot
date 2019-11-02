@@ -68,14 +68,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private async Task SaveMessageToStash(ITelegramUserMessage message)
         {
-            IDatabaseManager databaseManager =
-                    ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
             IUser user = databaseManager.GetUser(message.ChatId);
             if (user != null && user.IsAuthorized)
             {
-                IStashMessage stashMessage =
-                    stashMessageFactory.Create(message);
+                IStashMessage stashMessage = stashMessageFactory.Create(message);
                 await stashMessage.Download();
                 stashMessage.Encrypt(user);
                 databaseManager.SaveMessageToStash(stashMessage);
@@ -84,14 +82,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void GetStash(long chatId, IChatStateHandlerContext context)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user != null && user.IsAuthorized)
             {
-                List<IStashMessage> messagesFromStash =
-                    databaseManager.GetMessagesFromStash(chatId);
+                List<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
                 foreach(IStashMessage stashMessage in messagesFromStash)
                 {
                     stashMessage.Decrypt(user);
