@@ -1,0 +1,17 @@
+﻿{
+    "welcomeMessage": "Hi, good to see you!",
+    "mainCommands": "Registration: /reg\nAuthorization: /auth\nInformation about me: /info\nClose chat in any time: /e or /exit",
+    "information": "This is open source bot for stashing in Telegram Messenger.\nThe code you can find here: https://github.com/dmitrydnl/StashBot",
+    "registrationWarning": "If you have already registered you will lose all your old data!\nAre you sure? /yes or /no",
+    "registrationReady": "Input your password or /cancel",
+    "successRegistration": "Success!\nNow you can auth with password",
+    "passwordEmpty": "Input password",
+    "passwordMinLength": "Password min length 12!",
+    "passwordMaxLength": "Password max length 25!",
+    "passwordCharacters": "Password can contain only letters, numbers and special characters!",
+    "authorisationReady": "Input your password or /back",
+    "successAuthorisation": "Success!",
+    "failAuthorisation": "WRONG",
+    "login": "Input message to save it in stash.\nGet messages in stash: /stash\nLogout: /logout",
+    "logout": "You're logged out"
+}
