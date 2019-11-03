@@ -30,5 +30,14 @@
     <Folder Include="app\Module\Database\Stash\" />
     <Folder Include="app\Module\Message\Handler\ChatStateHandler\" />
     <Folder Include="app\Module\Secure\AesHmacCrypto\" />
+    <Folder Include="app\BotSettings\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="BotSettings.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BotSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

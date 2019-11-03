@@ -5,7 +5,7 @@ namespace StashBot.AppSetting
 {
     internal static class BotToken
     {
-        private const string BOT_TOKEN_FILE_NAME = "AppSettings.json";
+        private const string APP_SETTINGS_FILE_NAME = "AppSettings.json";
 
         private static string botToken;
 
@@ -13,7 +13,7 @@ namespace StashBot.AppSetting
         {
             if (string.IsNullOrEmpty(botToken))
             {
-                string text = File.ReadAllText(BOT_TOKEN_FILE_NAME);
+                string text = File.ReadAllText(APP_SETTINGS_FILE_NAME);
                 dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(text);
                 botToken = (string)jsonObject.botToken;
             }

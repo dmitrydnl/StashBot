@@ -1,12 +1,11 @@
 ﻿using System.Timers;
 using System.Collections.Generic;
+using StashBot.BotSettings;
 
 namespace StashBot.Module.Session
 {
     internal class SessionManager : ISessionManager
     {
-        private const int TIMER_INTERVAL_CLEAR_CHAT_SESSIONS = 10;
-
         private readonly Dictionary<long, IChatSession> currentChatSessions;
 
         internal SessionManager()
@@ -74,7 +73,7 @@ namespace StashBot.Module.Session
         {
             Timer timer = new Timer();
             timer.Elapsed += ClearSessions;
-            timer.Interval = TIMER_INTERVAL_CLEAR_CHAT_SESSIONS * 1000;
+            timer.Interval = ChatSessionSettings.ChatSessionsClearInterval * 1000;
             timer.Enabled = true;
         }
 

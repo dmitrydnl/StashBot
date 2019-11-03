@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using StashBot.Module.Message;
 using StashBot.Module.User;
+using StashBot.BotSettings;
 
 namespace StashBot.Module.Session
 {
     internal class ChatSession : IChatSession
     {
-        private const int CHAT_SESSION_LIVE_TIME_SEC = 60;
-
         public long ChatId
         {
             get;
@@ -61,7 +60,7 @@ namespace StashBot.Module.Session
 
         public bool NeedKill()
         {
-            DateTime endLiveTime = lastUserMessage.AddSeconds(CHAT_SESSION_LIVE_TIME_SEC);
+            DateTime endLiveTime = lastUserMessage.AddSeconds(ChatSessionSettings.ChatSessionLiveTime);
             return endLiveTime <= DateTime.UtcNow;
         }
     }
