@@ -21,8 +21,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             const string warningMessage = "Input your password or /back";
             messageManager.SendTextMessage(chatId, warningMessage);
@@ -30,10 +29,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            if (message == null || context == null)
+            {
+                return;
+            }
+
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
 
             if (IsCommand(message.Message))
             {
@@ -53,12 +55,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
-        private void LoginUser(ITelegramUserMessage message, IChatStateHandlerContext context)
+        private void LoginUser(ITelegramUserMessage message,
+            IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
 
             bool success = userManager.LoginUser(message.ChatId, message.Message);
             if (success)

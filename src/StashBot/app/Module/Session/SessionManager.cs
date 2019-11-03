@@ -1,12 +1,11 @@
 ﻿using System.Timers;
 using System.Collections.Generic;
+using StashBot.BotSettings;
 
 namespace StashBot.Module.Session
 {
     internal class SessionManager : ISessionManager
     {
-        private const int TIMER_INTERVAL_CLEAR_CHAT_SESSIONS = 10;
-
         private readonly Dictionary<long, IChatSession> currentChatSessions;
 
         internal SessionManager()
@@ -54,21 +53,27 @@ namespace StashBot.Module.Session
 
         public void UserSentMessage(long chatId, int messageId)
         {
-            IChatSession chatSession = currentChatSessions[chatId];
-            chatSession.UserSentMessage(messageId);
+            if (IsChatSessionExist(chatId))
+            {
+                IChatSession chatSession = currentChatSessions[chatId];
+                chatSession.UserSentMessage(messageId);
+            }
         }
 
         public void BotSentMessage(long chatId, int messageId)
         {
-            IChatSession chatSession = currentChatSessions[chatId];
-            chatSession.BotSentMessage(messageId);
+            if (IsChatSessionExist(chatId))
+            {
+                IChatSession chatSession = currentChatSessions[chatId];
+                chatSession.BotSentMessage(messageId);
+            }
         }
 
         private void StartClearChatSessionsTimer()
         {
             Timer timer = new Timer();
             timer.Elapsed += ClearSessions;
-            timer.Interval = TIMER_INTERVAL_CLEAR_CHAT_SESSIONS * 1000;
+            timer.Interval = ChatSessionSettings.ChatSessionsClearInterval * 1000;
             timer.Enabled = true;
         }
 

@@ -11,8 +11,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            if (message == null || context == null)
+            {
+                return;
+            }
+
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             const string welcomeMessage = "Hi, good to see you!";
             messageManager.SendTextMessage(message.ChatId, welcomeMessage);

@@ -19,16 +19,6 @@ namespace StashBot.Module.Database.Stash
             get;
         }
 
-        string Message
-        {
-            get;
-        }
-
-        string Photo
-        {
-            get;
-        }
-
         Task Download();
         void Encrypt(IUser user);
         void Decrypt(IUser user);

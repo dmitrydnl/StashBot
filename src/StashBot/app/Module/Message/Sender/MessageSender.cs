@@ -10,10 +10,13 @@ namespace StashBot.Module.Message.Sender
     {
         public async Task SendTextMessage(long chatId, string messageText)
         {
-            ITelegramBotClient telegramBotClient =
-                ModulesManager.GetModulesManager().GetTelegramBotClient();
-            ISessionManager sessionManager =
-                ModulesManager.GetModulesManager().GetSessionManager();
+            if (string.IsNullOrEmpty(messageText))
+            {
+                return;
+            }
+
+            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
 
             Telegram.Bot.Types.Message message = await telegramBotClient.SendTextMessageAsync(
                 chatId: chatId,
@@ -24,10 +27,13 @@ namespace StashBot.Module.Message.Sender
 
         public async Task SendPhotoMessage(long chatId, byte[] imageBytes)
         {
-            ITelegramBotClient telegramBotClient =
-                ModulesManager.GetModulesManager().GetTelegramBotClient();
-            ISessionManager sessionManager =
-                ModulesManager.GetModulesManager().GetSessionManager();
+            if (imageBytes == null || imageBytes.Length == 0)
+            {
+                return;
+            }
+
+            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
 
             using (Stream stream = new MemoryStream(imageBytes))
             {

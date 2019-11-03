@@ -22,8 +22,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             const string warningMessage = "Input your password or /cancel";
             messageManager.SendTextMessage(chatId, warningMessage);
@@ -31,6 +30,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
+            if (message == null || context == null)
+            {
+                return;
+            }
+
             if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);
@@ -51,10 +55,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void RegistrationUser(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
 
             if (CheckPassword(message.ChatId, message.Message))
             {
@@ -67,8 +69,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private bool CheckPassword(long chatId, string password)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             if (string.IsNullOrEmpty(password))
             {

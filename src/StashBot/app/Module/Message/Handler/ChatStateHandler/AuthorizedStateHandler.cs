@@ -27,8 +27,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             const string loginMessage = "Input message to save it in stash.\nGet messages in stash: /stash\nLogout: /logout";
             messageManager.SendTextMessage(chatId, loginMessage);
@@ -36,6 +35,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
+            if (message == null || context == null)
+            {
+                return;
+            }
+
             if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);
@@ -56,18 +60,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private async Task SaveMessageToStash(ITelegramUserMessage message)
         {
-            IDatabaseManager databaseManager =
-                    ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
             IUser user = databaseManager.GetUser(message.ChatId);
             if (user != null && user.IsAuthorized)
             {
                 IStashMessage stashMessage = stashMessageFactory.Create(message);
-                if (!stashMessage.IsDownloaded)
-                {
-                    await stashMessage.Download();
-                }
-
+                await stashMessage.Download();
                 stashMessage.Encrypt(user);
                 databaseManager.SaveMessageToStash(stashMessage);
             }
@@ -75,9 +74,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void GetStash(long chatId, IChatStateHandlerContext context)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
-
+            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user != null && user.IsAuthorized)
@@ -93,10 +90,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void Logout(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
 
             userManager.LogoutUser(chatId);
             const string logoutMessage = "You're logged out";

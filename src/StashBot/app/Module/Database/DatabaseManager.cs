@@ -20,14 +20,14 @@ namespace StashBot.Module.Database
             databaseAccount.CreateNewUser(chatId, password);
         }
 
-        public bool IsUserExist(long chatId)
-        {
-            return databaseAccount.IsUserExist(chatId);
-        }
-
         public IUser GetUser(long chatId)
         {
             return databaseAccount.GetUser(chatId);
+        }
+
+        public bool IsUserExist(long chatId)
+        {
+            return databaseAccount.IsUserExist(chatId);
         }
 
         public void SaveMessageToStash(IStashMessage stashMessage)
@@ -43,6 +43,11 @@ namespace StashBot.Module.Database
         public void ClearStash(long chatId)
         {
             databaseStash.ClearStash(chatId);
+        }
+
+        public bool IsStashExist(long chatId)
+        {
+            return databaseStash.IsStashExist(chatId);
         }
     }
 }
