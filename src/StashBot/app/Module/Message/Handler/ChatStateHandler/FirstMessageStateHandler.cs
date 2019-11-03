@@ -1,4 +1,5 @@
 ﻿using StashBot.Module.Session;
+using StashBot.BotResponses;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -18,8 +19,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
             IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string welcomeMessage = "Hi, good to see you!";
-            messageManager.SendTextMessage(message.ChatId, welcomeMessage);
+            messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.WelcomeMessage));
             context.ChangeChatState(message.ChatId, ChatSessionState.Start);
         }
     }

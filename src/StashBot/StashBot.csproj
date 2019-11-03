@@ -31,12 +31,17 @@
     <Folder Include="app\Module\Message\Handler\ChatStateHandler\" />
     <Folder Include="app\Module\Secure\AesHmacCrypto\" />
     <Folder Include="app\BotSettings\" />
+    <Folder Include="app\BotResponses\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="BotSettings.json" />
+    <None Remove="BotResponses.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BotSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BotResponses.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

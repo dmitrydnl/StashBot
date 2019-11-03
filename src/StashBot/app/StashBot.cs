@@ -1,6 +1,7 @@
 ﻿using System;
 using StashBot.Module;
 using StashBot.Module.Message;
+using StashBot.BotResponses;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
@@ -13,6 +14,7 @@ namespace StashBot
         internal StashBot()
         {
             telegramUserMessageFactory = new TelegramUserMessageFactory();
+            TextResponse.SetUpResponses();
             WriteBotStatus();
         }
 

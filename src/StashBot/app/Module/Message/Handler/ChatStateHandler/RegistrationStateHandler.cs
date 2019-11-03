@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StashBot.BotResponses;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -21,11 +22,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string warningMessage = "If you have already registered you will lose all your old data!\nAre you sure? /yes or /no";
-            messageManager.SendTextMessage(chatId, warningMessage);
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.RegistrationWarning));
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)

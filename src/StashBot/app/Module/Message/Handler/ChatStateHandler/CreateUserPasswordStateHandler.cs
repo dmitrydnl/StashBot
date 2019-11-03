@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using StashBot.Module.User;
+using StashBot.BotResponses;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -24,8 +25,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string warningMessage = "Input your password or /cancel";
-            messageManager.SendTextMessage(chatId, warningMessage);
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.RegistrationReady));
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -61,8 +61,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             if (CheckPassword(message.ChatId, message.Message))
             {
                 userManager.CreateNewUser(message.ChatId, message.Message);
-                string successMessage = "Success!\nNow you can auth with password";
-                messageManager.SendTextMessage(message.ChatId, successMessage);
+                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessRegistration));
                 context.ChangeChatState(message.ChatId, Session.ChatSessionState.Start);
             }
         }
@@ -73,29 +72,25 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
             if (string.IsNullOrEmpty(password))
             {
-                const string warningMessage = "Input password";
-                messageManager.SendTextMessage(chatId, warningMessage);
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordEmpty));
                 return false;
             }
 
             if (password.Length < 12)
             {
-                const string warningMessage = "Password min length 12!";
-                messageManager.SendTextMessage(chatId, warningMessage);
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordMinLength));
                 return false;
             }
 
             if (password.Length > 25)
             {
-                const string warningMessage = "Password max length 25!";
-                messageManager.SendTextMessage(chatId, warningMessage);
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordMaxLength));
                 return false;
             }
 
             if (!Regex.IsMatch(password, @"^[a-zA-Z0-9!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$"))
             {
-                const string warningMessage = "Password can contain only letters, numbers and special characters!";
-                messageManager.SendTextMessage(chatId, warningMessage);
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordCharacters));
                 return false;
             }
 
