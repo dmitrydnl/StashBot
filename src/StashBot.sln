@@ -32,6 +32,6 @@ Global
 		$4.scope = text/x-json
 		$0.StandardHeader = $5
 		$0.VersionControlPolicy = $6
-		version = 0.2
+		version = 0.3
 	EndGlobalSection
 EndGlobal
