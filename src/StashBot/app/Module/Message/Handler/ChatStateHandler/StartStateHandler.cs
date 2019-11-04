@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StashBot.BotResponses;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -22,16 +23,19 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string mainCommandsMessage = "Registration: /reg\nAuthorization: /auth\nInformation about me: /info\nClose chat in any time: /e or /exit";
-            messageManager.SendMessage(chatId, mainCommandsMessage);
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.MainCommands));
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            if (commands.ContainsKey(message.Message))
+            if (message == null || context == null)
+            {
+                return;
+            }
+
+            if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);
             }
@@ -39,6 +43,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             {
                 StartStateMessage(message.ChatId);
             }
+        }
+
+        private bool IsCommand(string message)
+        {
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
         private void Registration(long chatId, IChatStateHandlerContext context)
@@ -53,11 +62,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void Information(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string informationMessage = "This is open source bot for stashing in Telegram Messenger.\nThe code you can find here: https://github.com/dmitrydnl/StashBot";
-            messageManager.SendMessage(chatId, informationMessage);
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Information));
         }
     }
 }

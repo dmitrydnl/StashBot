@@ -4,8 +4,9 @@ namespace StashBot.Module.Database.Stash
 {
     internal interface IDatabaseStash
     {
-        void SaveMessageToStash(long chatId, string message);
-        List<string> GetMessagesFromStash(long chatId);
+        void SaveMessageToStash(IStashMessage stashMessage);
+        List<IStashMessage> GetMessagesFromStash(long chatId);
         void ClearStash(long chatId);
+        bool IsStashExist(long chatId);
     }
 }

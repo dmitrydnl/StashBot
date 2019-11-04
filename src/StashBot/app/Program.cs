@@ -22,8 +22,7 @@ namespace StashBot
 
             if (args.Length >= 1 && !string.IsNullOrEmpty(args[0]))
             {
-                BotToken botToken = new BotToken();
-                botToken.Set(args[0]);
+                BotToken.Set(args[0]);
             }
             else
             {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using StashBot.Module.User;
+using StashBot.BotResponses;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -22,79 +23,82 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string warningMessage = "Input your password or /cancel";
-            messageManager.SendMessage(chatId, warningMessage);
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.RegistrationReady));
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            if (commands.ContainsKey(message.Message))
+            if (message == null || context == null)
+            {
+                return;
+            }
+
+            if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);
             }
             else
             {
-                if (CheckPassword(message.ChatId, message.Message))
+                if (!string.IsNullOrEmpty(message.Message))
                 {
-                    RegistrationUser(message.ChatId, message.Message, context);
+                    RegistrationUser(message, context);
                 }
             }
         }
 
-        private void Cancel(long chatId, IChatStateHandlerContext context)
+        private bool IsCommand(string message)
         {
-            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
+        }
+
+        private void RegistrationUser(ITelegramUserMessage message, IChatStateHandlerContext context)
+        {
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+
+            if (CheckPassword(message.ChatId, message.Message))
+            {
+                userManager.CreateNewUser(message.ChatId, message.Message);
+                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessRegistration));
+                context.ChangeChatState(message.ChatId, Session.ChatSessionState.Start);
+            }
         }
 
         private bool CheckPassword(long chatId, string password)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             if (string.IsNullOrEmpty(password))
             {
-                const string warningMessage = "Input password";
-                messageManager.SendMessage(chatId, warningMessage);
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordEmpty));
                 return false;
             }
 
             if (password.Length < 12)
             {
-                const string warningMessage = "Password min length 12!";
-                messageManager.SendMessage(chatId, warningMessage);
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordMinLength));
                 return false;
             }
 
             if (password.Length > 25)
             {
-                const string warningMessage = "Password max length 25!";
-                messageManager.SendMessage(chatId, warningMessage);
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordMaxLength));
                 return false;
             }
 
             if (!Regex.IsMatch(password, @"^[a-zA-Z0-9!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$"))
             {
-                const string warningMessage = "Password can contain only letters, numbers and special characters!";
-                messageManager.SendMessage(chatId, warningMessage);
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordCharacters));
                 return false;
             }
 
             return true;
         }
 
-        private void RegistrationUser(long chatId, string password, IChatStateHandlerContext context)
+        private void Cancel(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
-
-            userManager.CreateNewUser(chatId, password);
-            string successMessage = "Success!\nNow you can auth with password";
-            messageManager.SendMessage(chatId, successMessage);
             context.ChangeChatState(chatId, Session.ChatSessionState.Start);
         }
     }

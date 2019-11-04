@@ -14,13 +14,12 @@ namespace StashBot.Module.Message.Handler
 
         public void HandleUserMessage(ITelegramUserMessage message)
         {
-            ISessionManager sessionManager =
-                ModulesManager.GetModulesManager().GetSessionManager();
-
-            if (string.IsNullOrEmpty(message.Message))
+            if (message.IsEmpty())
             {
                 return;
             }
+
+            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
 
             IChatSession chatSession = sessionManager.GetChatSession(message.ChatId);
             if (chatSession == null)
@@ -40,15 +39,14 @@ namespace StashBot.Module.Message.Handler
             }
         }
 
-        public void ChangeChatState(long chatId, ChatSessionState newChatSessionState)
+        public void ChangeChatState(long chatId, ChatSessionState newState)
         {
-            ISessionManager sessionManager =
-                ModulesManager.GetModulesManager().GetSessionManager();
+            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
 
             IChatSession chatSession = sessionManager.GetChatSession(chatId);
             if (chatSession != null)
             {
-                chatSession.State = newChatSessionState;
+                chatSession.State = newState;
                 chatStateHandlerFactory.GetChatStateHandler(chatSession.State).StartStateMessage(chatId);
             }
         }

@@ -1,64 +1,58 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace StashBot.Module.Database.Stash
 {
     internal class DatabaseStashLocal : IDatabaseStash
     {
-        private readonly Dictionary<long, List<string>> usersStashes;
+        private readonly Dictionary<long, List<IStashMessage>> usersStashes;
 
         internal DatabaseStashLocal()
         {
-            usersStashes = new Dictionary<long, List<string>>();
+            usersStashes = new Dictionary<long, List<IStashMessage>>();
         }
 
-        public List<string> GetMessagesFromStash(long chatId)
+        public void SaveMessageToStash(IStashMessage stashMessage)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
-
-            if (!usersStashes.ContainsKey(chatId))
+            if (!stashMessage.IsEncrypt)
             {
-                return new List<string>();
+                throw new ArgumentException("An unencrypted message cannot be stored in a stash");
             }
 
-            IUser user = databaseManager.GetUser(chatId);
-            if (user == null)
+            if (!stashMessage.IsDownloaded)
             {
-                return new List<string>();
+                throw new ArgumentException("An undownloaded message cannot be stored in a stash");
             }
 
-            List<string> decryptedMessages = new List<string>();
-            foreach (string encryptedMessage in usersStashes[chatId])
+            if (!IsStashExist(stashMessage.ChatId))
             {
-                decryptedMessages.Add(user.DecryptMessage(encryptedMessage));
+                usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
             }
-            return decryptedMessages;
+
+            usersStashes[stashMessage.ChatId].Add(stashMessage);
         }
 
-        public void SaveMessageToStash(long chatId, string message)
+        public List<IStashMessage> GetMessagesFromStash(long chatId)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
-
-            if (!usersStashes.ContainsKey(chatId))
+            if (!IsStashExist(chatId))
             {
-                usersStashes.Add(chatId, new List<string>());
+                usersStashes.Add(chatId, new List<IStashMessage>());
             }
 
-            IUser user = databaseManager.GetUser(chatId);
-            if (user != null)
-            {
-                string encryptedMessage = user.EncryptMessage(message);
-                usersStashes[chatId].Add(encryptedMessage);
-            }
+            return usersStashes[chatId];
         }
 
         public void ClearStash(long chatId)
         {
-            if (usersStashes.ContainsKey(chatId))
+            if (IsStashExist(chatId))
             {
                 usersStashes[chatId].Clear();
             }
+        }
+
+        public bool IsStashExist(long chatId)
+        {
+            return usersStashes.ContainsKey(chatId);
         }
     }
 }

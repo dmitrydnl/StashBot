@@ -6,8 +6,8 @@ namespace StashBot.Module.Database
 {
     internal class DatabaseManager : IDatabaseManager
     {
-        private IDatabaseAccount databaseAccount;
-        private IDatabaseStash databaseStash;
+        private readonly IDatabaseAccount databaseAccount;
+        private readonly IDatabaseStash databaseStash;
 
         internal DatabaseManager()
         {
@@ -20,22 +20,22 @@ namespace StashBot.Module.Database
             databaseAccount.CreateNewUser(chatId, password);
         }
 
-        public bool IsUserExist(long chatId)
-        {
-            return databaseAccount.IsUserExist(chatId);
-        }
-
         public IUser GetUser(long chatId)
         {
             return databaseAccount.GetUser(chatId);
         }
 
-        public void SaveMessageToStash(long chatId, string message)
+        public bool IsUserExist(long chatId)
         {
-            databaseStash.SaveMessageToStash(chatId, message);
+            return databaseAccount.IsUserExist(chatId);
         }
 
-        public List<string> GetMessagesFromStash(long chatId)
+        public void SaveMessageToStash(IStashMessage stashMessage)
+        {
+            databaseStash.SaveMessageToStash(stashMessage);
+        }
+
+        public List<IStashMessage> GetMessagesFromStash(long chatId)
         {
             return databaseStash.GetMessagesFromStash(chatId);
         }
@@ -43,6 +43,11 @@ namespace StashBot.Module.Database
         public void ClearStash(long chatId)
         {
             databaseStash.ClearStash(chatId);
+        }
+
+        public bool IsStashExist(long chatId)
+        {
+            return databaseStash.IsStashExist(chatId);
         }
     }
 }

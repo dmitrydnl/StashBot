@@ -13,21 +13,16 @@ namespace StashBot.Module.Secure.AesHmacCrypto
         private const int ITERATIONS = 10000;
         private const int MIN_PASSWORD_LENGTH = 12;
 
-        internal SecureAesHmacCrypto()
-        {
-            
-        }
-
         public string EncryptWithAesHmac(string secretMessage, string password, byte[] nonSecretPayload = null)
         {
             if (string.IsNullOrEmpty(secretMessage))
             {
-                throw new ArgumentException("Secret Message Required!", nameof(secretMessage));
+                throw new ArgumentException("Secret message required");
             }
 
             if (string.IsNullOrWhiteSpace(password) || password.Length < MIN_PASSWORD_LENGTH)
             {
-                throw new ArgumentException(string.Format("Must have a password of at least {0} characters!", MIN_PASSWORD_LENGTH), nameof(password));
+                throw new ArgumentException(string.Format("Must have a password of at least {0} characters!", MIN_PASSWORD_LENGTH));
             }
 
             byte[] plainText = Encoding.UTF8.GetBytes(secretMessage);
@@ -39,12 +34,12 @@ namespace StashBot.Module.Secure.AesHmacCrypto
         {
             if (string.IsNullOrWhiteSpace(encryptedMessage))
             {
-                throw new ArgumentException("Encrypted Message Required!", nameof(encryptedMessage));
+                throw new ArgumentException("Encrypted message required");
             }
 
             if (string.IsNullOrWhiteSpace(password) || password.Length < MIN_PASSWORD_LENGTH)
             {
-                throw new ArgumentException(string.Format("Must have a password of at least {0} characters!", MIN_PASSWORD_LENGTH), nameof(password));
+                throw new ArgumentException(string.Format("Must have a password of at least {0} characters!", MIN_PASSWORD_LENGTH));
             }
 
             byte[] cipherText = Convert.FromBase64String(encryptedMessage);
@@ -164,16 +159,22 @@ namespace StashBot.Module.Secure.AesHmacCrypto
                 int ivLength = (BLOCK_BIT_SIZE / 8);
 
                 if (encryptedMessage.Length < sentTag.Length + nonSecretPayloadLength + ivLength)
+                {
                     return null;
+                }
 
                 Array.Copy(encryptedMessage, encryptedMessage.Length - sentTag.Length, sentTag, 0, sentTag.Length);
 
                 int compare = 0;
                 for (int i = 0; i < sentTag.Length; i++)
+                {
                     compare |= sentTag[i] ^ calcTag[i];
+                }
 
                 if (compare != 0)
+                {
                     return null;
+                }
 
                 using (AesManaged aes = new AesManaged
                 {

@@ -17,7 +17,7 @@ namespace StashBot.Module.Secure.AesCrypto
         {
             if (string.IsNullOrEmpty(secretMessage))
             {
-                throw new ArgumentException("Secret Message Required!", nameof(secretMessage));
+                throw new ArgumentException("Secret message required");
             }
 
             byte[] encryptedData;
@@ -42,7 +42,7 @@ namespace StashBot.Module.Secure.AesCrypto
         {
             if (string.IsNullOrEmpty(encryptedMessage))
             {
-                throw new ArgumentException("Encrypted Message Required!", nameof(encryptedMessage));
+                throw new ArgumentException("Encrypted message required");
             }
 
             byte[] encryptedData = AesStringToEncryptedData(encryptedMessage);

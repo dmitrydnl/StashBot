@@ -10,12 +10,12 @@ namespace StashBot
             get;
         }
 
-        public int MessageId
+        public DateTime DateSent
         {
             get;
         }
 
-        public DateTime DateSent
+        public int MessageId
         {
             get;
         }
@@ -25,12 +25,30 @@ namespace StashBot
             get;
         }
 
-        internal TelegramUserMessage(Message message)
+        public string PhotoId
         {
-            ChatId = message.Chat.Id;
-            MessageId = message.MessageId;
-            DateSent = message.Date;
-            Message = message.Text;
+            get;
+        }
+
+        internal TelegramUserMessage(Message telegramMessage)
+        {
+            ChatId = telegramMessage.Chat.Id;
+            DateSent = telegramMessage.Date;
+            MessageId = telegramMessage.MessageId;
+            Message = telegramMessage.Text;
+            if (telegramMessage.Photo != null && telegramMessage.Photo.Length > 0)
+            {
+                PhotoId = telegramMessage.Photo[telegramMessage.Photo.Length - 1].FileId;
+            }
+            else
+            {
+                PhotoId = null;
+            }
+        }
+
+        public bool IsEmpty()
+        {
+            return string.IsNullOrEmpty(Message) && string.IsNullOrEmpty(PhotoId);
         }
     }
 }

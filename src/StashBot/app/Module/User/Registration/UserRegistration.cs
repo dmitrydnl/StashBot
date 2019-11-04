@@ -6,8 +6,7 @@ namespace StashBot.Module.User.Registration
     {
         public void CreateNewUser(long chatId, string password)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
             databaseManager.CreateNewUser(chatId, password);
         }

@@ -1,4 +1,5 @@
 ﻿using StashBot.Module.Session;
+using StashBot.BotResponses;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -11,11 +12,14 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            if (message == null || context == null)
+            {
+                return;
+            }
 
-            const string welcomeMessage = "Hi, good to see you!";
-            messageManager.SendMessage(message.ChatId, welcomeMessage);
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+
+            messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.WelcomeMessage));
             context.ChangeChatState(message.ChatId, ChatSessionState.Start);
         }
     }

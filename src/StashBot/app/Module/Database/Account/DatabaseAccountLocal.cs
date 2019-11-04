@@ -13,24 +13,22 @@ namespace StashBot.Module.Database.Account
 
         public void CreateNewUser(long chatId, string password)
         {
-            IDatabaseManager databaseManager =
-                ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
+
+            if (databaseManager.IsStashExist(chatId))
+            {
+                databaseManager.ClearStash(chatId);
+            }
 
             User newUser = new User(chatId, password);
             if (IsUserExist(chatId))
             {
-                databaseManager.ClearStash(chatId);
                 usersDatabase[chatId] = newUser;
             }
             else
             {
                 usersDatabase.Add(chatId, newUser);
             }
-        }
-
-        public bool IsUserExist(long chatId)
-        {
-            return usersDatabase.ContainsKey(chatId);
         }
 
         public IUser GetUser(long chatId)
@@ -41,6 +39,11 @@ namespace StashBot.Module.Database.Account
             }
 
             return null;
+        }
+
+        public bool IsUserExist(long chatId)
+        {
+            return usersDatabase.ContainsKey(chatId);
         }
     }
 }

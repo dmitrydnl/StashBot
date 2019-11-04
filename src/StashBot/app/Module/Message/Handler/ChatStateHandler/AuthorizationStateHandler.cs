@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using StashBot.Module.User;
+using StashBot.BotResponses;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -21,38 +22,54 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            const string warningMessage = "Input your password or /back";
-            messageManager.SendMessage(chatId, warningMessage);
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.AuthorisationReady));
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager =
-                ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager =
-                ModulesManager.GetModulesManager().GetUserManager();
+            if (message == null || context == null)
+            {
+                return;
+            }
 
-            if (commands.ContainsKey(message.Message))
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+
+            if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);
             }
             else
             {
-                bool success = userManager.LoginUser(message.ChatId, message.Message);
-                if (success)
+                if (!string.IsNullOrEmpty(message.Message))
                 {
-                    const string successMessage = "Success!";
-                    messageManager.SendMessage(message.ChatId, successMessage);
-                    context.ChangeChatState(message.ChatId, Session.ChatSessionState.Authorized);
+                    LoginUser(message, context);
                 }
-                else
-                {
-                    const string wrongMessage = "WRONG";
-                    messageManager.SendMessage(message.ChatId, wrongMessage);
-                }
+            }
+        }
+
+        private bool IsCommand(string message)
+        {
+            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
+        }
+
+        private void LoginUser(ITelegramUserMessage message,
+            IChatStateHandlerContext context)
+        {
+            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+
+            bool success = userManager.LoginUser(message.ChatId, message.Message);
+            if (success)
+            {
+                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessAuthorisation));
+                context.ChangeChatState(message.ChatId, Session.ChatSessionState.Authorized);
+            }
+            else
+            {
+                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.FailAuthorisation));
             }
         }
 
