@@ -1,9 +1,9 @@
 ﻿using System;
 using StashBot.Module.Secure;
 
-namespace StashBot.Module.Database.Account.Local
+namespace StashBot.Module.Database.Account.Sqlite
 {
-    internal class UserDatabaseLocal : IUser
+    public class UserSqlite : IUser
     {
         public long ChatId
         {
@@ -25,18 +25,16 @@ namespace StashBot.Module.Database.Account.Local
 
         private readonly string hashPassword;
 
-        internal UserDatabaseLocal(long chatId, string password)
+        internal UserSqlite(long chatId, string hashPassword)
         {
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(hashPassword))
             {
-                throw new ArgumentException("Password cannot be null");
+                throw new ArgumentException("Hash password cannot be null");
             }
-
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
 
             ChatId = chatId;
             IsAuthorized = false;
-            hashPassword = secureManager.CalculateHash(password);
+            this.hashPassword = hashPassword;
             EncryptedPassword = null;
         }
 

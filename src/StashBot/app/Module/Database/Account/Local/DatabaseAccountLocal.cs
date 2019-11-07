@@ -10,7 +10,7 @@ namespace StashBot.Module.Database.Account.Local
         internal DatabaseAccountLocal()
         {
             usersDatabase = new Dictionary<long, IUser>();
-            userFactory = new UserDatabaseLocalFactory();
+            userFactory = new UserLocalFactory();
         }
 
         public void CreateUser(long chatId, string password)

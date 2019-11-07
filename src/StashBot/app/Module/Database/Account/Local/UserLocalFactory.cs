@@ -1,10 +1,10 @@
 ﻿namespace StashBot.Module.Database.Account.Local
 {
-    internal class UserDatabaseLocalFactory : IUserFactory
+    internal class UserLocalFactory : IUserFactory
     {
         public IUser Create(long chatId, string password)
         {
-            return new UserDatabaseLocal(chatId, password);
+            return new UserLocal(chatId, password);
         }
     }
 }
