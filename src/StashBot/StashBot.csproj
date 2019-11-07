@@ -33,6 +33,7 @@
     <Folder Include="app\BotResponses\" />
     <Folder Include="app\Module\Database\Account\Local\" />
     <Folder Include="app\Module\Database\Stash\Local\" />
+    <Folder Include="app\Module\Database\Account\Sqlite\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="BotSettings.json" />
