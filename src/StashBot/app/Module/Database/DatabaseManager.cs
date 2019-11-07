@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using StashBot.Module.Database.Account;
 using StashBot.Module.Database.Account.Local;
+using StashBot.Module.Database.Account.Sqlite;
 using StashBot.Module.Database.Stash;
 using StashBot.Module.Database.Stash.Local;
+using StashBot.BotSettings;
 
 namespace StashBot.Module.Database
 {
@@ -13,8 +15,28 @@ namespace StashBot.Module.Database
 
         internal DatabaseManager()
         {
-            databaseAccount = new DatabaseAccountLocal();
-            databaseStash = new DatabaseStashLocal();
+            switch (DatabaseSettings.AccountDatabaseType)
+            {
+                case DatabaseType.Local:
+                    databaseAccount = new DatabaseAccountLocal();
+                    break;
+                case DatabaseType.Sqlite:
+                    databaseAccount = new DatabaseAccountSqlite();
+                    break;
+                default:
+                    databaseAccount = new DatabaseAccountLocal();
+                    break;
+            }
+
+            switch (DatabaseSettings.StashDatabaseType)
+            {
+                case DatabaseType.Local:
+                    databaseStash = new DatabaseStashLocal();
+                    break;
+                default:
+                    databaseStash = new DatabaseStashLocal();
+                    break;
+            }
         }
 
         public void CreateUser(long chatId, string password)

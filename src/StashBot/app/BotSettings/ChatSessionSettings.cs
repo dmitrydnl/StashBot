@@ -18,10 +18,6 @@ namespace StashBot.BotSettings
                 SetUpSettings();
                 return chatSessionsClearInterval;
             }
-            private set
-            {
-                chatSessionsClearInterval = value;
-            }
         }
 
         internal static int ChatSessionLiveTime
@@ -30,10 +26,6 @@ namespace StashBot.BotSettings
             {
                 SetUpSettings();
                 return chatSessionLiveTime;
-            }
-            private set
-            {
-                chatSessionLiveTime = value;
             }
         }
 
@@ -46,8 +38,8 @@ namespace StashBot.BotSettings
 
             string text = File.ReadAllText(BOT_SETTINGS_FILE_NAME);
             dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(text);
-            ChatSessionsClearInterval = (int)jsonObject.chatSessionsClearInterval;
-            ChatSessionLiveTime = (int)jsonObject.chatSessionLiveTime;
+            chatSessionsClearInterval = (int)jsonObject.chatSessionsClearInterval;
+            chatSessionLiveTime = (int)jsonObject.chatSessionLiveTime;
             isSetUp = true;
         }
     }
