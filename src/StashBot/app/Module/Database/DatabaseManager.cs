@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using StashBot.Module.Database.Account;
+using StashBot.Module.Database.Account.Local;
 using StashBot.Module.Database.Stash;
+using StashBot.Module.Database.Stash.Local;
 
 namespace StashBot.Module.Database
 {
@@ -15,9 +17,9 @@ namespace StashBot.Module.Database
             databaseStash = new DatabaseStashLocal();
         }
 
-        public void CreateNewUser(long chatId, string password)
+        public void CreateUser(long chatId, string password)
         {
-            databaseAccount.CreateNewUser(chatId, password);
+            databaseAccount.CreateUser(chatId, password);
         }
 
         public IUser GetUser(long chatId)
@@ -28,6 +30,21 @@ namespace StashBot.Module.Database
         public bool IsUserExist(long chatId)
         {
             return databaseAccount.IsUserExist(chatId);
+        }
+
+        public bool LoginUser(long chatId, string password)
+        {
+            return databaseAccount.LoginUser(chatId, password);
+        }
+
+        public void LogoutUser(long chatId)
+        {
+            databaseAccount.LogoutUser(chatId);
+        }
+
+        public IStashMessage CreateStashMessage(ITelegramUserMessage telegramMessage)
+        {
+            return databaseStash.CreateStashMessage(telegramMessage);
         }
 
         public void SaveMessageToStash(IStashMessage stashMessage)

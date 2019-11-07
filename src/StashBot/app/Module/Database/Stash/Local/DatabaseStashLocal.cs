@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StashBot.Module.Database.Stash
+namespace StashBot.Module.Database.Stash.Local
 {
     internal class DatabaseStashLocal : IDatabaseStash
     {
         private readonly Dictionary<long, List<IStashMessage>> usersStashes;
+        private readonly IStashMessageFactory stashMessageFactory;
 
         internal DatabaseStashLocal()
         {
             usersStashes = new Dictionary<long, List<IStashMessage>>();
+            stashMessageFactory = new StashMessageLocalFactory();
+        }
+
+        public IStashMessage CreateStashMessage(ITelegramUserMessage telegramMessage)
+        {
+            return stashMessageFactory.Create(telegramMessage);
         }
 
         public void SaveMessageToStash(IStashMessage stashMessage)
