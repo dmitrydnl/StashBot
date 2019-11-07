@@ -32,6 +32,7 @@
     <Folder Include="app\BotSettings\" />
     <Folder Include="app\BotResponses\" />
     <Folder Include="app\Module\Database\Account\Local\" />
+    <Folder Include="app\Module\Database\Stash\Local\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="BotSettings.json" />

@@ -13,7 +13,7 @@ namespace StashBot.Module.User.Registration
                 databaseManager.ClearStash(chatId);
             }
 
-            databaseManager.CreateNewUser(chatId, password);
+            databaseManager.CreateUser(chatId, password);
         }
     }
 }

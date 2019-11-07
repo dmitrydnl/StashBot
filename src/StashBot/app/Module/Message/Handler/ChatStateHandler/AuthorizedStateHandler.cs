@@ -11,11 +11,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
     {
         private delegate void Command(long chatId, IChatStateHandlerContext context);
         private readonly Dictionary<string, Command> commands;
-        private readonly IStashMessageFactory stashMessageFactory;
 
         internal AuthorizedStateHandler()
         {
-            stashMessageFactory = new StashMessageFactory();
             commands = new Dictionary<string, Command>();
             InitializeCommands();
         }
@@ -65,7 +63,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IUser user = databaseManager.GetUser(message.ChatId);
             if (user != null && user.IsAuthorized)
             {
-                IStashMessage stashMessage = stashMessageFactory.Create(message);
+                IStashMessage stashMessage = databaseManager.CreateStashMessage(message);
                 await stashMessage.Download();
                 stashMessage.Encrypt(user);
                 databaseManager.SaveMessageToStash(stashMessage);

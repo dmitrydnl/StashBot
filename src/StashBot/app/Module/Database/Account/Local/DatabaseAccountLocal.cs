@@ -13,7 +13,7 @@ namespace StashBot.Module.Database.Account.Local
             userFactory = new UserDatabaseLocalFactory();
         }
 
-        public void CreateNewUser(long chatId, string password)
+        public void CreateUser(long chatId, string password)
         {
             IUser newUser = userFactory.Create(chatId, password);
             if (IsUserExist(chatId))
