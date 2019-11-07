@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using StashBot.Module.Database.Account;
+using StashBot.Module.Database.Account.Local;
 using StashBot.Module.Database.Stash;
 
 namespace StashBot.Module.Database
@@ -28,6 +29,16 @@ namespace StashBot.Module.Database
         public bool IsUserExist(long chatId)
         {
             return databaseAccount.IsUserExist(chatId);
+        }
+
+        public bool LoginUser(long chatId, string password)
+        {
+            return databaseAccount.LoginUser(chatId, password);
+        }
+
+        public void LogoutUser(long chatId)
+        {
+            databaseAccount.LogoutUser(chatId);
         }
 
         public void SaveMessageToStash(IStashMessage stashMessage)

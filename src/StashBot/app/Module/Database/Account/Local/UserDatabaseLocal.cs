@@ -1,9 +1,9 @@
 ﻿using System;
 using StashBot.Module.Secure;
 
-namespace StashBot.Module.Database
+namespace StashBot.Module.Database.Account.Local
 {
-    internal class User : IUser
+    internal class UserDatabaseLocal : IUser
     {
         public long ChatId
         {
@@ -25,7 +25,7 @@ namespace StashBot.Module.Database
 
         private readonly string hashPassword;
 
-        internal User(long chatId, string password)
+        internal UserDatabaseLocal(long chatId, string password)
         {
             if (string.IsNullOrEmpty(password))
             {

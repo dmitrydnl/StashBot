@@ -8,30 +8,14 @@ namespace StashBot.Module.User.Authorisation
         {
             IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            IUser user = databaseManager.GetUser(chatId);
-            if (user == null)
-            {
-                return false;
-            }
-
-            if (!user.ValidatePassword(password))
-            {
-                return false;
-            }
-
-            user.Login(password);
-            return true;
+            return databaseManager.LoginUser(chatId, password);
         }
 
         public void LogoutUser(long chatId)
         {
             IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            IUser user = databaseManager.GetUser(chatId);
-            if (user != null)
-            {
-                user.Logout();
-            }
+            databaseManager.LogoutUser(chatId);
         }
     }
 }
