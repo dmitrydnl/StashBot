@@ -2,7 +2,7 @@
 {
     public class UserModel
     {
-        public long UserModelId { get; set; }
+        public long Id { get; set; }
         public long ChatId { get; set; }
         public string HashPassword { get; set; }
     }

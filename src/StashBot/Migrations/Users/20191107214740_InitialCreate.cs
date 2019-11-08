@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace StashBot.Migrations
+namespace StashBot.Migrations.Users
 {
     public partial class InitialCreate : Migration
     {

@@ -40,6 +40,7 @@
     <Folder Include="app\Module\Database\Stash\Local\" />
     <Folder Include="app\Module\Database\Account\Sqlite\" />
     <Folder Include="app\Module\Database\Stash\Sqlite\" />
+    <Folder Include="Migrations\Users\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="BotSettings.json" />
