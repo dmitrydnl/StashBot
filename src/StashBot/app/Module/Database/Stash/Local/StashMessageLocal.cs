@@ -27,13 +27,6 @@ namespace StashBot.Module.Database.Stash.Local
             private set;
         }
 
-        private enum StashMessageType
-        {
-            Text,
-            Photo,
-            Empty
-        }
-
         private readonly StashMessageType type;
         private string content;
         private string photoId;
