@@ -5,9 +5,9 @@ using StashBot.Module.Message;
 using StashBot.Module.Secure;
 using Telegram.Bot;
 
-namespace StashBot.Module.Database.Stash.Local
+namespace StashBot.Module.Database.Stash.Sqlite
 {
-    internal class StashMessageLocal : IStashMessage
+    internal class StashMessageSqlite : IStashMessage
     {
         public long ChatId
         {
@@ -31,7 +31,7 @@ namespace StashBot.Module.Database.Stash.Local
         private string content;
         private string photoId;
 
-        internal StashMessageLocal(ITelegramUserMessage telegramMessage)
+        internal StashMessageSqlite(ITelegramUserMessage telegramMessage)
         {
             ChatId = telegramMessage.ChatId;
             IsEncrypt = false;

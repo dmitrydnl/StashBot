@@ -39,11 +39,15 @@
     <Folder Include="app\Module\Database\Account\Local\" />
     <Folder Include="app\Module\Database\Stash\Local\" />
     <Folder Include="app\Module\Database\Account\Sqlite\" />
+    <Folder Include="app\Module\Database\Stash\Sqlite\" />
+    <Folder Include="Migrations\Users\" />
+    <Folder Include="Migrations\StashMessages\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="BotSettings.json" />
     <None Remove="BotResponses.json" />
     <None Remove="users.db" />
+    <None Remove="stashMessages.db" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BotSettings.json">
@@ -53,6 +57,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="users.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="stashMessages.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

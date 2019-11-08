@@ -1,30 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace StashBot.Migrations
+namespace StashBot.Migrations.StashMessages
 {
     public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "StashMessages",
                 columns: table => new
                 {
-                    UserModelId = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ChatId = table.Column<long>(nullable: false),
-                    HashPassword = table.Column<string>(nullable: true)
+                    Type = table.Column<int>(nullable: false),
+                    Content = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserModelId);
+                    table.PrimaryKey("PK_StashMessages", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "StashMessages");
         }
     }
 }

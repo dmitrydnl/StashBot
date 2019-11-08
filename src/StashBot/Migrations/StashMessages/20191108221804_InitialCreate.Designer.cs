@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using StashBot.Module.Database.Account.Sqlite;
+using StashBot.Module.Database.Stash.Sqlite;
 
-namespace StashBot.Migrations
+namespace StashBot.Migrations.StashMessages
 {
-    [DbContext(typeof(UsersContext))]
-    [Migration("20191107214740_InitialCreate")]
+    [DbContext(typeof(StashMessagesContext))]
+    [Migration("20191108221804_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,21 +17,24 @@ namespace StashBot.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
 
-            modelBuilder.Entity("StashBot.Module.Database.Account.Sqlite.UserModel", b =>
+            modelBuilder.Entity("StashBot.Module.Database.Stash.Sqlite.StashMessageModel", b =>
                 {
-                    b.Property<long>("UserModelId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("ChatId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("HashPassword")
+                    b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("UserModelId");
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
 
-                    b.ToTable("Users");
+                    b.HasKey("Id");
+
+                    b.ToTable("StashMessages");
                 });
 #pragma warning restore 612, 618
         }
