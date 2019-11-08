@@ -2,13 +2,13 @@
 
 namespace StashBot.Module.Database.Stash.Sqlite
 {
-    public class StashMessageContext : DbContext
+    public class StashMessagesContext : DbContext
     {
-        public DbSet<StashMessageModel> Stashes { get; set; }
+        public DbSet<StashMessageModel> StashMessages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=stashes.db");
+            optionsBuilder.UseSqlite("Data Source=stashMessages.db");
         }
     }
 }
