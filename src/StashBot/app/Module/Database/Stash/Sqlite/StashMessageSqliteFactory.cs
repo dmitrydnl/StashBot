@@ -4,7 +4,7 @@
     {
         public IStashMessage Create(ITelegramUserMessage telegramMessage)
         {
-            return new StashMessageSqlite();
+            return new StashMessageSqlite(telegramMessage);
         }
     }
 }
