@@ -2,5 +2,5 @@
     "chatSessionsClearInterval": 10,
     "chatSessionLiveTime": 60,
     "accountDatabaseType": "sqlite",
-    "stashDatabaseType": "local"
+    "stashDatabaseType": "sqlite"
 }
