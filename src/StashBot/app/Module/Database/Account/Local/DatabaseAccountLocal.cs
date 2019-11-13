@@ -1,26 +1,21 @@
 ﻿using System.Collections.Generic;
 
-namespace StashBot.Module.Database.Account
+namespace StashBot.Module.Database.Account.Local
 {
     internal class DatabaseAccountLocal : IDatabaseAccount
     {
         private readonly Dictionary<long, IUser> usersDatabase;
+        private readonly IUserFactory userFactory;
 
         internal DatabaseAccountLocal()
         {
             usersDatabase = new Dictionary<long, IUser>();
+            userFactory = new UserLocalFactory();
         }
 
-        public void CreateNewUser(long chatId, string password)
+        public void CreateUser(long chatId, string password)
         {
-            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
-
-            if (databaseManager.IsStashExist(chatId))
-            {
-                databaseManager.ClearStash(chatId);
-            }
-
-            User newUser = new User(chatId, password);
+            IUser newUser = userFactory.Create(chatId, password);
             if (IsUserExist(chatId))
             {
                 usersDatabase[chatId] = newUser;
@@ -44,6 +39,27 @@ namespace StashBot.Module.Database.Account
         public bool IsUserExist(long chatId)
         {
             return usersDatabase.ContainsKey(chatId);
+        }
+
+        public bool LoginUser(long chatId, string password)
+        {
+            IUser user = GetUser(chatId);
+            if (user == null || !user.ValidatePassword(password))
+            {
+                return false;
+            }
+
+            user.Login(password);
+            return true;
+        }
+
+        public void LogoutUser(long chatId)
+        {
+            IUser user = GetUser(chatId);
+            if (user != null)
+            {
+                user.Logout();
+            }
         }
     }
 }

@@ -8,7 +8,12 @@ namespace StashBot.Module.User.Registration
         {
             IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
 
-            databaseManager.CreateNewUser(chatId, password);
+            if (databaseManager.IsStashExist(chatId))
+            {
+                databaseManager.ClearStash(chatId);
+            }
+
+            databaseManager.CreateUser(chatId, password);
         }
     }
 }

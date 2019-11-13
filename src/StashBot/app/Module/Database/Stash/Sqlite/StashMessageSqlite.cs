@@ -5,9 +5,9 @@ using StashBot.Module.Message;
 using StashBot.Module.Secure;
 using Telegram.Bot;
 
-namespace StashBot.Module.Database.Stash
+namespace StashBot.Module.Database.Stash.Sqlite
 {
-    internal class StashMessage : IStashMessage
+    internal class StashMessageSqlite : IStashMessage, IStashMessageDatabaseModelConverter
     {
         public long ChatId
         {
@@ -27,19 +27,17 @@ namespace StashBot.Module.Database.Stash
             private set;
         }
 
-        private enum StashMessageType
-        {
-            Text,
-            Photo,
-            Empty
-        }
-
-        private readonly StashMessageType type;
+        private StashMessageType type;
         private string content;
         private string photoId;
 
-        internal StashMessage(ITelegramUserMessage telegramMessage)
+        internal StashMessageSqlite(ITelegramUserMessage telegramMessage)
         {
+            if (telegramMessage == null)
+            {
+                return;
+            }
+
             ChatId = telegramMessage.ChatId;
             IsEncrypt = false;
             if (!string.IsNullOrEmpty(telegramMessage.Message))
@@ -170,6 +168,27 @@ namespace StashBot.Module.Database.Stash
                 case StashMessageType.Empty:
                     break;
             }
+        }
+
+        public StashMessageModel ToStashMessageModel()
+        {
+            StashMessageModel messageModel = new StashMessageModel
+            {
+                ChatId = ChatId,
+                Type = type,
+                Content = content
+            };
+
+            return messageModel;
+        }
+
+        public void FromStashMessageModel(StashMessageModel messageModel)
+        {
+            ChatId = messageModel.ChatId;
+            type = messageModel.Type;
+            content = messageModel.Content;
+            IsEncrypt = true;
+            IsDownloaded = true;
         }
     }
 }
