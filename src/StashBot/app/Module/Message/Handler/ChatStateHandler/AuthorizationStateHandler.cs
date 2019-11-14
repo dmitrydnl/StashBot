@@ -34,9 +34,6 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
-
             if (IsCommand(message.Message))
             {
                 commands[message.Message](message.ChatId, context);
