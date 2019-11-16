@@ -21,6 +21,7 @@
     <Folder Include="Secure\" />
     <Folder Include="Secure\Hash\" />
     <Folder Include="Secure\AesCrypto\" />
+    <Folder Include="Session\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StashBot\StashBot.csproj" />
