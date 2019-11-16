@@ -52,8 +52,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
-        private void LoginUser(ITelegramUserMessage message,
-            IChatStateHandlerContext context)
+        private void LoginUser(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
             IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
             IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
