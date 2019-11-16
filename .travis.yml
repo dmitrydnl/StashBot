@@ -1,7 +1,5 @@
 language: csharp
-mono: none
 dotnet: 3.0.1
-dist: xenial
 sudo: false
 
 env:
@@ -10,7 +8,6 @@ env:
 
 script:
     - cd src
-    - dotnet restore
     - dotnet build StashBot.sln -c Release
     - dotnet test -c Release --no-build StashBotTest/StashBotTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
