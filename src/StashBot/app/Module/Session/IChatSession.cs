@@ -1,6 +1,6 @@
 ﻿namespace StashBot.Module.Session
 {
-    internal interface IChatSession
+    public interface IChatSession
     {
         long ChatId
         {

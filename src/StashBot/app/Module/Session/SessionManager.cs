@@ -4,11 +4,11 @@ using StashBot.BotSettings;
 
 namespace StashBot.Module.Session
 {
-    internal class SessionManager : ISessionManager
+    public class SessionManager : ISessionManager
     {
         private readonly Dictionary<long, IChatSession> currentChatSessions;
 
-        internal SessionManager()
+        public SessionManager()
         {
             currentChatSessions = new Dictionary<long, IChatSession>();
             StartClearChatSessionsTimer();
