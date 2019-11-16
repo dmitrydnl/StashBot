@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace StashBot.Module.Secure.Hash
 {
-    internal class SecureHash : ISecureHash
+    public class SecureHash : ISecureHash
     {
         public string CalculateHash(string text)
         {
