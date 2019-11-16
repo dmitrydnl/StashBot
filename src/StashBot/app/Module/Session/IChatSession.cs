@@ -16,6 +16,6 @@
         void UserSentMessage(int messageId);
         void BotSentMessage(int messageId);
         void Kill();
-        bool NeedKill();
+        bool IsNeedKill();
     }
 }

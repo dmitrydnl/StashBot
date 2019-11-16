@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using StashBot.Module.User;
 using StashBot.BotResponses;
+using StashBot.Module.User;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -57,6 +57,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
             IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+
+            messageManager.DeleteMessage(message.ChatId, message.MessageId);
 
             bool success = userManager.LoginUser(message.ChatId, message.Message);
             if (success)
