@@ -13,3 +13,6 @@ script:
     - dotnet restore
     - dotnet build StashBot.sln -c Release
     - dotnet test -c Release --no-build StashBotTest/StashBotTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+
+after_script:
+        - bash <(curl -s https://codecov.io/bash)
