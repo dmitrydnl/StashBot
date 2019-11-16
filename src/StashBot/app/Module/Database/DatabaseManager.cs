@@ -4,6 +4,7 @@ using StashBot.Module.Database.Account.Local;
 using StashBot.Module.Database.Account.Sqlite;
 using StashBot.Module.Database.Stash;
 using StashBot.Module.Database.Stash.Local;
+using StashBot.Module.Database.Stash.Sqlite;
 using StashBot.BotSettings;
 
 namespace StashBot.Module.Database
@@ -32,6 +33,9 @@ namespace StashBot.Module.Database
             {
                 case DatabaseType.Local:
                     databaseStash = new DatabaseStashLocal();
+                    break;
+                case DatabaseType.Sqlite:
+                    databaseStash = new DatabaseStashSqlite();
                     break;
                 default:
                     databaseStash = new DatabaseStashLocal();

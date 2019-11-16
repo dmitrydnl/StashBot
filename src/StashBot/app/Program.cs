@@ -24,10 +24,6 @@ namespace StashBot
             {
                 BotToken.Set(args[0]);
             }
-            else
-            {
-                return;
-            }
         }
     }
 }
