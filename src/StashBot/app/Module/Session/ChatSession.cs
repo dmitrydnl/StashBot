@@ -58,7 +58,7 @@ namespace StashBot.Module.Session
             userManager.LogoutUser(ChatId);
         }
 
-        public bool NeedKill()
+        public bool IsNeedKill()
         {
             DateTime endLiveTime = lastUserMessage.AddSeconds(ChatSessionSettings.ChatSessionLiveTime);
             return endLiveTime <= DateTime.UtcNow;

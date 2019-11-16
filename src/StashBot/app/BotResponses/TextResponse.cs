@@ -12,6 +12,11 @@ namespace StashBot.BotResponses
 
         internal static string Get(ResponseType responseType)
         {
+            if (responses == null)
+            {
+                SetUpResponses();
+            }
+
             return responses[responseType];
         }
 
