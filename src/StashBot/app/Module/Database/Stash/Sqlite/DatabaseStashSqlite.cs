@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace StashBot.Module.Database.Stash.Sqlite
@@ -19,22 +20,75 @@ namespace StashBot.Module.Database.Stash.Sqlite
 
         public void SaveMessageToStash(IStashMessage stashMessage)
         {
-            throw new NotImplementedException();
+            if (!stashMessage.IsEncrypt)
+            {
+                throw new ArgumentException("An unencrypted message cannot be stored in a stash");
+            }
+
+            if (!stashMessage.IsDownloaded)
+            {
+                throw new ArgumentException("An undownloaded message cannot be stored in a stash");
+            }
+
+            StashMessageModel messageModel = ((IStashMessageDatabaseModelConverter)stashMessage).ToStashMessageModel();
+            using (StashMessagesContext db = new StashMessagesContext())
+            {
+                db.StashMessages.Add(messageModel);
+                db.SaveChanges();
+            }
         }
 
         public List<IStashMessage> GetMessagesFromStash(long chatId)
         {
-            throw new NotImplementedException();
+            List<IStashMessage> stashMessages = new List<IStashMessage>();
+
+            if (!IsStashExist(chatId))
+            {
+                return stashMessages;
+            }
+
+            using (StashMessagesContext db = new StashMessagesContext())
+            {
+                IQueryable<StashMessageModel> stashMessageModel = db.StashMessages
+                        .Where(user => user.ChatId == chatId);
+
+                foreach (StashMessageModel messageModel in stashMessageModel)
+                {
+                    IStashMessage stashMessage = CreateStashMessage(null);
+                    ((IStashMessageDatabaseModelConverter)stashMessage).FromStashMessageModel(messageModel);
+                    stashMessages.Add(stashMessage);
+                }
+            }
+
+            return stashMessages;
         }
 
         public void ClearStash(long chatId)
         {
-            throw new NotImplementedException();
+            using (StashMessagesContext db = new StashMessagesContext())
+            {
+                IQueryable<StashMessageModel> messageModels = db.StashMessages
+                    .Where(user => user.ChatId == chatId);
+
+                foreach (StashMessageModel messageModel in messageModels)
+                {
+                    db.Remove(messageModel);
+                }
+
+                db.SaveChanges();
+            }
         }
 
         public bool IsStashExist(long chatId)
         {
-            throw new NotImplementedException();
+            using (StashMessagesContext db = new StashMessagesContext())
+            {
+                StashMessageModel messageModel = db.StashMessages
+                    .Where(user => user.ChatId == chatId)
+                    .FirstOrDefault();
+
+                return messageModel != null;
+            }
         }
     }
 }

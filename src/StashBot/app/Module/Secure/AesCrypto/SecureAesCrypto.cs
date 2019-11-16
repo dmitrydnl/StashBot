@@ -4,11 +4,11 @@ using System.Security.Cryptography;
 
 namespace StashBot.Module.Secure.AesCrypto
 {
-    internal class SecureAesCrypto : ISecureAesCrypto
+    public class SecureAesCrypto : ISecureAesCrypto
     {
         private readonly Aes aes;
 
-        internal SecureAesCrypto()
+        public SecureAesCrypto()
         {
             aes = Aes.Create();
         }
