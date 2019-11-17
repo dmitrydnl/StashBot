@@ -1,6 +1,6 @@
 ﻿{
     "WelcomeMessage": "Hi, good to see you!",
-    "MainCommands": "Registration: /SignUp\nAuthorization: /SignIn\nInformation about me: /Info\nClose chat in any time: /Exit",
+    "MainCommands": "Authorization: /SignIn\nRegistration: /SignUp\n\nInformation about me: /Info\nClose chat in any time: /exit",
     "Information": "This is open source bot for stashing in Telegram Messenger.\nThe code you can find here: https://github.com/dmitrydnl/StashBot",
     "RegistrationWarning": "If you have already registered you will lose all your old data!\nAre you sure? /yes or /no",
     "RegistrationReady": "Input your password or /cancel",
