@@ -34,5 +34,19 @@ namespace StashBotTest.Session
             Assert.AreEqual(chatSession1, null);
             Assert.AreNotEqual(chatSession2, null);
         }
+
+        [Test]
+        public void KillChatSessionTest()
+        {
+            const int chatSessionId = 12;
+            bool exist1 = sessionManager.IsChatSessionExist(chatSessionId);
+            sessionManager.CreateChatSession(chatSessionId);
+            bool exist2 = sessionManager.IsChatSessionExist(chatSessionId);
+            sessionManager.KillChatSession(chatSessionId);
+            bool exist3 = sessionManager.IsChatSessionExist(chatSessionId);
+            Assert.AreEqual(exist1, false);
+            Assert.AreEqual(exist2, true);
+            Assert.AreEqual(exist3, false);
+        }
     }
 }
