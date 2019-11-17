@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using StashBot.Module.Session;
 using Telegram.Bot;
 using Telegram.Bot.Types.InputFiles;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace StashBot.Module.Message.Sender
 {
     internal class MessageSender : IMessageSender
     {
-        public async Task SendTextMessage(long chatId, string messageText)
+        public async Task SendTextMessage(long chatId, string messageText, ReplyKeyboardMarkup replyKeyboard)
         {
             if (string.IsNullOrEmpty(messageText))
             {
@@ -20,8 +21,9 @@ namespace StashBot.Module.Message.Sender
 
             Telegram.Bot.Types.Message message = await telegramBotClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: messageText
-            );
+                text: messageText,
+                replyMarkup: replyKeyboard
+                );
             sessionManager.BotSentMessage(chatId, message.MessageId);
         }
 
