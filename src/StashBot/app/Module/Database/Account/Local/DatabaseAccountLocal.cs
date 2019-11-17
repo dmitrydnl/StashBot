@@ -2,12 +2,12 @@
 
 namespace StashBot.Module.Database.Account.Local
 {
-    internal class DatabaseAccountLocal : IDatabaseAccount
+    public class DatabaseAccountLocal : IDatabaseAccount
     {
         private readonly Dictionary<long, IUser> usersDatabase;
         private readonly IUserFactory userFactory;
 
-        internal DatabaseAccountLocal()
+        public DatabaseAccountLocal()
         {
             usersDatabase = new Dictionary<long, IUser>();
             userFactory = new UserLocalFactory();

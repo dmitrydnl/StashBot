@@ -1,6 +1,6 @@
 ﻿namespace StashBot.Module.Database
 {
-    internal interface IUser
+    public interface IUser
     {
         long ChatId
         {

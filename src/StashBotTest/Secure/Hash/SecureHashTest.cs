@@ -16,8 +16,9 @@ namespace StashBotTest.Secure.Hash
         [Test]
         public void CompareWithHashTest()
         {
-            string hash = secureHash.CalculateHash("SecureText");
-            bool equal = secureHash.CompareWithHash("SecureText", hash);
+            const string secureText = "SecureText";
+            string hash = secureHash.CalculateHash(secureText);
+            bool equal = secureHash.CompareWithHash(secureText, hash);
             Assert.AreEqual(equal, true);
         }
     }

@@ -16,17 +16,19 @@ namespace StashBotTest.Secure.AesCrypto
         [Test]
         public void EncryptWithAesTest()
         {
-            string encrypted1 = secureAesCrypto.EncryptWithAes("SecureText");
-            string encrypted2 = secureAesCrypto.EncryptWithAes("SecureText");
+            const string secureText = "SecureText";
+            string encrypted1 = secureAesCrypto.EncryptWithAes(secureText);
+            string encrypted2 = secureAesCrypto.EncryptWithAes(secureText);
             Assert.AreEqual(encrypted1, encrypted2);
         }
 
         [Test]
         public void DecryptWithAesTest()
         {
-            string encrypted = secureAesCrypto.EncryptWithAes("SecureText");
+            const string secureText = "SecureText";
+            string encrypted = secureAesCrypto.EncryptWithAes(secureText);
             string decryped = secureAesCrypto.DecryptWithAes(encrypted);
-            Assert.AreEqual("SecureText", decryped);
+            Assert.AreEqual(secureText, decryped);
         }
     }
 }
