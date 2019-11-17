@@ -19,7 +19,7 @@ namespace StashBot.Module.Message.Handler
                 return;
             }
 
-            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
             IChatSession chatSession = sessionManager.GetChatSession(message.ChatId);
             if (chatSession == null)
@@ -34,7 +34,7 @@ namespace StashBot.Module.Message.Handler
 
         public void ChangeChatState(long chatId, ChatSessionState newState)
         {
-            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
             IChatSession chatSession = sessionManager.GetChatSession(chatId);
             if (chatSession != null)

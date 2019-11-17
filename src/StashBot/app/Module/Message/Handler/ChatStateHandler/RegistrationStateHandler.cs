@@ -22,7 +22,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.RegistrationWarning), chatCommands.CreateReplyKeyboard());
         }
@@ -46,17 +46,17 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void Registration(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(chatId, Session.ChatSessionState.CreateUserPassword);
+            context.ChangeChatState(chatId, ChatSessionState.CreateUserPassword);
         }
 
         private void Cancel(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
+            context.ChangeChatState(chatId, ChatSessionState.Start);
         }
 
         private void Exit(long chatId, IChatStateHandlerContext context)
         {
-            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
             sessionManager.KillChatSession(chatId);
         }

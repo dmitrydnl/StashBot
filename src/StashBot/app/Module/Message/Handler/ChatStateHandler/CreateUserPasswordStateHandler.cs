@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using StashBot.Module.User;
 using StashBot.BotResponses;
 using StashBot.Module.Session;
@@ -24,7 +23,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.RegistrationReady), chatCommands.CreateReplyKeyboard());
         }
@@ -51,8 +50,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void RegistrationUser(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
+            IUserManager userManager = ModulesManager.GetUserManager();
 
             messageManager.DeleteMessage(message.ChatId, message.MessageId);
 
@@ -60,13 +59,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             {
                 userManager.CreateNewUser(message.ChatId, message.Message);
                 messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessRegistration));
-                context.ChangeChatState(message.ChatId, Session.ChatSessionState.Start);
+                context.ChangeChatState(message.ChatId, ChatSessionState.Start);
             }
         }
 
         private bool CheckPassword(long chatId, string password)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             if (string.IsNullOrEmpty(password))
             {
@@ -97,12 +96,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void Cancel(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
+            context.ChangeChatState(chatId, ChatSessionState.Start);
         }
 
         private void Exit(long chatId, IChatStateHandlerContext context)
         {
-            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
             sessionManager.KillChatSession(chatId);
         }

@@ -17,7 +17,7 @@ namespace StashBot.Module.Database.Account.Sqlite
 
         public void CreateUser(long chatId, string password)
         {
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             if (IsUserExist(chatId))
             {

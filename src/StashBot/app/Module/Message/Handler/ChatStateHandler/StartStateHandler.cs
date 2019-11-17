@@ -23,7 +23,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.MainCommands), chatCommands.CreateReplyKeyboard());
         }
@@ -47,24 +47,24 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void Registration(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(chatId, Session.ChatSessionState.Registration);
+            context.ChangeChatState(chatId, ChatSessionState.Registration);
         }
 
         private void Authorization(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(chatId, Session.ChatSessionState.Authorisation);
+            context.ChangeChatState(chatId, ChatSessionState.Authorisation);
         }
 
         private void Information(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Information), chatCommands.CreateReplyKeyboard());
         }
 
         private void Exit(long chatId, IChatStateHandlerContext context)
         {
-            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
             sessionManager.KillChatSession(chatId);
         }

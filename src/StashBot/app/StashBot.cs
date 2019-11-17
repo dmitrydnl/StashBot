@@ -20,7 +20,7 @@ namespace StashBot
 
         private void WriteBotStatus()
         {
-            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
 
             Telegram.Bot.Types.User me = telegramBotClient.GetMeAsync().Result;
             Console.WriteLine(DateTime.Now + " - Bot set up!");
@@ -31,7 +31,7 @@ namespace StashBot
 
         internal void Start()
         {
-            ITelegramBotClient telegramBotClient =  ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ITelegramBotClient telegramBotClient =  ModulesManager.GetTelegramBotClient();
 
             telegramBotClient.OnMessage += OnMessage;
             telegramBotClient.StartReceiving();
@@ -39,7 +39,7 @@ namespace StashBot
 
         private void OnMessage(object sender, MessageEventArgs e)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             ITelegramUserMessage userMessage = telegramUserMessageFactory.Create(e.Message);
             messageManager.HandleUserMessage(userMessage);

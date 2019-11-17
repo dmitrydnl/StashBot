@@ -27,7 +27,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Login), chatCommands.CreateReplyKeyboard());
         }
@@ -54,7 +54,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private async Task SaveMessageToStash(ITelegramUserMessage message)
         {
-            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetDatabaseManager();
 
             IUser user = databaseManager.GetUser(message.ChatId);
             if (user != null && user.IsAuthorized)
@@ -68,7 +68,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void GetStash(long chatId, IChatStateHandlerContext context)
         {
-            IDatabaseManager databaseManager = ModulesManager.GetModulesManager().GetDatabaseManager();
+            IDatabaseManager databaseManager = ModulesManager.GetDatabaseManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user != null && user.IsAuthorized)
@@ -84,17 +84,17 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void Logout(long chatId, IChatStateHandlerContext context)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
+            IUserManager userManager = ModulesManager.GetUserManager();
 
             userManager.LogoutUser(chatId);
             messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Logout));
-            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
+            context.ChangeChatState(chatId, ChatSessionState.Start);
         }
 
         private void Exit(long chatId, IChatStateHandlerContext context)
         {
-            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
             sessionManager.KillChatSession(chatId);
         }
