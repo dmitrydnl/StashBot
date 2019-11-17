@@ -2,7 +2,7 @@
 
 namespace StashBot
 {
-    internal interface ITelegramUserMessage
+    public interface ITelegramUserMessage
     {
         long ChatId
         {

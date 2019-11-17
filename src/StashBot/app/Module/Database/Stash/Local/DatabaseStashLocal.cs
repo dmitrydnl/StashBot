@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace StashBot.Module.Database.Stash.Local
 {
-    internal class DatabaseStashLocal : IDatabaseStash
+    public class DatabaseStashLocal : IDatabaseStash
     {
         private readonly Dictionary<long, List<IStashMessage>> usersStashes;
         private readonly IStashMessageFactory stashMessageFactory;
 
-        internal DatabaseStashLocal()
+        public DatabaseStashLocal()
         {
             usersStashes = new Dictionary<long, List<IStashMessage>>();
             stashMessageFactory = new StashMessageLocalFactory();

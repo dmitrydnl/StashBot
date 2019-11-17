@@ -2,7 +2,7 @@
 
 namespace StashBot.Module.Database.Stash
 {
-    internal interface IStashMessage
+    public interface IStashMessage
     {
         long ChatId
         {
