@@ -29,6 +29,7 @@ namespace StashBot.Module.Message.Handler
             }
 
             sessionManager.UserSentMessage(message.ChatId, message.MessageId);
+
             if (string.Equals(message.Message, "/e") || string.Equals(message.Message, "/exit"))
             {
                 sessionManager.KillChatSession(message.ChatId);
