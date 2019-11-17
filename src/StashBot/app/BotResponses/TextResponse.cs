@@ -17,7 +17,6 @@ namespace StashBot.BotResponses
             {
                 SetUpResponses();
             }
-
             return responses[responseType];
         }
 
@@ -31,6 +30,7 @@ namespace StashBot.BotResponses
             responses = new Dictionary<ResponseType, string>();
             string content = File.ReadAllText(BOT_RESPONSES_FILE_NAME);
             Dictionary<string, string> jsonResponses = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
+
             foreach (var response in jsonResponses)
             {
                 Enum.TryParse(response.Key, out ResponseType responseType);

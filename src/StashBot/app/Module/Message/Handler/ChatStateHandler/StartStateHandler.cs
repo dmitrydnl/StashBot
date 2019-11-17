@@ -1,31 +1,31 @@
-﻿using System.Collections.Generic;
-using StashBot.BotResponses;
+﻿using StashBot.BotResponses;
+using StashBot.Module.Session;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class StartStateHandler : IChatStateHandler
     {
-        private delegate void Command(long chatId, IChatStateHandlerContext context);
-        private readonly Dictionary<string, Command> commands;
+        private readonly IChatCommands chatCommands;
 
         internal StartStateHandler()
         {
-            commands = new Dictionary<string, Command>();
+            chatCommands = new ChatCommands();
             InitializeCommands();
         }
 
         private void InitializeCommands()
         {
-            commands.Add("/reg", Registration);
-            commands.Add("/auth", Authorization);
-            commands.Add("/info", Information);
+            chatCommands.Add("/SignUp", Registration);
+            chatCommands.Add("/SignIn", Authorization);
+            chatCommands.Add("/Info", Information);
+            chatCommands.Add("/Exit", Exit);
         }
 
         public void StartStateMessage(long chatId)
         {
             IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.MainCommands));
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.MainCommands), chatCommands.CreateReplyKeyboard());
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -35,19 +35,14 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            if (IsCommand(message.Message))
+            if (chatCommands.ContainsCommand(message.Message))
             {
-                commands[message.Message](message.ChatId, context);
+                chatCommands.Get(message.Message)(message.ChatId, context);
             }
             else
             {
                 StartStateMessage(message.ChatId);
             }
-        }
-
-        private bool IsCommand(string message)
-        {
-            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
         }
 
         private void Registration(long chatId, IChatStateHandlerContext context)
@@ -64,7 +59,14 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Information));
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Information), chatCommands.CreateReplyKeyboard());
+        }
+
+        private void Exit(long chatId, IChatStateHandlerContext context)
+        {
+            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
+
+            sessionManager.KillChatSession(chatId);
         }
     }
 }
