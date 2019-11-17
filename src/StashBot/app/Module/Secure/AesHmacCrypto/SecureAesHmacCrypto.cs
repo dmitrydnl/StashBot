@@ -5,7 +5,7 @@ using System.Text;
 
 namespace StashBot.Module.Secure.AesHmacCrypto
 {
-    internal class SecureAesHmacCrypto : ISecureAesHmacCrypto
+    public class SecureAesHmacCrypto : ISecureAesHmacCrypto
     {
         private const int BLOCK_BIT_SIZE = 128;
         private const int KEY_BIT_SIZE = 256;
