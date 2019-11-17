@@ -1,4 +1,5 @@
 ﻿using StashBot.BotResponses;
+using StashBot.Module.Session;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
@@ -17,6 +18,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             chatCommands.Add("/SignUp", Registration);
             chatCommands.Add("/SignIn", Authorization);
             chatCommands.Add("/Info", Information);
+            chatCommands.Add("/Exit", Exit);
         }
 
         public void StartStateMessage(long chatId)
@@ -58,6 +60,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
 
             messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Information), chatCommands.CreateReplyKeyboard());
+        }
+
+        private void Exit(long chatId, IChatStateHandlerContext context)
+        {
+            ISessionManager sessionManager = ModulesManager.GetModulesManager().GetSessionManager();
+
+            sessionManager.KillChatSession(chatId);
         }
     }
 }
