@@ -48,8 +48,8 @@ namespace StashBot.Module.Session
 
         public void Kill()
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
+            IUserManager userManager = ModulesManager.GetUserManager();
 
             messageManager.DeleteListMessages(ChatId, botMessagesId);
             botMessagesId.Clear();

@@ -45,7 +45,7 @@ namespace StashBot.Module.Database.Account.Sqlite
                 throw new ArgumentException("Password cannot be null");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             EncryptedPassword = secureManager.EncryptWithAes(password);
             IsAuthorized = true;
@@ -59,7 +59,7 @@ namespace StashBot.Module.Database.Account.Sqlite
 
         public bool ValidatePassword(string password)
         {
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             return secureManager.CompareWithHash(password, hashPassword);
         }

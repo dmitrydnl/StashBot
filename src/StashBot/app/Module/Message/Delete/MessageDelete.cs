@@ -7,7 +7,7 @@ namespace StashBot.Module.Message.Delete
     {
         public void DeleteMessage(long chatId, int messageId)
         {
-            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
 
             telegramBotClient.DeleteMessageAsync(chatId, messageId);
         }

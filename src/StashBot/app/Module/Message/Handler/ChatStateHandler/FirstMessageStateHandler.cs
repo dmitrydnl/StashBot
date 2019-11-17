@@ -17,7 +17,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.WelcomeMessage));
             context.ChangeChatState(message.ChatId, ChatSessionState.Start);

@@ -68,7 +68,7 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An encrypted message cannot download");
             }
 
-            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
 
             using (MemoryStream stream = new MemoryStream())
             {
@@ -98,7 +98,7 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("User is unauthorized, message cannot encrypt");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             if (type != StashMessageType.Empty)
@@ -126,7 +126,7 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("User is unauthorized, message cannot decrypt");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             if (type != StashMessageType.Empty)
@@ -149,7 +149,7 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An undownloaded message cannot send");
             }
 
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             switch (type)
             {
