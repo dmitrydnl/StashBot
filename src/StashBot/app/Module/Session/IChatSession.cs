@@ -15,8 +15,7 @@
 
         void UserSentMessage(int messageId);
         void BotSentMessage(int messageId);
-        void DeleteUserMessage(int messageId);
-        void DeleteBotMessage(int messageId);
+        void MessageDeleted(int messageId);
         void Kill();
         bool IsNeedKill();
     }
