@@ -50,7 +50,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 i++;
             }
 
-            return new ReplyKeyboardMarkup(buttons);
+            return new ReplyKeyboardMarkup(buttons) { ResizeKeyboard = true };
         }
     }
 }
