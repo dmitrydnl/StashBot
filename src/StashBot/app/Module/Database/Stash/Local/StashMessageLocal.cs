@@ -162,8 +162,6 @@ namespace StashBot.Module.Database.Stash.Local
                     break;
                 case StashMessageType.Empty:
                     break;
-                default:
-                    break;
             }
         }
     }

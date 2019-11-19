@@ -167,8 +167,6 @@ namespace StashBot.Module.Database.Stash.Sqlite
                     break;
                 case StashMessageType.Empty:
                     break;
-                default:
-                    break;
             }
         }
 
