@@ -3,7 +3,7 @@ using Telegram.Bot.Types;
 
 namespace StashBot
 {
-    internal class TelegramUserMessage : ITelegramUserMessage
+    public class TelegramUserMessage : ITelegramUserMessage
     {
         public long ChatId
         {
@@ -30,7 +30,7 @@ namespace StashBot
             get;
         }
 
-        internal TelegramUserMessage(Message telegramMessage)
+        public TelegramUserMessage(Message telegramMessage)
         {
             ChatId = telegramMessage.Chat.Id;
             DateSent = telegramMessage.Date;

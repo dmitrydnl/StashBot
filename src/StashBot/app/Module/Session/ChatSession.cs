@@ -46,6 +46,28 @@ namespace StashBot.Module.Session
             botMessagesId.Add(messageId);
         }
 
+        public void DeleteUserMessage(int messageId)
+        {
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
+
+            if (userMessagesId.Contains(messageId))
+            {
+                userMessagesId.Remove(messageId);
+                messageManager.DeleteMessage(ChatId, messageId);
+            }
+        }
+
+        public void DeleteBotMessage(int messageId)
+        {
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
+
+            if (botMessagesId.Contains(messageId))
+            {
+                botMessagesId.Remove(messageId);
+                messageManager.DeleteMessage(ChatId, messageId);
+            }
+        }
+
         public void Kill()
         {
             IMessageManager messageManager = ModulesManager.GetMessageManager();

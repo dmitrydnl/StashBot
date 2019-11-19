@@ -52,8 +52,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetMessageManager();
             IUserManager userManager = ModulesManager.GetUserManager();
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
-            messageManager.DeleteMessage(message.ChatId, message.MessageId);
+            sessionManager.GetChatSession(message.ChatId).DeleteUserMessage(message.MessageId);
 
             if (CheckPassword(message.ChatId, message.Message))
             {
