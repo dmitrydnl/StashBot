@@ -48,14 +48,8 @@ namespace StashBot.Module.Session
 
         public void MessageDeleted(int messageId)
         {
-            if (userMessagesId.Contains(messageId))
-            {
-                userMessagesId.Remove(messageId);
-            }
-            else if (botMessagesId.Contains(messageId))
-            {
-                botMessagesId.Remove(messageId);
-            }
+            userMessagesId.Remove(messageId);
+            botMessagesId.Remove(messageId);
         }
 
         public void Kill()
@@ -63,10 +57,10 @@ namespace StashBot.Module.Session
             IMessageManager messageManager = ModulesManager.GetMessageManager();
             IUserManager userManager = ModulesManager.GetUserManager();
 
-            messageManager.DeleteListMessages(ChatId, botMessagesId);
-            botMessagesId.Clear();
-            messageManager.DeleteListMessages(ChatId, userMessagesId);
-            userMessagesId.Clear();
+            List<int> copyBotMessagesId = new List<int>(botMessagesId);
+            List<int> copyUserMessagesId = new List<int>(userMessagesId);
+            messageManager.DeleteListMessages(ChatId, copyBotMessagesId);
+            messageManager.DeleteListMessages(ChatId, copyUserMessagesId);
             userManager.LogoutUser(ChatId);
         }
 

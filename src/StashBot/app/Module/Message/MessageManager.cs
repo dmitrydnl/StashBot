@@ -25,7 +25,7 @@ namespace StashBot.Module.Message
             messageHandler.HandleUserMessage(message);
         }
 
-        public Task SendTextMessage(long chatId, string textMessage, ReplyKeyboardMarkup replyKeyboard = null)
+        public Task SendTextMessage(long chatId, string textMessage, ReplyKeyboardMarkup replyKeyboard)
         {
             return messageSender.SendTextMessage(chatId, textMessage, replyKeyboard);
         }

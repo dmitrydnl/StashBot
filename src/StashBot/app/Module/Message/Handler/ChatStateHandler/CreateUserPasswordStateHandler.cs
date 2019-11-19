@@ -58,7 +58,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             if (CheckPassword(message.ChatId, message.Message))
             {
                 userManager.CreateNewUser(message.ChatId, message.Message);
-                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessRegistration));
+                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessRegistration), null);
                 context.ChangeChatState(message.ChatId, ChatSessionState.Start);
             }
         }
@@ -69,25 +69,25 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
             if (string.IsNullOrEmpty(password))
             {
-                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordEmpty));
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordEmpty), null);
                 return false;
             }
 
             if (password.Length < 12)
             {
-                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordMinLength));
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordMinLength), null);
                 return false;
             }
 
             if (password.Length > 25)
             {
-                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordMaxLength));
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordMaxLength), null);
                 return false;
             }
 
             if (!Regex.IsMatch(password, @"^[a-zA-Z0-9!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$"))
             {
-                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordCharacters));
+                messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.PasswordCharacters), null);
                 return false;
             }
 

@@ -59,7 +59,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Information), chatCommands.CreateReplyKeyboard());
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Information), null);
         }
 
         private void Exit(long chatId, IChatStateHandlerContext context)

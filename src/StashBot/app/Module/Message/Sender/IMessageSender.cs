@@ -5,7 +5,7 @@ namespace StashBot.Module.Message.Sender
 {
     internal interface IMessageSender
     {
-        Task SendTextMessage(long chatId, string message, ReplyKeyboardMarkup replyKeyboard = null);
+        Task SendTextMessage(long chatId, string message, ReplyKeyboardMarkup replyKeyboard);
         Task SendPhotoMessage(long chatId, byte[] imageBytes);
     }
 }
