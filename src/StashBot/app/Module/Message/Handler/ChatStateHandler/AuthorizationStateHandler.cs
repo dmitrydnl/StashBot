@@ -51,9 +51,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetMessageManager();
             IUserManager userManager = ModulesManager.GetUserManager();
-            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
-            sessionManager.GetChatSession(message.ChatId).DeleteUserMessage(message.MessageId);
+            messageManager.DeleteMessage(message.ChatId, message.MessageId);
 
             bool success = userManager.LoginUser(message.ChatId, message.Message);
             if (success)
