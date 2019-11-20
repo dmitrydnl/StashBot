@@ -57,12 +57,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             bool success = userManager.LoginUser(message.ChatId, message.Message);
             if (success)
             {
-                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessAuthorisation));
+                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessAuthorisation), null);
                 context.ChangeChatState(message.ChatId, ChatSessionState.Authorized);
             }
             else
             {
-                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.FailAuthorisation));
+                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.FailAuthorisation), null);
             }
         }
 

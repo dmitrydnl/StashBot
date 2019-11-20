@@ -20,7 +20,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void InitializeCommands()
         {
-            chatCommands.Add("/stash", GetStash);
+            chatCommands.Add("/Stash", GetStash);
             chatCommands.Add("/logout", Logout);
             chatCommands.Add("/exit", Exit);
         }
@@ -88,7 +88,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IUserManager userManager = ModulesManager.GetUserManager();
 
             userManager.LogoutUser(chatId);
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Logout));
+            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Logout), null);
             context.ChangeChatState(chatId, ChatSessionState.Start);
         }
 

@@ -159,7 +159,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
             switch (type)
             {
                 case StashMessageType.Text:
-                    _ = messageManager.SendTextMessage(ChatId, content);
+                    _ = messageManager.SendTextMessage(ChatId, content, null);
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);

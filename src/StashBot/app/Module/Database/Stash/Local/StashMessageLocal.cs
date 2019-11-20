@@ -93,6 +93,11 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An undownloaded message cannot encrypt");
             }
 
+            if (user == null)
+            {
+                throw new ArgumentException("User cannot be null");
+            }
+
             if (!user.IsAuthorized)
             {
                 throw new ArgumentException("User is unauthorized, message cannot encrypt");
@@ -154,7 +159,7 @@ namespace StashBot.Module.Database.Stash.Local
             switch (type)
             {
                 case StashMessageType.Text:
-                    _ = messageManager.SendTextMessage(ChatId, content);
+                    _ = messageManager.SendTextMessage(ChatId, content, null);
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);
