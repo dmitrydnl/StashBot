@@ -93,6 +93,11 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An undownloaded message cannot encrypt");
             }
 
+            if (user == null)
+            {
+                throw new ArgumentException("User cannot be null");
+            }
+
             if (!user.IsAuthorized)
             {
                 throw new ArgumentException("User is unauthorized, message cannot encrypt");
