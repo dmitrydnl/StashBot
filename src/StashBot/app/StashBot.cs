@@ -34,6 +34,7 @@ namespace StashBot
             ITelegramBotClient telegramBotClient =  ModulesManager.GetTelegramBotClient();
 
             telegramBotClient.OnMessage += OnMessage;
+            telegramBotClient.OnCallbackQuery += OnCallbackQuery;
             telegramBotClient.StartReceiving();
         }
 
@@ -43,6 +44,12 @@ namespace StashBot
 
             ITelegramUserMessage userMessage = telegramUserMessageFactory.Create(e.Message);
             messageManager.HandleUserMessage(userMessage);
+        }
+
+        private void OnCallbackQuery(object sender, CallbackQueryEventArgs e)
+        {
+            Console.WriteLine(e.CallbackQuery.Data);
+            Console.WriteLine(e.CallbackQuery.From.Id);
         }
     }
 }
