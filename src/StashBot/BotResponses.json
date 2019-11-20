@@ -12,6 +12,6 @@
     "AuthorisationReady": "Input your password or /back",
     "SuccessAuthorisation": "Success!",
     "FailAuthorisation": "WRONG",
-    "Login": "Input message to save it in stash.\nGet messages in stash: /stash\nLogout: /logout",
+    "Login": "Input message to save it in stash.\nGet messages in stash: /Stash\nLogout: /logout",
     "Logout": "You're logged out"
 }

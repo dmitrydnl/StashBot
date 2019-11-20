@@ -32,6 +32,11 @@ namespace StashBot
 
         public TelegramUserMessage(Message telegramMessage)
         {
+            if (telegramMessage == null)
+            {
+                throw new ArgumentException("Telegram message cannot be null");
+            }
+
             ChatId = telegramMessage.Chat.Id;
             DateSent = telegramMessage.Date;
             MessageId = telegramMessage.MessageId;
