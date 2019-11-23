@@ -31,8 +31,12 @@ namespace StashBot.Module.Database.Stash.Sqlite
         private string content;
         private string photoId;
 
+        private readonly IKeyboardForStashMessage keyboardForStashMessage;
+
         internal StashMessageSqlite(ITelegramUserMessage telegramMessage)
         {
+            keyboardForStashMessage = new KeyboardForStashMessage(this);
+
             if (telegramMessage == null)
             {
                 return;
@@ -159,7 +163,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
             switch (type)
             {
                 case StashMessageType.Text:
-                    _ = messageManager.SendTextMessage(ChatId, content, null);
+                    _ = messageManager.SendTextMessage(ChatId, content, keyboardForStashMessage.ForTextMessage());
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);
