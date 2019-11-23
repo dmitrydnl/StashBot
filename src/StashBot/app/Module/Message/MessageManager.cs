@@ -25,14 +25,14 @@ namespace StashBot.Module.Message
             messageHandler.HandleUserMessage(message);
         }
 
-        public Task SendTextMessage(long chatId, string textMessage, IReplyMarkup replyMarkup)
+        public Task SendTextMessageAsync(long chatId, string textMessage, IReplyMarkup replyMarkup)
         {
-            return messageSender.SendTextMessage(chatId, textMessage, replyMarkup);
+            return messageSender.SendTextMessageAsync(chatId, textMessage, replyMarkup);
         }
 
-        public Task SendPhotoMessage(long chatId, byte[] imageBytes, IReplyMarkup replyMarkup)
+        public Task SendPhotoMessageAsync(long chatId, byte[] imageBytes, IReplyMarkup replyMarkup)
         {
-            return messageSender.SendPhotoMessage(chatId, imageBytes, replyMarkup);
+            return messageSender.SendPhotoMessageAsync(chatId, imageBytes, replyMarkup);
         }
 
         public void DeleteMessage(long chatId, int messageId)

@@ -24,7 +24,7 @@ namespace StashBot.Module.Database.Stash
             get;
         }
 
-        Task Download();
+        Task DownloadAsync();
         void Encrypt(IUser user);
         void Decrypt(IUser user);
         void Send();

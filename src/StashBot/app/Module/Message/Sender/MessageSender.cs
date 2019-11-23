@@ -9,7 +9,7 @@ namespace StashBot.Module.Message.Sender
 {
     internal class MessageSender : IMessageSender
     {
-        public async Task SendTextMessage(long chatId, string messageText, IReplyMarkup replyMarkup)
+        public async Task SendTextMessageAsync(long chatId, string messageText, IReplyMarkup replyMarkup)
         {
             if (string.IsNullOrEmpty(messageText))
             {
@@ -27,7 +27,7 @@ namespace StashBot.Module.Message.Sender
             sessionManager.BotSentMessage(chatId, message.MessageId);
         }
 
-        public async Task SendPhotoMessage(long chatId, byte[] imageBytes, IReplyMarkup replyMarkup)
+        public async Task SendPhotoMessageAsync(long chatId, byte[] imageBytes, IReplyMarkup replyMarkup)
         {
             if (imageBytes == null || imageBytes.Length == 0)
             {

@@ -29,7 +29,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Login), chatCommands.CreateReplyKeyboard());
+            messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.Login), chatCommands.CreateReplyKeyboard());
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -47,12 +47,12 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             {
                 if (!message.IsEmpty())
                 {
-                    _ = SaveMessageToStash(message);
+                    _ = SaveMessageToStashAsync(message);
                 }
             }
         }
 
-        private async Task SaveMessageToStash(ITelegramUserMessage message)
+        private async Task SaveMessageToStashAsync(ITelegramUserMessage message)
         {
             IDatabaseManager databaseManager = ModulesManager.GetDatabaseManager();
 
@@ -60,7 +60,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             if (user != null && user.IsAuthorized)
             {
                 IStashMessage stashMessage = databaseManager.CreateStashMessage(message);
-                await stashMessage.Download();
+                await stashMessage.DownloadAsync();
                 stashMessage.Encrypt(user);
                 IDatabaseError databaseError = databaseManager.SaveMessageToStash(stashMessage);
                 databaseError.Handle(message.ChatId);
@@ -78,7 +78,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 ICollection<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
                 if (messagesFromStash.Count == 0)
                 {
-                    messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.EmptyStash), null);
+                    messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.EmptyStash), null);
                 }
                 else
                 {
@@ -97,7 +97,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IUserManager userManager = ModulesManager.GetUserManager();
 
             userManager.LogoutUser(chatId);
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Logout), null);
+            messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.Logout), null);
             context.ChangeChatState(chatId, ChatSessionState.Start);
         }
     }
