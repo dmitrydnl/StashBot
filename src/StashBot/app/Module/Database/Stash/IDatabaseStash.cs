@@ -6,7 +6,7 @@ namespace StashBot.Module.Database.Stash
     {
         IStashMessage CreateStashMessage(ITelegramUserMessage telegramMessage);
         IDatabaseError SaveMessageToStash(IStashMessage stashMessage);
-        List<IStashMessage> GetMessagesFromStash(long chatId);
+        ICollection<IStashMessage> GetMessagesFromStash(long chatId);
         void DeleteStashMessage(long chatId, long databaseMessageId);
         void ClearStash(long chatId);
         bool IsStashExist(long chatId);

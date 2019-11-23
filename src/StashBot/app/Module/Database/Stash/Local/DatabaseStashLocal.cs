@@ -56,7 +56,7 @@ namespace StashBot.Module.Database.Stash.Local
             return new NullError();
         }
 
-        public List<IStashMessage> GetMessagesFromStash(long chatId)
+        public ICollection<IStashMessage> GetMessagesFromStash(long chatId)
         {
             if (!IsStashExist(chatId))
             {

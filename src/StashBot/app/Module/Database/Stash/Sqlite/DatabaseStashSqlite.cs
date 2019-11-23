@@ -47,7 +47,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
             return new NullError();
         }
 
-        public List<IStashMessage> GetMessagesFromStash(long chatId)
+        public ICollection<IStashMessage> GetMessagesFromStash(long chatId)
         {
             List<IStashMessage> stashMessages = new List<IStashMessage>();
 

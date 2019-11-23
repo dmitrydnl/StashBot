@@ -66,7 +66,7 @@ namespace StashBot.Module.Database
             return databaseStash.SaveMessageToStash(stashMessage);
         }
 
-        public List<IStashMessage> GetMessagesFromStash(long chatId)
+        public ICollection<IStashMessage> GetMessagesFromStash(long chatId)
         {
             return databaseStash.GetMessagesFromStash(chatId);
         }

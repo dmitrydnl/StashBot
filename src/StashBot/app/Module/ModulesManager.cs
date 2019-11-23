@@ -8,7 +8,7 @@ using Telegram.Bot;
 
 namespace StashBot.Module
 {
-    internal class ModulesManager
+    internal static class ModulesManager
     {
         private static ITelegramBotClient telegramBotClient;
         private static IMessageManager messageManager;
