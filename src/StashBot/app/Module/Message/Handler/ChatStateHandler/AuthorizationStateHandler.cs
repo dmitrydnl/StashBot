@@ -57,7 +57,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             bool success = userManager.LoginUser(message.ChatId, message.Message);
             if (success)
             {
-                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.Success), null);
+                messageManager.SendTextMessageAsync(message.ChatId, TextResponse.Get(ResponseType.Success), null);
                 context.ChangeChatState(message.ChatId, ChatSessionState.Authorized);
             }
             else
