@@ -2,18 +2,16 @@
 {
     internal enum ResponseType
     {
-        WelcomeMessage,
         MainCommands,
         Information,
         RegistrationWarning,
         RegistrationReady,
-        SuccessRegistration,
         PasswordEmpty,
         PasswordMinLength,
         PasswordMaxLength,
         PasswordCharacters,
         AuthorisationReady,
-        SuccessAuthorisation,
+        Success,
         FailAuthorisation,
         Login,
         Logout,

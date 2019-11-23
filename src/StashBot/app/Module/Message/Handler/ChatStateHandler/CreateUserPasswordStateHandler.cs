@@ -58,7 +58,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             if (CheckPassword(message.ChatId, message.Message))
             {
                 userManager.CreateNewUser(message.ChatId, message.Message);
-                messageManager.SendTextMessageAsync(message.ChatId, TextResponse.Get(ResponseType.SuccessRegistration), null);
+                messageManager.SendTextMessageAsync(message.ChatId, TextResponse.Get(ResponseType.Success), null);
                 context.ChangeChatState(message.ChatId, ChatSessionState.Start);
             }
         }
