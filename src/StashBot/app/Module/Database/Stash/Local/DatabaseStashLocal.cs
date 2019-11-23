@@ -37,6 +37,13 @@ namespace StashBot.Module.Database.Stash.Local
                 usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
             }
 
+            long databaseMessageId = 0;
+            if (usersStashes[stashMessage.ChatId].Count > 0)
+            {
+                databaseMessageId = usersStashes[stashMessage.ChatId].Last().DatabaseMessageId.Value + 1;
+            }
+            ((IStashMessageLocalDatabaseId)stashMessage).UpdateDatabaseMessageId(databaseMessageId);
+
             usersStashes[stashMessage.ChatId].Add(stashMessage);
         }
 

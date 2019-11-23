@@ -9,7 +9,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
 {
     internal class StashMessageSqlite : IStashMessage, IStashMessageDatabaseModelConverter
     {
-        public long DatabaseMessageId
+        public long? DatabaseMessageId
         {
             get;
             private set;
@@ -41,8 +41,13 @@ namespace StashBot.Module.Database.Stash.Sqlite
 
         internal StashMessageSqlite(ITelegramUserMessage telegramMessage)
         {
+            DatabaseMessageId = null;
+            FromITelegramUserMessage(telegramMessage);
             keyboardForStashMessage = new KeyboardForStashMessage(this);
+        }
 
+        private void FromITelegramUserMessage(ITelegramUserMessage telegramMessage)
+        {
             if (telegramMessage == null)
             {
                 return;

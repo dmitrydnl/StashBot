@@ -7,9 +7,9 @@ using Telegram.Bot;
 
 namespace StashBot.Module.Database.Stash.Local
 {
-    public class StashMessageLocal : IStashMessage
+    public class StashMessageLocal : IStashMessage, IStashMessageLocalDatabaseId
     {
-        public long DatabaseMessageId
+        public long? DatabaseMessageId
         {
             get;
             private set;
@@ -33,11 +33,21 @@ namespace StashBot.Module.Database.Stash.Local
             private set;
         }
 
-        private readonly StashMessageType type;
+        private StashMessageType type;
         private string content;
         private string photoId;
 
+        private readonly IKeyboardForStashMessage keyboardForStashMessage;
+
         public StashMessageLocal(ITelegramUserMessage telegramMessage)
+        {
+            DatabaseMessageId = null;
+            FromITelegramUserMessage(telegramMessage);
+            keyboardForStashMessage = new KeyboardForStashMessage(this);
+        }
+
+
+        private void FromITelegramUserMessage(ITelegramUserMessage telegramMessage)
         {
             ChatId = telegramMessage.ChatId;
             IsEncrypt = false;
@@ -165,7 +175,7 @@ namespace StashBot.Module.Database.Stash.Local
             switch (type)
             {
                 case StashMessageType.Text:
-                    _ = messageManager.SendTextMessage(ChatId, content, null);
+                    _ = messageManager.SendTextMessage(ChatId, content, keyboardForStashMessage.ForTextMessage());
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);
@@ -174,6 +184,11 @@ namespace StashBot.Module.Database.Stash.Local
                 case StashMessageType.Empty:
                     break;
             }
+        }
+
+        public void UpdateDatabaseMessageId(long? databaseId)
+        {
+            DatabaseMessageId = databaseId;
         }
     }
 }
