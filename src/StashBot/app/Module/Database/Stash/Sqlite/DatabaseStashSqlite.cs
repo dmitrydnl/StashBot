@@ -50,7 +50,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
             using (StashMessagesContext db = new StashMessagesContext())
             {
                 IQueryable<StashMessageModel> stashMessageModel = db.StashMessages
-                        .Where(user => user.ChatId == chatId);
+                        .Where(message => message.ChatId == chatId);
 
                 foreach (StashMessageModel messageModel in stashMessageModel)
                 {
@@ -63,12 +63,28 @@ namespace StashBot.Module.Database.Stash.Sqlite
             return stashMessages;
         }
 
+        public void DeleteStashMessage(long chatId, long databaseMessageId)
+        {
+            using (StashMessagesContext db = new StashMessagesContext())
+            {
+                StashMessageModel messageModel = db.StashMessages
+                    .Where(message => (message.ChatId == chatId) && (message.Id == databaseMessageId))
+                    .FirstOrDefault();
+
+                if (messageModel != null)
+                {
+                    db.Remove(messageModel);
+                    db.SaveChanges();
+                }
+            }
+        }
+
         public void ClearStash(long chatId)
         {
             using (StashMessagesContext db = new StashMessagesContext())
             {
                 IQueryable<StashMessageModel> messageModels = db.StashMessages
-                    .Where(user => user.ChatId == chatId);
+                    .Where(message => message.ChatId == chatId);
 
                 foreach (StashMessageModel messageModel in messageModels)
                 {
@@ -84,7 +100,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
             using (StashMessagesContext db = new StashMessagesContext())
             {
                 StashMessageModel messageModel = db.StashMessages
-                    .Where(user => user.ChatId == chatId)
+                    .Where(message => message.ChatId == chatId)
                     .FirstOrDefault();
 
                 return messageModel != null;

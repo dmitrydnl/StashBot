@@ -71,6 +71,11 @@ namespace StashBot.Module.Database
             return databaseStash.GetMessagesFromStash(chatId);
         }
 
+        public void DeleteStashMessage(long chatId, long databaseMessageId)
+        {
+            databaseStash.DeleteStashMessage(chatId, databaseMessageId);
+        }
+
         public void ClearStash(long chatId)
         {
             databaseStash.ClearStash(chatId);
