@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using StashBot.Module.Database.Stash.Errors;
+using StashBot.BotSettings;
 
 namespace StashBot.Module.Database.Stash.Local
 {
@@ -31,6 +32,11 @@ namespace StashBot.Module.Database.Stash.Local
             if (!stashMessage.IsDownloaded)
             {
                 throw new ArgumentException("An undownloaded message cannot be stored in a stash");
+            }
+
+            if (!CheckStashLimit(stashMessage.ChatId))
+            {
+                return new StashFullError();
             }
 
             if (!IsStashExist(stashMessage.ChatId))
@@ -88,6 +94,13 @@ namespace StashBot.Module.Database.Stash.Local
         public bool IsStashExist(long chatId)
         {
             return usersStashes.ContainsKey(chatId);
+        }
+
+        private bool CheckStashLimit(long chatId)
+        {
+            int count = usersStashes[chatId].Count;
+
+            return count < StashSettings.StashMessageLimit;
         }
     }
 }
