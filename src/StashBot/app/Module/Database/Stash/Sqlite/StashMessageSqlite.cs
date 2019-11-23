@@ -9,7 +9,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
 {
     internal class StashMessageSqlite : IStashMessage, IStashMessageDatabaseModelConverter
     {
-        public long Id
+        public long DatabaseMessageId
         {
             get;
             private set;
@@ -194,7 +194,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
 
         public void FromStashMessageModel(StashMessageModel messageModel)
         {
-            Id = messageModel.Id;
+            DatabaseMessageId = messageModel.Id;
             ChatId = messageModel.ChatId;
             type = messageModel.Type;
             content = messageModel.Content;

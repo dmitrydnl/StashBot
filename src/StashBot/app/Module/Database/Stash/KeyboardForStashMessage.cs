@@ -15,7 +15,7 @@ namespace StashBot.Module.Database.Stash
         {
             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(new[]
             {
-                InlineKeyboardButton.WithCallbackData("Удалить", $"delete_message:{stashMessage.ChatId}:{stashMessage.Id}")
+                InlineKeyboardButton.WithCallbackData("Удалить", $"delete_message:{stashMessage.ChatId}:{stashMessage.DatabaseMessageId}")
             });
 
             return inlineKeyboardMarkup;
@@ -25,7 +25,7 @@ namespace StashBot.Module.Database.Stash
         {
             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(new[]
             {
-                InlineKeyboardButton.WithCallbackData("Удалить", $"delete_message:{stashMessage.ChatId}:{stashMessage.Id}")
+                InlineKeyboardButton.WithCallbackData("Удалить", $"delete_message:{stashMessage.ChatId}:{stashMessage.DatabaseMessageId}")
             });
 
             return inlineKeyboardMarkup;

@@ -9,7 +9,7 @@ namespace StashBot.Module.Database.Stash.Local
 {
     public class StashMessageLocal : IStashMessage
     {
-        public long Id
+        public long DatabaseMessageId
         {
             get;
             private set;
