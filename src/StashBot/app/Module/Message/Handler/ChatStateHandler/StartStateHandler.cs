@@ -25,7 +25,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.MainCommands), chatCommands.CreateReplyKeyboard());
+            messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.MainCommands), chatCommands.CreateReplyKeyboard());
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -59,7 +59,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             IMessageManager messageManager = ModulesManager.GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Information), null);
+            messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.Information), null);
         }
     }
 }
