@@ -13,5 +13,6 @@
     "SuccessAuthorisation": "Success!",
     "FailAuthorisation": "WRONG",
     "Login": "Input message to save it in stash.\nGet messages in stash: /Stash\nLogout: /logout",
-    "Logout": "You're logged out"
+    "Logout": "You're logged out",
+    "EmptyStash": "Your stash is empty"
 }

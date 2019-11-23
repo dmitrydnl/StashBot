@@ -69,15 +69,23 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private void GetStash(long chatId, IChatStateHandlerContext context)
         {
             IDatabaseManager databaseManager = ModulesManager.GetDatabaseManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user != null && user.IsAuthorized)
             {
                 List<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
-                foreach(IStashMessage stashMessage in messagesFromStash)
+                if (messagesFromStash.Count == 0)
                 {
-                    stashMessage.Decrypt(user);
-                    stashMessage.Send();
+                    messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.EmptyStash), null);
+                }
+                else
+                {
+                    foreach (IStashMessage stashMessage in messagesFromStash)
+                    {
+                        stashMessage.Decrypt(user);
+                        stashMessage.Send();
+                    }
                 }
             }
         }
