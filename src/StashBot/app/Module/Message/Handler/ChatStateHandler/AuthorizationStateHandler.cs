@@ -17,7 +17,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private void InitializeCommands()
         {
             chatCommands.Add("/back", true, Cancel);
-            chatCommands.Add("/exit", true, Exit);
+            chatCommands.AddExitCommand(true);
         }
 
         public void StartStateMessage(long chatId)
@@ -69,13 +69,6 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private void Cancel(long chatId, IChatStateHandlerContext context)
         {
             context.ChangeChatState(chatId, ChatSessionState.Start);
-        }
-
-        private void Exit(long chatId, IChatStateHandlerContext context)
-        {
-            ISessionManager sessionManager = ModulesManager.GetSessionManager();
-
-            sessionManager.KillChatSession(chatId);
         }
     }
 }

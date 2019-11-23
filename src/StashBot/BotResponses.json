@@ -14,5 +14,6 @@
     "FailAuthorisation": "WRONG",
     "Login": "Input message to save it in stash.\nGet messages in stash: /Stash\nLogout: /logout",
     "Logout": "You're logged out",
-    "EmptyStash": "Your stash is empty"
+    "EmptyStash": "Your stash is empty",
+    "FullStashError": "Your stash is full, delete your message!" 
 }

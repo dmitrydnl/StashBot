@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StashBot.Module.Session;
 using Telegram.Bot.Types.ReplyMarkups;
 using static StashBot.Module.Message.Handler.ChatStateHandler.IChatCommands;
 
@@ -26,6 +27,11 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                     keyboardCommands.Add(name, command);
                 }
             }
+        }
+
+        public void AddExitCommand(bool showOnKeyboard)
+        {
+            Add("/exit", showOnKeyboard, ExitCommand);
         }
 
         public Command Get(string name)
@@ -58,6 +64,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             }
 
             return new ReplyKeyboardMarkup(buttons) { ResizeKeyboard = true };
+        }
+        
+        private void ExitCommand(long chatId, IChatStateHandlerContext context)
+        {
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
+
+            sessionManager.KillChatSession(chatId);
         }
     }
 }
