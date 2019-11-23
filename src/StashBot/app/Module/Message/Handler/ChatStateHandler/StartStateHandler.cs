@@ -15,8 +15,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void InitializeCommands()
         {
-            chatCommands.Add("/SignUp", true, Registration);
             chatCommands.Add("/SignIn", true, Authorization);
+            chatCommands.Add("/SignUp", true, Registration);
             chatCommands.Add("/Info", false, Information);
             chatCommands.AddExitCommand(true);
         }

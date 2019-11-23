@@ -1,6 +1,5 @@
 ﻿{
-    "WelcomeMessage": "Hi, good to see you!",
-    "MainCommands": "Authorization: /SignIn\nRegistration: /SignUp\n\nInformation about me: /Info\nClose chat in any time: /exit",
+    "MainCommands": "🐾 /SignIn or /SignUp \n\n📘About: /Info\n⚠️Close immediately: /exit",
     "Information": "This is open source bot for stashing in Telegram Messenger.\nThe code you can find here: https://github.com/dmitrydnl/StashBot",
     "RegistrationWarning": "If you have already registered you will lose all your old data!\nAre you sure? /yes or /no",
     "RegistrationReady": "Input your password or /cancel",
@@ -15,5 +14,5 @@
     "Login": "Input message to save it in stash.\nGet messages in stash: /Stash\nLogout: /logout",
     "Logout": "You're logged out",
     "EmptyStash": "Your stash is empty",
-    "FullStashError": "Your stash is full, delete your message!" 
+    "FullStashError": "Your stash is full, delete your message!"
 }
