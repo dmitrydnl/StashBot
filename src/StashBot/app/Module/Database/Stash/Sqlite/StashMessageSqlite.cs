@@ -76,11 +76,11 @@ namespace StashBot.Module.Database.Stash.Sqlite
             }
         }
 
-        public async Task DownloadAsync()
+        public Task DownloadAsync()
         {
             if (IsDownloaded)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (IsEncrypt)
@@ -88,6 +88,11 @@ namespace StashBot.Module.Database.Stash.Sqlite
                 throw new ArgumentException("An encrypted message cannot download");
             }
 
+            return DownloadInternalAsync();
+        }
+
+        public async Task DownloadInternalAsync()
+        {
             ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
 
             using (MemoryStream stream = new MemoryStream())
