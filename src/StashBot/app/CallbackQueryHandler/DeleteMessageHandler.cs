@@ -6,12 +6,14 @@ namespace StashBot.CallbackQueryHandler
 {
     internal class DeleteMessageHandler : ICallbackQueryHandler
     {
+        private const int MIN_PARAMETERS_COUNT = 3;
+
         public void Handle(string[] queryArray, int messageId)
         {
             IDatabaseManager databaseManager = ModulesManager.GetDatabaseManager();
             IMessageManager messageManager = ModulesManager.GetMessageManager();
 
-            if (queryArray.Length < 3)
+            if (queryArray.Length < MIN_PARAMETERS_COUNT)
             {
                 return;
             }

@@ -20,9 +20,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void InitializeCommands()
         {
-            chatCommands.Add("/Stash", GetStash);
-            chatCommands.Add("/logout", Logout);
-            chatCommands.Add("/exit", Exit);
+            chatCommands.Add("/Stash", true, GetStash);
+            chatCommands.Add("/logout", true, Logout);
+            chatCommands.Add("/exit", true, Exit);
         }
 
         public void StartStateMessage(long chatId)

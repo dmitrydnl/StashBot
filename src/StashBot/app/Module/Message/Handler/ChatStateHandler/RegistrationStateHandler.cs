@@ -15,9 +15,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void InitializeCommands()
         {
-            chatCommands.Add("/yes", Registration);
-            chatCommands.Add("/no", Cancel);
-            chatCommands.Add("/exit", Exit);
+            chatCommands.Add("/yes", true, Registration);
+            chatCommands.Add("/no", true, Cancel);
+            chatCommands.Add("/exit", true, Exit);
         }
 
         public void StartStateMessage(long chatId)

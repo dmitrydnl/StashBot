@@ -17,8 +17,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void InitializeCommands()
         {
-            chatCommands.Add("/cancel", Cancel);
-            chatCommands.Add("/exit", Exit);
+            chatCommands.Add("/cancel", true, Cancel);
+            chatCommands.Add("/exit", true, Exit);
         }
 
         public void StartStateMessage(long chatId)
