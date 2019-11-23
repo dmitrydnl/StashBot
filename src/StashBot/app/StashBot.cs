@@ -49,6 +49,8 @@ namespace StashBot
 
         private void OnCallbackQuery(object sender, CallbackQueryEventArgs e)
         {
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
+
             if (string.IsNullOrEmpty(e.CallbackQuery.Data))
             {
                 return;
@@ -71,6 +73,7 @@ namespace StashBot
             }
 
             callbackQueryHandler.Handle(queryArray, e.CallbackQuery.Message.MessageId);
+            telegramBotClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id);
         }
     }
 }
