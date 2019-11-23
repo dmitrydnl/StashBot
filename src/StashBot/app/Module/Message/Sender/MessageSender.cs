@@ -9,7 +9,7 @@ namespace StashBot.Module.Message.Sender
 {
     internal class MessageSender : IMessageSender
     {
-        public async Task SendTextMessage(long chatId, string messageText, ReplyKeyboardMarkup replyKeyboard)
+        public async Task SendTextMessage(long chatId, string messageText, IReplyMarkup replyMarkup)
         {
             if (string.IsNullOrEmpty(messageText))
             {
@@ -22,7 +22,7 @@ namespace StashBot.Module.Message.Sender
             Telegram.Bot.Types.Message message = await telegramBotClient.SendTextMessageAsync(
                 chatId: chatId,
                 text: messageText,
-                replyMarkup: replyKeyboard
+                replyMarkup: replyMarkup
                 );
             sessionManager.BotSentMessage(chatId, message.MessageId);
         }
