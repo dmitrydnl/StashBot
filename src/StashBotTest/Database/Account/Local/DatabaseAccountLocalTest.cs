@@ -6,6 +6,8 @@ namespace StashBotTest.Database.Account.Local
 {
     public class DatabaseAccountLocalTest
     {
+        const string password = "super_secure_password";
+
         private DatabaseAccountLocal databaseAccount;
 
         [SetUp]
@@ -18,7 +20,6 @@ namespace StashBotTest.Database.Account.Local
         public void CreateUserTest()
         {
             const int chatId = 1;
-            const string password = "super_secure_password";
             bool exist1 = databaseAccount.IsUserExist(chatId);
             databaseAccount.CreateUser(chatId, password);
             bool exist2 = databaseAccount.IsUserExist(chatId);
@@ -30,7 +31,6 @@ namespace StashBotTest.Database.Account.Local
         public void GetUserTest()
         {
             const int chatId = 12;
-            const string password = "super_secure_password";
             IUser user1 = databaseAccount.GetUser(chatId);
             databaseAccount.CreateUser(chatId, password);
             IUser user2 = databaseAccount.GetUser(chatId);
@@ -42,7 +42,6 @@ namespace StashBotTest.Database.Account.Local
         public void LoginUserTest()
         {
             const int chatId = 123;
-            const string password = "super_secure_password";
             databaseAccount.CreateUser(chatId, password);
             IUser user = databaseAccount.GetUser(chatId);
             bool login1 = user.IsAuthorized;
@@ -56,7 +55,6 @@ namespace StashBotTest.Database.Account.Local
         public void LogoutUserTest()
         {
             const int chatId = 1234;
-            const string password = "super_secure_password";
             databaseAccount.CreateUser(chatId, password);
             IUser user = databaseAccount.GetUser(chatId);
             bool login1 = user.IsAuthorized;
