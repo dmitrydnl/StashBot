@@ -27,7 +27,7 @@ namespace StashBot.Module.Message.Sender
             sessionManager.BotSentMessage(chatId, message.MessageId);
         }
 
-        public async Task SendPhotoMessage(long chatId, byte[] imageBytes)
+        public async Task SendPhotoMessage(long chatId, byte[] imageBytes, IReplyMarkup replyMarkup)
         {
             if (imageBytes == null || imageBytes.Length == 0)
             {
@@ -41,7 +41,8 @@ namespace StashBot.Module.Message.Sender
             {
                 Telegram.Bot.Types.Message message = await telegramBotClient.SendPhotoAsync(
                     chatId,
-                    new InputOnlineFile(stream)
+                    new InputOnlineFile(stream),
+                    replyMarkup: replyMarkup
                 );
                 sessionManager.BotSentMessage(chatId, message.MessageId);
             }

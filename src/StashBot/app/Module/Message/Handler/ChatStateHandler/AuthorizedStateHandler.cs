@@ -39,7 +39,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            if (chatCommands.ContainsCommand(message.Message))
+            if (!string.IsNullOrEmpty(message.Message) && chatCommands.ContainsCommand(message.Message))
             {
                 chatCommands.Get(message.Message)(message.ChatId, context);
             }

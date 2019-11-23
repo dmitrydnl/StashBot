@@ -179,7 +179,7 @@ namespace StashBot.Module.Database.Stash.Local
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);
-                    _ = messageManager.SendPhotoMessage(ChatId, imageBytes);
+                    _ = messageManager.SendPhotoMessage(ChatId, imageBytes, keyboardForStashMessage.ForPhotoMessage());
                     break;
                 case StashMessageType.Empty:
                     break;
