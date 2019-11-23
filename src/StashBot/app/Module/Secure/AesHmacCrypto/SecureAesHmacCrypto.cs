@@ -7,6 +7,7 @@ namespace StashBot.Module.Secure.AesHmacCrypto
 {
     public class SecureAesHmacCrypto : ISecureAesHmacCrypto
     {
+        private const int BITS_IN_BYTE = 8;
         private const int BLOCK_BIT_SIZE = 128;
         private const int KEY_BIT_SIZE = 256;
         private const int SALT_BIT_SIZE = 64;
@@ -51,25 +52,25 @@ namespace StashBot.Module.Secure.AesHmacCrypto
         {
             nonSecretPayload = nonSecretPayload ?? new byte[] { };
 
-            byte[] payload = new byte[(SALT_BIT_SIZE / 8 * 2) + nonSecretPayload.Length];
+            byte[] payload = new byte[(SALT_BIT_SIZE / BITS_IN_BYTE * 2) + nonSecretPayload.Length];
 
             Array.Copy(nonSecretPayload, payload, nonSecretPayload.Length);
             int payloadIndex = nonSecretPayload.Length;
 
             byte[] cryptKey;
             byte[] authKey;
-            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, SALT_BIT_SIZE / 8, ITERATIONS))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, SALT_BIT_SIZE / BITS_IN_BYTE, ITERATIONS))
             {
                 byte[] salt = generator.Salt;
-                cryptKey = generator.GetBytes(KEY_BIT_SIZE / 8);
+                cryptKey = generator.GetBytes(KEY_BIT_SIZE / BITS_IN_BYTE);
                 Array.Copy(salt, 0, payload, payloadIndex, salt.Length);
                 payloadIndex += salt.Length;
             }
 
-            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, SALT_BIT_SIZE / 8, ITERATIONS))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, SALT_BIT_SIZE / BITS_IN_BYTE, ITERATIONS))
             {
                 byte[] salt = generator.Salt;
-                authKey = generator.GetBytes(KEY_BIT_SIZE / 8);
+                authKey = generator.GetBytes(KEY_BIT_SIZE / BITS_IN_BYTE);
                 Array.Copy(salt, 0, payload, payloadIndex, salt.Length);
             }
 
@@ -78,8 +79,8 @@ namespace StashBot.Module.Secure.AesHmacCrypto
 
         private byte[] DecryptWithPassword(byte[] encryptedMessage, string password, int nonSecretPayloadLength = 0)
         {
-            byte[] cryptSalt = new byte[SALT_BIT_SIZE / 8];
-            byte[] authSalt = new byte[SALT_BIT_SIZE / 8];
+            byte[] cryptSalt = new byte[SALT_BIT_SIZE / BITS_IN_BYTE];
+            byte[] authSalt = new byte[SALT_BIT_SIZE / BITS_IN_BYTE];
 
             Array.Copy(encryptedMessage, nonSecretPayloadLength, cryptSalt, 0, cryptSalt.Length);
             Array.Copy(encryptedMessage, nonSecretPayloadLength + cryptSalt.Length, authSalt, 0, authSalt.Length);
@@ -89,12 +90,12 @@ namespace StashBot.Module.Secure.AesHmacCrypto
 
             using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, cryptSalt, ITERATIONS))
             {
-                cryptKey = generator.GetBytes(KEY_BIT_SIZE / 8);
+                cryptKey = generator.GetBytes(KEY_BIT_SIZE / BITS_IN_BYTE);
             }
 
             using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, authSalt, ITERATIONS))
             {
-                authKey = generator.GetBytes(KEY_BIT_SIZE / 8);
+                authKey = generator.GetBytes(KEY_BIT_SIZE / BITS_IN_BYTE);
             }
 
             return Decrypt(encryptedMessage, cryptKey, authKey, cryptSalt.Length + authSalt.Length + nonSecretPayloadLength);
@@ -154,9 +155,9 @@ namespace StashBot.Module.Secure.AesHmacCrypto
         {
             using (HMACSHA256 hmac = new HMACSHA256(authKey))
             {
-                byte[] sentTag = new byte[hmac.HashSize / 8];
+                byte[] sentTag = new byte[hmac.HashSize / BITS_IN_BYTE];
                 byte[] calcTag = hmac.ComputeHash(encryptedMessage, 0, encryptedMessage.Length - sentTag.Length);
-                int ivLength = (BLOCK_BIT_SIZE / 8);
+                int ivLength = BLOCK_BIT_SIZE / BITS_IN_BYTE;
 
                 if (encryptedMessage.Length < sentTag.Length + nonSecretPayloadLength + ivLength)
                 {

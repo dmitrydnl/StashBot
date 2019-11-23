@@ -73,13 +73,15 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return false;
             }
 
-            if (password.Length < 12)
+            const int MIN_PASSWORD_LENGTH = 12;
+            if (password.Length < MIN_PASSWORD_LENGTH)
             {
                 messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.PasswordMinLength), null);
                 return false;
             }
 
-            if (password.Length > 25)
+            const int MAX_PASSWORD_LENGTH = 25;
+            if (password.Length > MAX_PASSWORD_LENGTH)
             {
                 messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.PasswordMaxLength), null);
                 return false;
