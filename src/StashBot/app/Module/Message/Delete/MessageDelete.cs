@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Telegram.Bot;
+using StashBot.Module.Session;
 
 namespace StashBot.Module.Message.Delete
 {
@@ -7,8 +8,10 @@ namespace StashBot.Module.Message.Delete
     {
         public void DeleteMessage(long chatId, int messageId)
         {
-            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
+            ISessionManager sessionManager = ModulesManager.GetSessionManager();
 
+            sessionManager.GetChatSession(chatId).MessageDeleted(messageId);
             telegramBotClient.DeleteMessageAsync(chatId, messageId);
         }
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace StashBot.Module.Secure.Hash
 {
-    internal class SecureHash : ISecureHash
+    public class SecureHash : ISecureHash
     {
         public string CalculateHash(string text)
         {
@@ -30,17 +30,10 @@ namespace StashBot.Module.Secure.Hash
                 throw new ArgumentException("Hash shouldn't be empty");
             }
 
-            try
-            {
-                string[] parts = hash.Split(':');
-                byte[] salt = Convert.FromBase64String(parts[0]);
-                byte[] bytes = KeyDerivation.Pbkdf2(text, salt, KeyDerivationPrf.HMACSHA512, 10000, 16);
-                return parts[1].Equals(Convert.ToBase64String(bytes));
-            }
-            catch
-            {
-                return false;
-            }
+            string[] parts = hash.Split(':');
+            byte[] salt = Convert.FromBase64String(parts[0]);
+            byte[] bytes = KeyDerivation.Pbkdf2(text, salt, KeyDerivationPrf.HMACSHA512, 10000, 16);
+            return parts[1].Equals(Convert.ToBase64String(bytes));
         }
 
         private byte[] GenerateSalt(int length)
@@ -50,6 +43,7 @@ namespace StashBot.Module.Secure.Hash
             {
                 random.GetBytes(salt);
             }
+
             return salt;
         }
     }

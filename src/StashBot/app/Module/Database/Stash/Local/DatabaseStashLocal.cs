@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using StashBot.Module.Database.Stash.Errors;
+using StashBot.BotSettings;
 
 namespace StashBot.Module.Database.Stash.Local
 {
-    internal class DatabaseStashLocal : IDatabaseStash
+    public class DatabaseStashLocal : IDatabaseStash
     {
         private readonly Dictionary<long, List<IStashMessage>> usersStashes;
         private readonly IStashMessageFactory stashMessageFactory;
 
-        internal DatabaseStashLocal()
+        public DatabaseStashLocal()
         {
             usersStashes = new Dictionary<long, List<IStashMessage>>();
             stashMessageFactory = new StashMessageLocalFactory();
@@ -19,7 +22,7 @@ namespace StashBot.Module.Database.Stash.Local
             return stashMessageFactory.Create(telegramMessage);
         }
 
-        public void SaveMessageToStash(IStashMessage stashMessage)
+        public IDatabaseError SaveMessageToStash(IStashMessage stashMessage)
         {
             if (!stashMessage.IsEncrypt)
             {
@@ -31,15 +34,29 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An undownloaded message cannot be stored in a stash");
             }
 
+            if (!CheckStashLimit(stashMessage.ChatId))
+            {
+                return new StashFullError();
+            }
+
             if (!IsStashExist(stashMessage.ChatId))
             {
                 usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
             }
 
+            long databaseMessageId = 0;
+            if (usersStashes[stashMessage.ChatId].Count > 0)
+            {
+                databaseMessageId = usersStashes[stashMessage.ChatId].Last().DatabaseMessageId.Value + 1;
+            }
+            ((IStashMessageLocalDatabaseId)stashMessage).UpdateDatabaseMessageId(databaseMessageId);
+
             usersStashes[stashMessage.ChatId].Add(stashMessage);
+
+            return new NullError();
         }
 
-        public List<IStashMessage> GetMessagesFromStash(long chatId)
+        public ICollection<IStashMessage> GetMessagesFromStash(long chatId)
         {
             if (!IsStashExist(chatId))
             {
@@ -47,6 +64,23 @@ namespace StashBot.Module.Database.Stash.Local
             }
 
             return usersStashes[chatId];
+        }
+
+        public void DeleteStashMessage(long chatId, long databaseMessageId)
+        {
+            if (!IsStashExist(chatId))
+            {
+                return;
+            }
+
+            IStashMessage stashMessage = usersStashes[chatId]
+                .Where(message => message.DatabaseMessageId == databaseMessageId)
+                .FirstOrDefault();
+
+            if (stashMessage != null)
+            {
+                usersStashes[chatId].Remove(stashMessage);
+            }
         }
 
         public void ClearStash(long chatId)
@@ -60,6 +94,13 @@ namespace StashBot.Module.Database.Stash.Local
         public bool IsStashExist(long chatId)
         {
             return usersStashes.ContainsKey(chatId);
+        }
+
+        private bool CheckStashLimit(long chatId)
+        {
+            int count = usersStashes[chatId].Count;
+
+            return count < StashSettings.StashMessageLimit;
         }
     }
 }

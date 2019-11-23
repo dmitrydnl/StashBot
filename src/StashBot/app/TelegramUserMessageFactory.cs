@@ -2,7 +2,7 @@
 
 namespace StashBot
 {
-    internal class TelegramUserMessageFactory : ITelegramUserMessageFactory
+    public class TelegramUserMessageFactory : ITelegramUserMessageFactory
     {
         public ITelegramUserMessage Create(Message telegramMessage)
         {

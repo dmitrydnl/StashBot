@@ -1,6 +1,7 @@
 ﻿{
     "chatSessionsClearInterval": 10,
     "chatSessionLiveTime": 60,
+    "stashMessageLimit": 100,
     "accountDatabaseType": "sqlite",
     "stashDatabaseType": "sqlite"
 }

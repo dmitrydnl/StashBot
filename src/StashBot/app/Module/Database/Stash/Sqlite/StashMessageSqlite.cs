@@ -9,6 +9,12 @@ namespace StashBot.Module.Database.Stash.Sqlite
 {
     internal class StashMessageSqlite : IStashMessage, IStashMessageDatabaseModelConverter
     {
+        public long? DatabaseMessageId
+        {
+            get;
+            private set;
+        }
+
         public long ChatId
         {
             get;
@@ -31,7 +37,16 @@ namespace StashBot.Module.Database.Stash.Sqlite
         private string content;
         private string photoId;
 
+        private readonly IKeyboardForStashMessage keyboardForStashMessage;
+
         internal StashMessageSqlite(ITelegramUserMessage telegramMessage)
+        {
+            DatabaseMessageId = null;
+            FromITelegramUserMessage(telegramMessage);
+            keyboardForStashMessage = new KeyboardForStashMessage(this);
+        }
+
+        private void FromITelegramUserMessage(ITelegramUserMessage telegramMessage)
         {
             if (telegramMessage == null)
             {
@@ -61,11 +76,11 @@ namespace StashBot.Module.Database.Stash.Sqlite
             }
         }
 
-        public async Task Download()
+        public Task DownloadAsync()
         {
             if (IsDownloaded)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (IsEncrypt)
@@ -73,7 +88,12 @@ namespace StashBot.Module.Database.Stash.Sqlite
                 throw new ArgumentException("An encrypted message cannot download");
             }
 
-            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            return DownloadInternalAsync();
+        }
+
+        public async Task DownloadInternalAsync()
+        {
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
 
             using (MemoryStream stream = new MemoryStream())
             {
@@ -103,7 +123,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
                 throw new ArgumentException("User is unauthorized, message cannot encrypt");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             if (type != StashMessageType.Empty)
@@ -131,7 +151,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
                 throw new ArgumentException("User is unauthorized, message cannot decrypt");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             if (type != StashMessageType.Empty)
@@ -154,18 +174,20 @@ namespace StashBot.Module.Database.Stash.Sqlite
                 throw new ArgumentException("An undownloaded message cannot send");
             }
 
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             switch (type)
             {
                 case StashMessageType.Text:
-                    _ = messageManager.SendTextMessage(ChatId, content);
+                    _ = messageManager.SendTextMessageAsync(ChatId, content, keyboardForStashMessage.ForTextMessage());
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);
-                    _ = messageManager.SendPhotoMessage(ChatId, imageBytes);
+                    _ = messageManager.SendPhotoMessageAsync(ChatId, imageBytes, keyboardForStashMessage.ForPhotoMessage());
                     break;
                 case StashMessageType.Empty:
+                    break;
+                default:
                     break;
             }
         }
@@ -184,6 +206,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
 
         public void FromStashMessageModel(StashMessageModel messageModel)
         {
+            DatabaseMessageId = messageModel.Id;
             ChatId = messageModel.ChatId;
             type = messageModel.Type;
             content = messageModel.Content;

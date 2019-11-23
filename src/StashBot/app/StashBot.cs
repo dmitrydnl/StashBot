@@ -2,6 +2,7 @@
 using StashBot.Module;
 using StashBot.Module.Message;
 using StashBot.BotResponses;
+using StashBot.CallbackQueryHandler;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
@@ -9,7 +10,7 @@ namespace StashBot
 {
     internal class StashBot
     {
-        private ITelegramUserMessageFactory telegramUserMessageFactory;
+        private readonly ITelegramUserMessageFactory telegramUserMessageFactory;
 
         internal StashBot()
         {
@@ -20,7 +21,7 @@ namespace StashBot
 
         private void WriteBotStatus()
         {
-            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
 
             Telegram.Bot.Types.User me = telegramBotClient.GetMeAsync().Result;
             Console.WriteLine(DateTime.Now + " - Bot set up!");
@@ -31,17 +32,48 @@ namespace StashBot
 
         internal void Start()
         {
-            ITelegramBotClient telegramBotClient =  ModulesManager.GetModulesManager().GetTelegramBotClient();
+            ITelegramBotClient telegramBotClient =  ModulesManager.GetTelegramBotClient();
 
             telegramBotClient.OnMessage += OnMessage;
+            telegramBotClient.OnCallbackQuery += OnCallbackQuery;
             telegramBotClient.StartReceiving();
         }
 
         private void OnMessage(object sender, MessageEventArgs e)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
-            messageManager.HandleUserMessage(telegramUserMessageFactory.Create(e.Message));
+            ITelegramUserMessage userMessage = telegramUserMessageFactory.Create(e.Message);
+            messageManager.HandleUserMessage(userMessage);
+        }
+
+        private void OnCallbackQuery(object sender, CallbackQueryEventArgs e)
+        {
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
+
+            if (string.IsNullOrEmpty(e.CallbackQuery.Data))
+            {
+                return;
+            }
+
+            string[] queryArray = e.CallbackQuery.Data.Split(":");
+            if (queryArray.Length == 0)
+            {
+                return;
+            }
+
+            ICallbackQueryHandler callbackQueryHandler;
+            switch (queryArray[0])
+            {
+                case "delete_message":
+                    callbackQueryHandler = new DeleteMessageHandler();
+                    break;
+                default:
+                    return;
+            }
+
+            callbackQueryHandler.Handle(queryArray, e.CallbackQuery.Message.MessageId);
+            telegramBotClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id);
         }
     }
 }

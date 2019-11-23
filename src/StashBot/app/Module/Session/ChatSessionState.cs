@@ -1,6 +1,6 @@
 ﻿namespace StashBot.Module.Session
 {
-    internal enum ChatSessionState
+    public enum ChatSessionState
     {
         FirstMessage,
         Start,

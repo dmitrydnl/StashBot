@@ -4,12 +4,12 @@ using StashBot.Module.Secure;
 
 namespace StashBot.Module.Database.Account.Sqlite
 {
-    internal class DatabaseAccountSqlite : IDatabaseAccount
+    public class DatabaseAccountSqlite : IDatabaseAccount
     {
         private readonly Dictionary<long, IUser> authorizedUsers;
         private readonly IUserFactory userFactory;
 
-        internal DatabaseAccountSqlite()
+        public DatabaseAccountSqlite()
         {
             authorizedUsers = new Dictionary<long, IUser>();
             userFactory = new UserSqliteFactory();
@@ -17,7 +17,7 @@ namespace StashBot.Module.Database.Account.Sqlite
 
         public void CreateUser(long chatId, string password)
         {
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             if (IsUserExist(chatId))
             {

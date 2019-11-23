@@ -2,8 +2,13 @@
 
 namespace StashBot.Module.Database.Stash
 {
-    internal interface IStashMessage
+    public interface IStashMessage
     {
+        long? DatabaseMessageId
+        {
+            get;
+        }
+
         long ChatId
         {
             get;
@@ -19,7 +24,7 @@ namespace StashBot.Module.Database.Stash
             get;
         }
 
-        Task Download();
+        Task DownloadAsync();
         void Encrypt(IUser user);
         void Decrypt(IUser user);
         void Send();

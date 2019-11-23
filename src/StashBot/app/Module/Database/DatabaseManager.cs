@@ -16,31 +16,19 @@ namespace StashBot.Module.Database
 
         internal DatabaseManager()
         {
-            switch (DatabaseSettings.AccountDatabaseType)
+            databaseAccount = DatabaseSettings.AccountDatabaseType switch
             {
-                case DatabaseType.Local:
-                    databaseAccount = new DatabaseAccountLocal();
-                    break;
-                case DatabaseType.Sqlite:
-                    databaseAccount = new DatabaseAccountSqlite();
-                    break;
-                default:
-                    databaseAccount = new DatabaseAccountLocal();
-                    break;
-            }
+                DatabaseType.Local => new DatabaseAccountLocal(),
+                DatabaseType.Sqlite => new DatabaseAccountSqlite(),
+                _ => new DatabaseAccountLocal(),
+            };
 
-            switch (DatabaseSettings.StashDatabaseType)
+            databaseStash = DatabaseSettings.StashDatabaseType switch
             {
-                case DatabaseType.Local:
-                    databaseStash = new DatabaseStashLocal();
-                    break;
-                case DatabaseType.Sqlite:
-                    databaseStash = new DatabaseStashSqlite();
-                    break;
-                default:
-                    databaseStash = new DatabaseStashLocal();
-                    break;
-            }
+                DatabaseType.Local => new DatabaseStashLocal(),
+                DatabaseType.Sqlite => new DatabaseStashSqlite(),
+                _ => new DatabaseStashLocal(),
+            };
         }
 
         public void CreateUser(long chatId, string password)
@@ -73,14 +61,19 @@ namespace StashBot.Module.Database
             return databaseStash.CreateStashMessage(telegramMessage);
         }
 
-        public void SaveMessageToStash(IStashMessage stashMessage)
+        public IDatabaseError SaveMessageToStash(IStashMessage stashMessage)
         {
-            databaseStash.SaveMessageToStash(stashMessage);
+            return databaseStash.SaveMessageToStash(stashMessage);
         }
 
-        public List<IStashMessage> GetMessagesFromStash(long chatId)
+        public ICollection<IStashMessage> GetMessagesFromStash(long chatId)
         {
             return databaseStash.GetMessagesFromStash(chatId);
+        }
+
+        public void DeleteStashMessage(long chatId, long databaseMessageId)
+        {
+            databaseStash.DeleteStashMessage(chatId, databaseMessageId);
         }
 
         public void ClearStash(long chatId)
