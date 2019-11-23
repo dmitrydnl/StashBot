@@ -16,7 +16,6 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             {
                 return;
             }
-
             context.ChangeChatState(message.ChatId, ChatSessionState.Start);
         }
     }

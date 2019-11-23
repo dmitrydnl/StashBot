@@ -9,7 +9,7 @@ namespace StashBot.Module.Database.Stash.Errors
         {
             IMessageManager messageManager = ModulesManager.GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.FullStashError), null);
+            messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.FullStashError), null);
         }
     }
 }

@@ -72,7 +72,7 @@ namespace StashBot.Module.Database.Stash.Local
             }
         }
 
-        public async Task Download()
+        public async Task DownloadAsync()
         {
             if (IsDownloaded)
             {
@@ -175,13 +175,15 @@ namespace StashBot.Module.Database.Stash.Local
             switch (type)
             {
                 case StashMessageType.Text:
-                    _ = messageManager.SendTextMessage(ChatId, content, keyboardForStashMessage.ForTextMessage());
+                    _ = messageManager.SendTextMessageAsync(ChatId, content, keyboardForStashMessage.ForTextMessage());
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);
-                    _ = messageManager.SendPhotoMessage(ChatId, imageBytes, keyboardForStashMessage.ForPhotoMessage());
+                    _ = messageManager.SendPhotoMessageAsync(ChatId, imageBytes, keyboardForStashMessage.ForPhotoMessage());
                     break;
                 case StashMessageType.Empty:
+                    break;
+                default:
                     break;
             }
         }
