@@ -2,6 +2,7 @@
 using StashBot.Module;
 using StashBot.Module.Message;
 using StashBot.BotResponses;
+using StashBot.CallbackQueryHandler;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
@@ -48,8 +49,28 @@ namespace StashBot
 
         private void OnCallbackQuery(object sender, CallbackQueryEventArgs e)
         {
-            Console.WriteLine(e.CallbackQuery.Data);
-            Console.WriteLine(e.CallbackQuery.From.Id);
+            if (string.IsNullOrEmpty(e.CallbackQuery.Data))
+            {
+                return;
+            }
+
+            string[] queryArray = e.CallbackQuery.Data.Split(":");
+            if (queryArray.Length == 0)
+            {
+                return;
+            }
+
+            ICallbackQueryHandler callbackQueryHandler;
+            switch (queryArray[0])
+            {
+                case "delete_message":
+                    callbackQueryHandler = new DeleteMessageHandler();
+                    break;
+                default:
+                    return;
+            }
+
+            callbackQueryHandler.Handle(queryArray, e.CallbackQuery.Message.MessageId);
         }
     }
 }
