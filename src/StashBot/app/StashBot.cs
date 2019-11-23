@@ -10,7 +10,7 @@ namespace StashBot
 {
     internal class StashBot
     {
-        private ITelegramUserMessageFactory telegramUserMessageFactory;
+        private readonly ITelegramUserMessageFactory telegramUserMessageFactory;
 
         internal StashBot()
         {

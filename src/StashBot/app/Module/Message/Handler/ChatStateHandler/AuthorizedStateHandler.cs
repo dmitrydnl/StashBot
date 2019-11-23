@@ -74,7 +74,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             IUser user = databaseManager.GetUser(chatId);
             if (user != null && user.IsAuthorized)
             {
-                List<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
+                ICollection<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
                 if (messagesFromStash.Count == 0)
                 {
                     messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.EmptyStash), null);

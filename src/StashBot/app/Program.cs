@@ -3,7 +3,7 @@ using StashBot.AppSetting;
 
 namespace StashBot
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {

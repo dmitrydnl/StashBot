@@ -7,7 +7,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
     {
         public void StartStateMessage(long chatId)
         {
-
+            // Do nothing
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)

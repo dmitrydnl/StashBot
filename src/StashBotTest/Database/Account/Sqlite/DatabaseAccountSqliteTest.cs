@@ -6,6 +6,8 @@ namespace StashBotTest.Database.Account.Sqlite
 {
     public class DatabaseAccountSqliteTest
     {
+        const string password = "super_secure_password";
+
         private DatabaseAccountSqlite databaseAccount;
 
         [SetUp]
@@ -18,7 +20,6 @@ namespace StashBotTest.Database.Account.Sqlite
         public void CreateUserTest()
         {
             const int chatId = 1;
-            const string password = "super_secure_password";
             databaseAccount.CreateUser(chatId, password);
             bool exist = databaseAccount.IsUserExist(chatId);
             Assert.AreEqual(exist, true);
@@ -28,7 +29,6 @@ namespace StashBotTest.Database.Account.Sqlite
         public void GetUserTest()
         {
             const int chatId = 12;
-            const string password = "super_secure_password";
             databaseAccount.CreateUser(chatId, password);
             IUser user = databaseAccount.GetUser(chatId);
             Assert.AreNotEqual(user, null);
@@ -38,7 +38,6 @@ namespace StashBotTest.Database.Account.Sqlite
         public void LoginUserTest()
         {
             const int chatId = 123;
-            const string password = "super_secure_password";
             databaseAccount.CreateUser(chatId, password);
             IUser user1 = databaseAccount.GetUser(chatId);
             bool login1 = user1.IsAuthorized;
@@ -53,7 +52,6 @@ namespace StashBotTest.Database.Account.Sqlite
         public void LogoutUserTest()
         {
             const int chatId = 1234;
-            const string password = "super_secure_password";
             databaseAccount.CreateUser(chatId, password);
             IUser user1 = databaseAccount.GetUser(chatId);
             bool login1 = user1.IsAuthorized;

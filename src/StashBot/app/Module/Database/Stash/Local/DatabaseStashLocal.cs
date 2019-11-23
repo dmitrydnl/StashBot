@@ -47,7 +47,7 @@ namespace StashBot.Module.Database.Stash.Local
             usersStashes[stashMessage.ChatId].Add(stashMessage);
         }
 
-        public List<IStashMessage> GetMessagesFromStash(long chatId)
+        public ICollection<IStashMessage> GetMessagesFromStash(long chatId)
         {
             if (!IsStashExist(chatId))
             {
