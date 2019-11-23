@@ -17,6 +17,7 @@
         FailAuthorisation,
         Login,
         Logout,
-        EmptyStash
+        EmptyStash,
+        FullStashError
     }
 }

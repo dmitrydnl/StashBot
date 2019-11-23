@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using StashBot.Module.Database.Stash.Errors;
 
 namespace StashBot.Module.Database.Stash.Sqlite
 {
@@ -18,7 +19,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
             return stashMessageFactory.Create(telegramMessage);
         }
 
-        public void SaveMessageToStash(IStashMessage stashMessage)
+        public IDatabaseError SaveMessageToStash(IStashMessage stashMessage)
         {
             if (!stashMessage.IsEncrypt)
             {
@@ -36,6 +37,8 @@ namespace StashBot.Module.Database.Stash.Sqlite
                 db.StashMessages.Add(messageModel);
                 db.SaveChanges();
             }
+
+            return new NullError();
         }
 
         public List<IStashMessage> GetMessagesFromStash(long chatId)
