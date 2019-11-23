@@ -22,7 +22,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             chatCommands.Add("/Stash", true, GetStash);
             chatCommands.Add("/logout", true, Logout);
-            chatCommands.Add("/exit", true, Exit);
+            chatCommands.AddExitCommand(true);
         }
 
         public void StartStateMessage(long chatId)
@@ -98,13 +98,6 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             userManager.LogoutUser(chatId);
             messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.Logout), null);
             context.ChangeChatState(chatId, ChatSessionState.Start);
-        }
-
-        private void Exit(long chatId, IChatStateHandlerContext context)
-        {
-            ISessionManager sessionManager = ModulesManager.GetSessionManager();
-
-            sessionManager.KillChatSession(chatId);
         }
     }
 }
