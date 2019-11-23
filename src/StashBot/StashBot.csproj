@@ -42,6 +42,7 @@
     <Folder Include="app\Module\Database\Stash\Sqlite\" />
     <Folder Include="Migrations\Users\" />
     <Folder Include="Migrations\StashMessages\" />
+    <Folder Include="app\CallbackQueryHandler\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="BotSettings.json" />

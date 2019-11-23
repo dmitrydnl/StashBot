@@ -9,6 +9,12 @@ namespace StashBot.Module.Database.Stash.Sqlite
 {
     internal class StashMessageSqlite : IStashMessage, IStashMessageDatabaseModelConverter
     {
+        public long? DatabaseMessageId
+        {
+            get;
+            private set;
+        }
+
         public long ChatId
         {
             get;
@@ -31,7 +37,16 @@ namespace StashBot.Module.Database.Stash.Sqlite
         private string content;
         private string photoId;
 
+        private readonly IKeyboardForStashMessage keyboardForStashMessage;
+
         internal StashMessageSqlite(ITelegramUserMessage telegramMessage)
+        {
+            DatabaseMessageId = null;
+            FromITelegramUserMessage(telegramMessage);
+            keyboardForStashMessage = new KeyboardForStashMessage(this);
+        }
+
+        private void FromITelegramUserMessage(ITelegramUserMessage telegramMessage)
         {
             if (telegramMessage == null)
             {
@@ -159,11 +174,11 @@ namespace StashBot.Module.Database.Stash.Sqlite
             switch (type)
             {
                 case StashMessageType.Text:
-                    _ = messageManager.SendTextMessage(ChatId, content, null);
+                    _ = messageManager.SendTextMessage(ChatId, content, keyboardForStashMessage.ForTextMessage());
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);
-                    _ = messageManager.SendPhotoMessage(ChatId, imageBytes);
+                    _ = messageManager.SendPhotoMessage(ChatId, imageBytes, keyboardForStashMessage.ForPhotoMessage());
                     break;
                 case StashMessageType.Empty:
                     break;
@@ -184,6 +199,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
 
         public void FromStashMessageModel(StashMessageModel messageModel)
         {
+            DatabaseMessageId = messageModel.Id;
             ChatId = messageModel.ChatId;
             type = messageModel.Type;
             content = messageModel.Content;

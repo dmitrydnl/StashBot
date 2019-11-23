@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace StashBot.Module.Database.Stash.Local
@@ -36,6 +37,13 @@ namespace StashBot.Module.Database.Stash.Local
                 usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
             }
 
+            long databaseMessageId = 0;
+            if (usersStashes[stashMessage.ChatId].Count > 0)
+            {
+                databaseMessageId = usersStashes[stashMessage.ChatId].Last().DatabaseMessageId.Value + 1;
+            }
+            ((IStashMessageLocalDatabaseId)stashMessage).UpdateDatabaseMessageId(databaseMessageId);
+
             usersStashes[stashMessage.ChatId].Add(stashMessage);
         }
 
@@ -47,6 +55,23 @@ namespace StashBot.Module.Database.Stash.Local
             }
 
             return usersStashes[chatId];
+        }
+
+        public void DeleteStashMessage(long chatId, long databaseMessageId)
+        {
+            if (!IsStashExist(chatId))
+            {
+                return;
+            }
+
+            IStashMessage stashMessage = usersStashes[chatId]
+                .Where(message => message.DatabaseMessageId == databaseMessageId)
+                .FirstOrDefault();
+
+            if (stashMessage != null)
+            {
+                usersStashes[chatId].Remove(stashMessage);
+            }
         }
 
         public void ClearStash(long chatId)

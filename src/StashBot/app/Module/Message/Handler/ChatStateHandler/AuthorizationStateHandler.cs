@@ -16,8 +16,8 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void InitializeCommands()
         {
-            chatCommands.Add("/back", Cancel);
-            chatCommands.Add("/exit", Exit);
+            chatCommands.Add("/back", true, Cancel);
+            chatCommands.Add("/exit", true, Exit);
         }
 
         public void StartStateMessage(long chatId)
@@ -34,7 +34,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            if (chatCommands.ContainsCommand(message.Message))
+            if (!string.IsNullOrEmpty(message.Message) && chatCommands.ContainsCommand(message.Message))
             {
                 chatCommands.Get(message.Message)(message.ChatId, context);
             }

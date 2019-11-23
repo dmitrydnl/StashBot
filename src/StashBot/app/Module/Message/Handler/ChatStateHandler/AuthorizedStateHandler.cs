@@ -20,9 +20,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 
         private void InitializeCommands()
         {
-            chatCommands.Add("/Stash", GetStash);
-            chatCommands.Add("/logout", Logout);
-            chatCommands.Add("/exit", Exit);
+            chatCommands.Add("/Stash", true, GetStash);
+            chatCommands.Add("/logout", true, Logout);
+            chatCommands.Add("/exit", true, Exit);
         }
 
         public void StartStateMessage(long chatId)
@@ -39,7 +39,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            if (chatCommands.ContainsCommand(message.Message))
+            if (!string.IsNullOrEmpty(message.Message) && chatCommands.ContainsCommand(message.Message))
             {
                 chatCommands.Get(message.Message)(message.ChatId, context);
             }
@@ -69,15 +69,23 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         private void GetStash(long chatId, IChatStateHandlerContext context)
         {
             IDatabaseManager databaseManager = ModulesManager.GetDatabaseManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             IUser user = databaseManager.GetUser(chatId);
             if (user != null && user.IsAuthorized)
             {
                 List<IStashMessage> messagesFromStash = databaseManager.GetMessagesFromStash(chatId);
-                foreach(IStashMessage stashMessage in messagesFromStash)
+                if (messagesFromStash.Count == 0)
                 {
-                    stashMessage.Decrypt(user);
-                    stashMessage.Send();
+                    messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.EmptyStash), null);
+                }
+                else
+                {
+                    foreach (IStashMessage stashMessage in messagesFromStash)
+                    {
+                        stashMessage.Decrypt(user);
+                        stashMessage.Send();
+                    }
                 }
             }
         }

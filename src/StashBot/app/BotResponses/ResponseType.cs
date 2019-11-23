@@ -16,6 +16,7 @@
         SuccessAuthorisation,
         FailAuthorisation,
         Login,
-        Logout
+        Logout,
+        EmptyStash
     }
 }

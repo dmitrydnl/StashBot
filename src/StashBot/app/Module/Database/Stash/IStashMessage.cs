@@ -4,6 +4,11 @@ namespace StashBot.Module.Database.Stash
 {
     public interface IStashMessage
     {
+        long? DatabaseMessageId
+        {
+            get;
+        }
+
         long ChatId
         {
             get;

@@ -6,18 +6,25 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class ChatCommands : IChatCommands
     {
-        private readonly Dictionary<string, Command> commands;
+        private readonly Dictionary<string, Command> allCommands;
+        private readonly Dictionary<string, Command> keyboardCommands;
 
         internal ChatCommands()
         {
-            commands = new Dictionary<string, Command>();
+            allCommands = new Dictionary<string, Command>();
+            keyboardCommands = new Dictionary<string, Command>();
         }
 
-        public void Add(string name, Command command)
+        public void Add(string name, bool showOnKeyboard, Command command)
         {
             if (!string.IsNullOrEmpty(name) && command != null && !ContainsCommand(name))
             {
-                commands.Add(name, command);
+                allCommands.Add(name, command);
+
+                if (showOnKeyboard)
+                {
+                    keyboardCommands.Add(name, command);
+                }
             }
         }
 
@@ -25,26 +32,26 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
         {
             if (!string.IsNullOrEmpty(name) && ContainsCommand(name))
             {
-                return commands[name];
+                return allCommands[name];
             }
             return null;
         }
 
         public bool ContainsCommand(string name)
         {
-            return commands.ContainsKey(name);
+            return allCommands.ContainsKey(name);
         }
 
         public ReplyKeyboardMarkup CreateReplyKeyboard()
         {
-            if (commands == null || commands.Count == 0)
+            if (keyboardCommands == null || keyboardCommands.Count == 0)
             {
                 return null;
             }
 
             int i = 0;
-            KeyboardButton[] buttons = new KeyboardButton[commands.Count];
-            foreach (var command in commands)
+            KeyboardButton[] buttons = new KeyboardButton[keyboardCommands.Count];
+            foreach (var command in keyboardCommands)
             {
                 buttons[i] = new KeyboardButton(command.Key);
                 i++;

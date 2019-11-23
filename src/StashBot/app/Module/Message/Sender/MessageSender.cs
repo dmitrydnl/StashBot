@@ -9,7 +9,7 @@ namespace StashBot.Module.Message.Sender
 {
     internal class MessageSender : IMessageSender
     {
-        public async Task SendTextMessage(long chatId, string messageText, ReplyKeyboardMarkup replyKeyboard)
+        public async Task SendTextMessage(long chatId, string messageText, IReplyMarkup replyMarkup)
         {
             if (string.IsNullOrEmpty(messageText))
             {
@@ -22,12 +22,12 @@ namespace StashBot.Module.Message.Sender
             Telegram.Bot.Types.Message message = await telegramBotClient.SendTextMessageAsync(
                 chatId: chatId,
                 text: messageText,
-                replyMarkup: replyKeyboard
+                replyMarkup: replyMarkup
                 );
             sessionManager.BotSentMessage(chatId, message.MessageId);
         }
 
-        public async Task SendPhotoMessage(long chatId, byte[] imageBytes)
+        public async Task SendPhotoMessage(long chatId, byte[] imageBytes, IReplyMarkup replyMarkup)
         {
             if (imageBytes == null || imageBytes.Length == 0)
             {
@@ -41,7 +41,8 @@ namespace StashBot.Module.Message.Sender
             {
                 Telegram.Bot.Types.Message message = await telegramBotClient.SendPhotoAsync(
                     chatId,
-                    new InputOnlineFile(stream)
+                    new InputOnlineFile(stream),
+                    replyMarkup: replyMarkup
                 );
                 sessionManager.BotSentMessage(chatId, message.MessageId);
             }
