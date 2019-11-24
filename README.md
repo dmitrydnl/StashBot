@@ -17,25 +17,31 @@
 
 `StashBot` is your reliable **hiding place**. 
 
-It's **security** `telegram bot` which allows you to store files in encrypted form:
+It's `telegram bot` which allows you to store files:
+
+Even if someone has access to your telegram account, he will not have access to the files that are stored in the bot
 
 <p align="center">
-  <img width="350" align="center" src="https://user-images.githubusercontent.com/45558274/68976324-9a504800-0806-11ea-89e5-509db77abab1.gif" alt="demo"/>
+  <img width="350" align="center" src="https://user-images.githubusercontent.com/45558274/69492554-5cfa5300-0eb5-11ea-841a-4534b8a6b953.gif" alt="demo"/>
 </p>
 
-Your `telegram account` = `account in this bot`. All you need to start using it is to `Sign Up`. Thus you will set a `password` which can help us to identify that it is exactly **you** who want to access the store. **If you re-register, your data will be deleted.** Actually, we're encrypting your things with this password, that's why it's a only way to **decrypt** your data.
+**Bot** will identify **you** with your `telegram account` and `secret word` which will have been created during regestration. 
 
-After `Log In`, you can send to `StashBot` all your **secret stuff**. He will **encrypt** them with a modern and powerful crypto-algorithm and leave them on his server. And immediately will clear chat history.
+**If you re-register, your data will be deleted.** Actually, on our server we're encrypting your data with this `secret word`, that's why it's a only way to get access to your data.
 
-Next time when you need any of this, just `Log In` and Get It.
+After `Log In`, you can send to `StashBot` all your **secret stuff**. He will **encrypt** them with a modern and powerful crypto-algorithm and leave them on his server.
+
+Also Bot will clean chat after a few minutes of inactivity. But actually you will still have access to all your data.
+
+Next time when you need any of this, just `Log In` and `/Stash`.
 
 
 ## 🚀 Usage
 
-1. Follow this [link](https://t.me/stash_1_bot) to connect StashBot
-2. `/reg` or `/auth`
-3. To get your **secret stuff** just type `/stash`
-4. `/exit` or `/e` is used to forse clear your chat history
+1. 🔗 [Connect StashBot](https://t.me/stash1bot)
+2. 👀 `/SignIn` or `/SignUp`
+3. 🛸 Get messages: `/Stash`
+4. 🛑 Delete and Stop: `/exit`
 
 
 ## 🐣 Deploy your own StashBot
@@ -52,7 +58,7 @@ Feel free to check [issues page](https://github.com/.../issues) if you want to c
 [Check the contributing guide](./CONTRIBUTING.md).
 
 
-## Authors
+## 👥 Authors
 
 👤 **Dmitry Danilin**
 
