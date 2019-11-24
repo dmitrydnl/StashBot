@@ -7,8 +7,14 @@ using Telegram.Bot;
 
 namespace StashBot.Module.Database.Stash.Local
 {
-    internal class StashMessageLocal : IStashMessage
+    public class StashMessageLocal : IStashMessage, IStashMessageLocalDatabaseId
     {
+        public long? DatabaseMessageId
+        {
+            get;
+            private set;
+        }
+
         public long ChatId
         {
             get;
@@ -27,11 +33,21 @@ namespace StashBot.Module.Database.Stash.Local
             private set;
         }
 
-        private readonly StashMessageType type;
+        private StashMessageType type;
         private string content;
         private string photoId;
 
-        internal StashMessageLocal(ITelegramUserMessage telegramMessage)
+        private readonly IKeyboardForStashMessage keyboardForStashMessage;
+
+        public StashMessageLocal(ITelegramUserMessage telegramMessage)
+        {
+            DatabaseMessageId = null;
+            FromITelegramUserMessage(telegramMessage);
+            keyboardForStashMessage = new KeyboardForStashMessage(this);
+        }
+
+
+        private void FromITelegramUserMessage(ITelegramUserMessage telegramMessage)
         {
             ChatId = telegramMessage.ChatId;
             IsEncrypt = false;
@@ -56,11 +72,11 @@ namespace StashBot.Module.Database.Stash.Local
             }
         }
 
-        public async Task Download()
+        public Task DownloadAsync()
         {
             if (IsDownloaded)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (IsEncrypt)
@@ -68,7 +84,12 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An encrypted message cannot download");
             }
 
-            ITelegramBotClient telegramBotClient = ModulesManager.GetModulesManager().GetTelegramBotClient();
+            return DownloadInternalAsync();
+        }
+
+        private async Task DownloadInternalAsync()
+        {
+            ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
 
             using (MemoryStream stream = new MemoryStream())
             {
@@ -93,12 +114,17 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An undownloaded message cannot encrypt");
             }
 
+            if (user == null)
+            {
+                throw new ArgumentException("User cannot be null");
+            }
+
             if (!user.IsAuthorized)
             {
                 throw new ArgumentException("User is unauthorized, message cannot encrypt");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             if (type != StashMessageType.Empty)
@@ -126,7 +152,7 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("User is unauthorized, message cannot decrypt");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             string password = secureManager.DecryptWithAes(user.EncryptedPassword);
             if (type != StashMessageType.Empty)
@@ -149,20 +175,27 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An undownloaded message cannot send");
             }
 
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
             switch (type)
             {
                 case StashMessageType.Text:
-                    _ = messageManager.SendTextMessage(ChatId, content);
+                    _ = messageManager.SendTextMessageAsync(ChatId, content, keyboardForStashMessage.ForTextMessage());
                     break;
                 case StashMessageType.Photo:
                     byte[] imageBytes = Convert.FromBase64String(content);
-                    _ = messageManager.SendPhotoMessage(ChatId, imageBytes);
+                    _ = messageManager.SendPhotoMessageAsync(ChatId, imageBytes, keyboardForStashMessage.ForPhotoMessage());
                     break;
                 case StashMessageType.Empty:
                     break;
+                default:
+                    break;
             }
+        }
+
+        public void UpdateDatabaseMessageId(long? databaseId)
+        {
+            DatabaseMessageId = databaseId;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using StashBot.Module.Message.Handler;
 using StashBot.Module.Message.Sender;
 using StashBot.Module.Message.Delete;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace StashBot.Module.Message
 {
@@ -24,14 +25,14 @@ namespace StashBot.Module.Message
             messageHandler.HandleUserMessage(message);
         }
 
-        public Task SendTextMessage(long chatId, string textMessage)
+        public Task SendTextMessageAsync(long chatId, string textMessage, IReplyMarkup replyMarkup)
         {
-            return messageSender.SendTextMessage(chatId, textMessage);
+            return messageSender.SendTextMessageAsync(chatId, textMessage, replyMarkup);
         }
 
-        public Task SendPhotoMessage(long chatId, byte[] imageBytes)
+        public Task SendPhotoMessageAsync(long chatId, byte[] imageBytes, IReplyMarkup replyMarkup)
         {
-            return messageSender.SendPhotoMessage(chatId, imageBytes);
+            return messageSender.SendPhotoMessageAsync(chatId, imageBytes, replyMarkup);
         }
 
         public void DeleteMessage(long chatId, int messageId)

@@ -3,7 +3,7 @@ using StashBot.AppSetting;
 
 namespace StashBot
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
@@ -23,10 +23,6 @@ namespace StashBot
             if (args.Length >= 1 && !string.IsNullOrEmpty(args[0]))
             {
                 BotToken.Set(args[0]);
-            }
-            else
-            {
-                return;
             }
         }
     }

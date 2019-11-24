@@ -46,19 +46,25 @@ namespace StashBot.Module.Session
             botMessagesId.Add(messageId);
         }
 
+        public void MessageDeleted(int messageId)
+        {
+            userMessagesId.Remove(messageId);
+            botMessagesId.Remove(messageId);
+        }
+
         public void Kill()
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
+            IUserManager userManager = ModulesManager.GetUserManager();
 
-            messageManager.DeleteListMessages(ChatId, botMessagesId);
-            botMessagesId.Clear();
-            messageManager.DeleteListMessages(ChatId, userMessagesId);
-            userMessagesId.Clear();
+            List<int> copyBotMessagesId = new List<int>(botMessagesId);
+            List<int> copyUserMessagesId = new List<int>(userMessagesId);
+            messageManager.DeleteListMessages(ChatId, copyBotMessagesId);
+            messageManager.DeleteListMessages(ChatId, copyUserMessagesId);
             userManager.LogoutUser(ChatId);
         }
 
-        public bool NeedKill()
+        public bool IsNeedKill()
         {
             DateTime endLiveTime = lastUserMessage.AddSeconds(ChatSessionSettings.ChatSessionLiveTime);
             return endLiveTime <= DateTime.UtcNow;

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -12,6 +13,10 @@ namespace StashBot.BotResponses
 
         internal static string Get(ResponseType responseType)
         {
+            if (responses == null)
+            {
+                SetUpResponses();
+            }
             return responses[responseType];
         }
 
@@ -23,24 +28,14 @@ namespace StashBot.BotResponses
             }
 
             responses = new Dictionary<ResponseType, string>();
-            string text = File.ReadAllText(BOT_RESPONSES_FILE_NAME);
-            dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(text);
+            string content = File.ReadAllText(BOT_RESPONSES_FILE_NAME);
+            Dictionary<string, string> jsonResponses = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
 
-            responses.Add(ResponseType.WelcomeMessage, (string)jsonObject.welcomeMessage);
-            responses.Add(ResponseType.MainCommands, (string)jsonObject.mainCommands);
-            responses.Add(ResponseType.Information, (string)jsonObject.information);
-            responses.Add(ResponseType.RegistrationWarning, (string)jsonObject.registrationWarning);
-            responses.Add(ResponseType.RegistrationReady, (string)jsonObject.registrationReady);
-            responses.Add(ResponseType.SuccessRegistration, (string)jsonObject.successRegistration);
-            responses.Add(ResponseType.PasswordEmpty, (string)jsonObject.passwordEmpty);
-            responses.Add(ResponseType.PasswordMinLength, (string)jsonObject.passwordMinLength);
-            responses.Add(ResponseType.PasswordMaxLength, (string)jsonObject.passwordMaxLength);
-            responses.Add(ResponseType.PasswordCharacters, (string)jsonObject.passwordCharacters);
-            responses.Add(ResponseType.AuthorisationReady, (string)jsonObject.authorisationReady);
-            responses.Add(ResponseType.SuccessAuthorisation, (string)jsonObject.successAuthorisation);
-            responses.Add(ResponseType.FailAuthorisation, (string)jsonObject.failAuthorisation);
-            responses.Add(ResponseType.Login, (string)jsonObject.login);
-            responses.Add(ResponseType.Logout, (string)jsonObject.logout);
+            foreach (var response in jsonResponses)
+            {
+                Enum.TryParse(response.Key, out ResponseType responseType);
+                responses.Add(responseType, response.Value);
+            }
         }
     }
 }

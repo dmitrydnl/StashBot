@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using StashBot.Module.Database.Stash.Errors;
+using StashBot.BotSettings;
 
 namespace StashBot.Module.Database.Stash.Sqlite
 {
@@ -18,7 +20,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
             return stashMessageFactory.Create(telegramMessage);
         }
 
-        public void SaveMessageToStash(IStashMessage stashMessage)
+        public IDatabaseError SaveMessageToStash(IStashMessage stashMessage)
         {
             if (!stashMessage.IsEncrypt)
             {
@@ -33,12 +35,19 @@ namespace StashBot.Module.Database.Stash.Sqlite
             StashMessageModel messageModel = ((IStashMessageDatabaseModelConverter)stashMessage).ToStashMessageModel();
             using (StashMessagesContext db = new StashMessagesContext())
             {
+                if (!CheckStashLimit(stashMessage.ChatId, db))
+                {
+                    return new StashFullError();
+                }
+
                 db.StashMessages.Add(messageModel);
                 db.SaveChanges();
             }
+
+            return new NullError();
         }
 
-        public List<IStashMessage> GetMessagesFromStash(long chatId)
+        public ICollection<IStashMessage> GetMessagesFromStash(long chatId)
         {
             List<IStashMessage> stashMessages = new List<IStashMessage>();
 
@@ -50,7 +59,7 @@ namespace StashBot.Module.Database.Stash.Sqlite
             using (StashMessagesContext db = new StashMessagesContext())
             {
                 IQueryable<StashMessageModel> stashMessageModel = db.StashMessages
-                        .Where(user => user.ChatId == chatId);
+                        .Where(message => message.ChatId == chatId);
 
                 foreach (StashMessageModel messageModel in stashMessageModel)
                 {
@@ -63,12 +72,28 @@ namespace StashBot.Module.Database.Stash.Sqlite
             return stashMessages;
         }
 
+        public void DeleteStashMessage(long chatId, long databaseMessageId)
+        {
+            using (StashMessagesContext db = new StashMessagesContext())
+            {
+                StashMessageModel messageModel = db.StashMessages
+                    .Where(message => (message.ChatId == chatId) && (message.Id == databaseMessageId))
+                    .FirstOrDefault();
+
+                if (messageModel != null)
+                {
+                    db.Remove(messageModel);
+                    db.SaveChanges();
+                }
+            }
+        }
+
         public void ClearStash(long chatId)
         {
             using (StashMessagesContext db = new StashMessagesContext())
             {
                 IQueryable<StashMessageModel> messageModels = db.StashMessages
-                    .Where(user => user.ChatId == chatId);
+                    .Where(message => message.ChatId == chatId);
 
                 foreach (StashMessageModel messageModel in messageModels)
                 {
@@ -84,11 +109,20 @@ namespace StashBot.Module.Database.Stash.Sqlite
             using (StashMessagesContext db = new StashMessagesContext())
             {
                 StashMessageModel messageModel = db.StashMessages
-                    .Where(user => user.ChatId == chatId)
+                    .Where(message => message.ChatId == chatId)
                     .FirstOrDefault();
 
                 return messageModel != null;
             }
+        }
+
+        private bool CheckStashLimit(long chatId, StashMessagesContext db)
+        {
+            int count = db.StashMessages
+                    .Where(message => message.ChatId == chatId)
+                    .Count();
+
+            return count < StashSettings.StashMessageLimit;
         }
     }
 }

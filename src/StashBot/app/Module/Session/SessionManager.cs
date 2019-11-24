@@ -4,11 +4,11 @@ using StashBot.BotSettings;
 
 namespace StashBot.Module.Session
 {
-    internal class SessionManager : ISessionManager
+    public class SessionManager : ISessionManager
     {
         private readonly Dictionary<long, IChatSession> currentChatSessions;
 
-        internal SessionManager()
+        public SessionManager()
         {
             currentChatSessions = new Dictionary<long, IChatSession>();
             StartClearChatSessionsTimer();
@@ -82,7 +82,7 @@ namespace StashBot.Module.Session
             foreach (var s in currentChatSessions)
             {
                 IChatSession chatSession = s.Value;
-                if (chatSession.NeedKill())
+                if (chatSession.IsNeedKill())
                 {
                     KillChatSession(chatSession.ChatId);
                 }

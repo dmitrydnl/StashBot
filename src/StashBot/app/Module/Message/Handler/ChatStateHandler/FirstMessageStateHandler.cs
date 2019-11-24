@@ -7,7 +7,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
     {
         public void StartStateMessage(long chatId)
         {
-
+            // Do nothing
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -16,10 +16,6 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             {
                 return;
             }
-
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
-
-            messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.WelcomeMessage));
             context.ChangeChatState(message.ChatId, ChatSessionState.Start);
         }
     }

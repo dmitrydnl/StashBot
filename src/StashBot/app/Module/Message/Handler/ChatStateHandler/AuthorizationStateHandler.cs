@@ -1,30 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using StashBot.BotResponses;
+using StashBot.Module.Session;
 using StashBot.Module.User;
-using StashBot.BotResponses;
 
 namespace StashBot.Module.Message.Handler.ChatStateHandler
 {
     internal class AuthorisationStateHandler : IChatStateHandler
     {
-        private delegate void Command(long chatId, IChatStateHandlerContext context);
-        private readonly Dictionary<string, Command> commands;
+        private readonly IChatCommands chatCommands;
 
         internal AuthorisationStateHandler()
         {
-            commands = new Dictionary<string, Command>();
+            chatCommands = new ChatCommands();
             InitializeCommands();
         }
 
         private void InitializeCommands()
         {
-            commands.Add("/back", Cancel);
+            chatCommands.Add("/back", true, Cancel);
+            chatCommands.AddExitCommand(true);
         }
 
         public void StartStateMessage(long chatId)
         {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
 
-            messageManager.SendTextMessage(chatId, TextResponse.Get(ResponseType.AuthorisationReady));
+            messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.AuthorisationReady), chatCommands.CreateReplyKeyboard());
         }
 
         public void HandleUserMessage(ITelegramUserMessage message, IChatStateHandlerContext context)
@@ -34,12 +34,9 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return;
             }
 
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
-
-            if (IsCommand(message.Message))
+            if (!string.IsNullOrEmpty(message.Message) && chatCommands.ContainsCommand(message.Message))
             {
-                commands[message.Message](message.ChatId, context);
+                chatCommands.Get(message.Message)(message.ChatId, context);
             }
             else
             {
@@ -50,32 +47,28 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             }
         }
 
-        private bool IsCommand(string message)
+        private void LoginUser(ITelegramUserMessage message, IChatStateHandlerContext context)
         {
-            return !string.IsNullOrEmpty(message) && commands.ContainsKey(message);
-        }
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
+            IUserManager userManager = ModulesManager.GetUserManager();
 
-        private void LoginUser(ITelegramUserMessage message,
-            IChatStateHandlerContext context)
-        {
-            IMessageManager messageManager = ModulesManager.GetModulesManager().GetMessageManager();
-            IUserManager userManager = ModulesManager.GetModulesManager().GetUserManager();
+            messageManager.DeleteMessage(message.ChatId, message.MessageId);
 
             bool success = userManager.LoginUser(message.ChatId, message.Message);
             if (success)
             {
-                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.SuccessAuthorisation));
-                context.ChangeChatState(message.ChatId, Session.ChatSessionState.Authorized);
+                messageManager.SendTextMessageAsync(message.ChatId, TextResponse.Get(ResponseType.Success), null);
+                context.ChangeChatState(message.ChatId, ChatSessionState.Authorized);
             }
             else
             {
-                messageManager.SendTextMessage(message.ChatId, TextResponse.Get(ResponseType.FailAuthorisation));
+                messageManager.SendTextMessageAsync(message.ChatId, TextResponse.Get(ResponseType.FailAuthorisation), null);
             }
         }
 
         private void Cancel(long chatId, IChatStateHandlerContext context)
         {
-            context.ChangeChatState(chatId, Session.ChatSessionState.Start);
+            context.ChangeChatState(chatId, ChatSessionState.Start);
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace StashBot.Module.Message.Sender
 {
     internal interface IMessageSender
     {
-        Task SendTextMessage(long chatId, string message);
-        Task SendPhotoMessage(long chatId, byte[] imageBytes);
+        Task SendTextMessageAsync(long chatId, string message, IReplyMarkup replyMarkup);
+        Task SendPhotoMessageAsync(long chatId, byte[] imageBytes, IReplyMarkup replyMarkup);
     }
 }

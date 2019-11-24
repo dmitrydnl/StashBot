@@ -32,7 +32,7 @@ namespace StashBot.Module.Database.Account.Local
                 throw new ArgumentException("Password cannot be null");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             ChatId = chatId;
             IsAuthorized = false;
@@ -47,7 +47,7 @@ namespace StashBot.Module.Database.Account.Local
                 throw new ArgumentException("Password cannot be null");
             }
 
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             EncryptedPassword = secureManager.EncryptWithAes(password);
             IsAuthorized = true;
@@ -61,7 +61,7 @@ namespace StashBot.Module.Database.Account.Local
 
         public bool ValidatePassword(string password)
         {
-            ISecureManager secureManager = ModulesManager.GetModulesManager().GetSecureManager();
+            ISecureManager secureManager = ModulesManager.GetSecureManager();
 
             return secureManager.CompareWithHash(password, hashPassword);
         }

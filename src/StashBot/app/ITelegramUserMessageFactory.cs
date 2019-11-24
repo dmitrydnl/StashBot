@@ -2,7 +2,7 @@
 
 namespace StashBot
 {
-    internal interface ITelegramUserMessageFactory
+    public interface ITelegramUserMessageFactory
     {
         ITelegramUserMessage Create(Message telegramMessage);
     }

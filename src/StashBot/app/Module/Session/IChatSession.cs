@@ -1,6 +1,6 @@
 ﻿namespace StashBot.Module.Session
 {
-    internal interface IChatSession
+    public interface IChatSession
     {
         long ChatId
         {
@@ -15,7 +15,8 @@
 
         void UserSentMessage(int messageId);
         void BotSentMessage(int messageId);
+        void MessageDeleted(int messageId);
         void Kill();
-        bool NeedKill();
+        bool IsNeedKill();
     }
 }
