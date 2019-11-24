@@ -19,6 +19,8 @@
 
 It's `telegram bot` which allows you to store files:
 
+Even if someone has access to your telegram account, he will not have access to the files that are stored in the bot
+
 <p align="center">
   <img width="350" align="center" src="https://user-images.githubusercontent.com/45558274/69492554-5cfa5300-0eb5-11ea-841a-4534b8a6b953.gif" alt="demo"/>
 </p>
