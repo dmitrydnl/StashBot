@@ -22,7 +22,7 @@ namespace StashBot.Module.Database.Stash.Local
             return stashMessageFactory.Create(telegramMessage);
         }
 
-        public IDatabaseError SaveMessageToStash(IStashMessage stashMessage)
+        public IDatabaseResult SaveMessageToStash(IStashMessage stashMessage)
         {
             if (!stashMessage.IsEncrypt)
             {

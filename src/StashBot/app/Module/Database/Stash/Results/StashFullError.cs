@@ -3,7 +3,7 @@ using StashBot.BotResponses;
 
 namespace StashBot.Module.Database.Stash.Errors
 {
-    internal class StashFullError : IDatabaseError
+    internal class StashFullError : IDatabaseResult
     {
         public void Handle(long chatId)
         {

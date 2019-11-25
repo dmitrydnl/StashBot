@@ -66,7 +66,7 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 IStashMessage stashMessage = databaseManager.CreateStashMessage(message);
                 await stashMessage.DownloadAsync();
                 stashMessage.Encrypt(user);
-                IDatabaseError databaseError = databaseManager.SaveMessageToStash(stashMessage);
+                IDatabaseResult databaseError = databaseManager.SaveMessageToStash(stashMessage);
                 databaseError.Handle(message.ChatId);
             }
         }
