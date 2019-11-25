@@ -34,14 +34,14 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An undownloaded message cannot be stored in a stash");
             }
 
-            if (!CheckStashLimit(stashMessage.ChatId))
-            {
-                return new StashFullError();
-            }
-
             if (!IsStashExist(stashMessage.ChatId))
             {
                 usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
+            }
+
+            if (!CheckStashLimit(stashMessage.ChatId))
+            {
+                return new StashFullError();
             }
 
             long databaseMessageId = 0;

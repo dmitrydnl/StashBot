@@ -23,15 +23,11 @@ namespace StashBot
         {
             ITelegramBotClient telegramBotClient = ModulesManager.GetTelegramBotClient();
 
-            #if DEBUG
-
             Telegram.Bot.Types.User me = telegramBotClient.GetMeAsync().Result;
             Console.WriteLine(DateTime.Now + " - Bot set up!");
             Console.WriteLine($"Id: {me.Id}");
             Console.WriteLine($"Login: {me.Username}");
             Console.WriteLine($"Name: {me.FirstName}");
-
-            #endif
         }
 
         internal void Start()

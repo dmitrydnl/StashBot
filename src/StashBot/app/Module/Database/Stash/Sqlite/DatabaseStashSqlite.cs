@@ -32,14 +32,14 @@ namespace StashBot.Module.Database.Stash.Sqlite
                 throw new ArgumentException("An undownloaded message cannot be stored in a stash");
             }
 
+            if (!CheckStashLimit(stashMessage.ChatId))
+            {
+                return new StashFullError();
+            }
+
             StashMessageModel messageModel = ((IStashMessageDatabaseModelConverter)stashMessage).ToStashMessageModel();
             using (StashMessagesContext db = new StashMessagesContext())
             {
-                if (!CheckStashLimit(stashMessage.ChatId, db))
-                {
-                    return new StashFullError();
-                }
-
                 db.StashMessages.Add(messageModel);
                 db.SaveChanges();
             }
@@ -116,13 +116,16 @@ namespace StashBot.Module.Database.Stash.Sqlite
             }
         }
 
-        private bool CheckStashLimit(long chatId, StashMessagesContext db)
+        private bool CheckStashLimit(long chatId)
         {
-            int count = db.StashMessages
+            using (StashMessagesContext db = new StashMessagesContext())
+            {
+                int count = db.StashMessages
                     .Where(message => message.ChatId == chatId)
                     .Count();
 
-            return count < StashSettings.StashMessageLimit;
+                return count < StashSettings.StashMessageLimit;
+            }
         }
     }
 }
