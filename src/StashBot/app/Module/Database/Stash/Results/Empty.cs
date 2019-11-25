@@ -1,6 +1,6 @@
-﻿namespace StashBot.Module.Database.Stash.Errors
+﻿namespace StashBot.Module.Database.Stash.Results
 {
-    internal class NullError : IDatabaseResult
+    internal class Empty : IDatabaseResult
     {
         public void Handle(long chatId)
         {

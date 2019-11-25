@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using StashBot.Module.Database.Stash.Errors;
+using StashBot.Module.Database.Stash.Results;
 using StashBot.BotSettings;
 
 namespace StashBot.Module.Database.Stash.Local
@@ -53,7 +53,7 @@ namespace StashBot.Module.Database.Stash.Local
 
             usersStashes[stashMessage.ChatId].Add(stashMessage);
 
-            return new NullError();
+            return new SuccessSaveMessage();
         }
 
         public ICollection<IStashMessage> GetMessagesFromStash(long chatId)

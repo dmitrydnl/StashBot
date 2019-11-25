@@ -14,5 +14,6 @@
     "Logout": "👀 You've logged out",
     "EmptyStash": "🕳 Stash is empty",
     "FullStashError": "💯 Stash is full\nDelete your message!",
-    "UnsupportedMessageFormat": "❌ Unsupported message format"
+    "UnsupportedMessageFormat": "❌ Unsupported message format",
+    "SuccessSaveMessage": "✅ Saved"
 }
