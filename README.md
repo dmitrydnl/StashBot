@@ -73,6 +73,4 @@ Feel free to check [issues page](https://github.com/.../issues) if you want to c
 
 ## 📝 License
 
-Copyright © 2019 [Bogdan Marshtupa](https://github.com/marshtupa).
-
-This project is [GPL-3.0](https://github.com/dmitrydnl/StashBot/blob/master/LICENSE) licensed.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](https://github.com/dmitrydnl/StashBot/blob/master/LICENSE) file for details.
