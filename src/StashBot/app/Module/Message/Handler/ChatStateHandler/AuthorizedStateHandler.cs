@@ -49,6 +49,10 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 {
                     _ = SaveMessageToStashAsync(message);
                 }
+                else
+                {
+                    UnsupportedMessageFormat(message.ChatId);
+                }
             }
         }
 
@@ -99,6 +103,13 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
             userManager.LogoutUser(chatId);
             messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.Logout), null);
             context.ChangeChatState(chatId, ChatSessionState.Start);
+        }
+
+        private void UnsupportedMessageFormat(long chatId)
+        {
+            IMessageManager messageManager = ModulesManager.GetMessageManager();
+
+            messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.UnsupportedMessageFormat), null);
         }
     }
 }

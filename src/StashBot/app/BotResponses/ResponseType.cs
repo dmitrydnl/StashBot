@@ -16,6 +16,7 @@
         Login,
         Logout,
         EmptyStash,
-        FullStashError
+        FullStashError,
+        UnsupportedMessageFormat
     }
 }
