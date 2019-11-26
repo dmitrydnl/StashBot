@@ -61,7 +61,7 @@ namespace StashBot.Module.Database
             return databaseStash.CreateStashMessage(telegramMessage);
         }
 
-        public IDatabaseError SaveMessageToStash(IStashMessage stashMessage)
+        public IDatabaseResult SaveMessageToStash(IStashMessage stashMessage)
         {
             return databaseStash.SaveMessageToStash(stashMessage);
         }

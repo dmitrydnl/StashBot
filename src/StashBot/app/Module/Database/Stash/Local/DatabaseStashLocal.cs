@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using StashBot.Module.Database.Stash.Errors;
+using StashBot.Module.Database.Stash.Results;
 using StashBot.BotSettings;
 
 namespace StashBot.Module.Database.Stash.Local
@@ -22,7 +22,7 @@ namespace StashBot.Module.Database.Stash.Local
             return stashMessageFactory.Create(telegramMessage);
         }
 
-        public IDatabaseError SaveMessageToStash(IStashMessage stashMessage)
+        public IDatabaseResult SaveMessageToStash(IStashMessage stashMessage)
         {
             if (!stashMessage.IsEncrypt)
             {
@@ -34,14 +34,14 @@ namespace StashBot.Module.Database.Stash.Local
                 throw new ArgumentException("An undownloaded message cannot be stored in a stash");
             }
 
-            if (!CheckStashLimit(stashMessage.ChatId))
-            {
-                return new StashFullError();
-            }
-
             if (!IsStashExist(stashMessage.ChatId))
             {
                 usersStashes.Add(stashMessage.ChatId, new List<IStashMessage>());
+            }
+
+            if (!CheckStashLimit(stashMessage.ChatId))
+            {
+                return new StashFullError();
             }
 
             long databaseMessageId = 0;
@@ -53,7 +53,7 @@ namespace StashBot.Module.Database.Stash.Local
 
             usersStashes[stashMessage.ChatId].Add(stashMessage);
 
-            return new NullError();
+            return new SuccessSaveMessage();
         }
 
         public ICollection<IStashMessage> GetMessagesFromStash(long chatId)

@@ -43,7 +43,7 @@
     <Folder Include="Migrations\Users\" />
     <Folder Include="Migrations\StashMessages\" />
     <Folder Include="app\CallbackQueryHandler\" />
-    <Folder Include="app\Module\Database\Stash\Errors\" />
+    <Folder Include="app\Module\Database\Stash\Results\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="BotSettings.json" />

@@ -73,21 +73,23 @@ namespace StashBot.Module.Message.Handler.ChatStateHandler
                 return false;
             }
 
-            if (password.Length < 12)
+            if (!Regex.IsMatch(password, @"^[a-zA-Z0-9!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$"))
+            {
+                messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.PasswordCharacters), null);
+                return false;
+            }
+
+            const int MIN_PASSWORD_LENGTH = 12;
+            if (password.Length < MIN_PASSWORD_LENGTH)
             {
                 messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.PasswordMinLength), null);
                 return false;
             }
 
-            if (password.Length > 25)
+            const int MAX_PASSWORD_LENGTH = 25;
+            if (password.Length > MAX_PASSWORD_LENGTH)
             {
                 messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.PasswordMaxLength), null);
-                return false;
-            }
-
-            if (!Regex.IsMatch(password, @"^[a-zA-Z0-9!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$"))
-            {
-                messageManager.SendTextMessageAsync(chatId, TextResponse.Get(ResponseType.PasswordCharacters), null);
                 return false;
             }
 

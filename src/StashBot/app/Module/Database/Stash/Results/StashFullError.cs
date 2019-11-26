@@ -1,9 +1,9 @@
 ﻿using StashBot.Module.Message;
 using StashBot.BotResponses;
 
-namespace StashBot.Module.Database.Stash.Errors
+namespace StashBot.Module.Database.Stash.Results
 {
-    internal class StashFullError : IDatabaseError
+    internal class StashFullError : IDatabaseResult
     {
         public void Handle(long chatId)
         {

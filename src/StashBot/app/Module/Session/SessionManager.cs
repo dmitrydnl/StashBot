@@ -71,9 +71,11 @@ namespace StashBot.Module.Session
 
         private void StartClearChatSessionsTimer()
         {
+            const int MILLISECONDS_IN_SECOND = 1000;
+
             Timer timer = new Timer();
             timer.Elapsed += ClearSessions;
-            timer.Interval = ChatSessionSettings.ChatSessionsClearInterval * 1000;
+            timer.Interval = ChatSessionSettings.ChatSessionsClearInterval * MILLISECONDS_IN_SECOND;
             timer.Enabled = true;
         }
 
